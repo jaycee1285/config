@@ -14,7 +14,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "nano"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -52,7 +52,6 @@
   services.xserver.displayManager.lightdm.enable = true;
   services.xserver.desktopManager.xfce.enable = true;
   services.xserver.desktopManager.budgie.enable = true;
-  services.xserver.windowManager.fluxbox.enable = true;
 
 
   # Configure keymap in X11
@@ -93,6 +92,9 @@
 	];
   };
 
+  security.sudo.wheelNeedsPassword = false;
+
+
   # Install firefox.
 
   # Allow unfree packages
@@ -132,21 +134,13 @@
   nixos-generators
   gnome.gnome-keyring
   libgnome-keyring
+  abiword
 
   #iconsandcursors
-  papirus-icon-theme
-  colloid-icon-theme
   kanagawa-icon-theme
   gruvbox-dark-icons-gtk
   phinger-cursors
-  qogir-kde
-  qogir-theme
-  qogir-icon-theme
   graphite-kde-theme
-  graphite-cursors
-  graphite-gtk-theme
-  matcha-gtk-theme
-  solarc-gtk-theme
 
   #theming
   themechanger
@@ -154,19 +148,25 @@
   themix-gui
  
   #themes
-  kanagawa-gtk-theme
-  solarc-gtk-theme
-  gruvbox-gtk-theme
   colloid-kde
   colloid-gtk-theme
   nordic
-  ];
+  kanagawa-gtk-theme
+  graphite-gtk-theme
+  gruvbox-gtk-theme
+  matcha-gtk-theme
+  numix-solarized-gtk-theme
+];
+  
 
   #fonts
 fonts.packages = with pkgs; [
   (nerdfonts.override { fonts = [ "IosevkaTermSlab" ]; })
-  (google-fonts.override {fonts = [ "Buenard" ]; })
+  (google-fonts.override {fonts = [ "Buenard" "Libre Franklin" "Overpass" "Overpass Mono" "Philosopher" "Mulish" "Tenor Sans" "Gentium Book Plus" "Sintony" "Poppins" "Oswald"
+  "Merriweather" "Quattrocento" "Lora" "Raleway" "Cormorant Garamond" "Changa" "Merriweather Sans" "Arsenal"  ]; })
 ];
+
+services.gnome.gnome-keyring.enable = true;
 
 
   # Some programs need SUID wrappers, can be configured further or are
