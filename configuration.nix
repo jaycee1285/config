@@ -49,9 +49,11 @@
   services.xserver.enable = true;
 
   # Enable the LXQT Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
+  # services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.displayManager.gdm.wayland = true;  
   services.xserver.desktopManager.lxqt.enable = true;
+  services.xserver.desktopManager.xfce.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
@@ -112,15 +114,33 @@
   bun
   github-desktop
   yarn
-  pkgs.xfce.xfce4-whiskermenu-plugin
 
 
   #internet
   librewolf
   qbittorrent
   joplin-desktop
-  obsidian
-  syncthing
+  brave
+  onedriver
+
+  #mis
+  neothesia
+  drawio
+  celeste
+  fclones-gui
+  labwc
+  niri
+  bemenu
+  abiword
+  featherpad
+  vlc
+  
+  #office
+  spacedrive
+  mailspring
+  apostrophe
+  inkscape
+  pencil
 
   #utilities
   gparted
@@ -128,18 +148,25 @@
   fontfinder
   git
   wget
-  zip
+  p7zip
   unzip
   nixos-generators
   gnome.gnome-keyring
   libgnome-keyring
-  abiword
+  home-manager
+  brightnessctl
+  featherpad
+  labwc-gtktheme
+  kopia
+  fusuma
+  ventoy-full
 
   #iconsandcursors
   kanagawa-icon-theme
   gruvbox-dark-icons-gtk
   phinger-cursors
   graphite-kde-theme
+  vimix-icon-theme
 
   #theming
   themechanger
@@ -147,15 +174,11 @@
   themix-gui
  
   #themes
-  colloid-kde
-  colloid-gtk-theme
-  nordic
   kanagawa-gtk-theme
   graphite-gtk-theme
   gruvbox-gtk-theme
   matcha-gtk-theme
   numix-solarized-gtk-theme
-  paper-gtk-theme
 ];
   
 
@@ -164,10 +187,16 @@ fonts.packages = with pkgs; [
   (nerdfonts.override { fonts = [ "IosevkaTermSlab" ]; })
   (google-fonts.override {fonts = [ "Buenard" "Libre Franklin" "Overpass" "Overpass Mono" "Philosopher" "Mulish" "Tenor Sans" "Gentium Book Plus" "Sintony" "Poppins" "Oswald"
   "Merriweather" "Quattrocento" "Lora" "Raleway" "Cormorant Garamond" "Changa" "Merriweather Sans" "Arsenal"  ]; })
+  lexend
+  aileron
 ];
 
-services.gnome.gnome-keyring.enable = true;
+nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+services.gnome.gnome-keyring.enable = true;
+services.onedrive.enable = true;
+
+programs.labwc.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -194,6 +223,6 @@ services.gnome.gnome-keyring.enable = true;
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.05"; # Did you read the comment?
+  system.stateVersion = "24.11"; # Did you read the comment?
 
 }
