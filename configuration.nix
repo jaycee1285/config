@@ -53,7 +53,6 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.displayManager.gdm.wayland = true;  
   services.xserver.desktopManager.lxqt.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
@@ -113,7 +112,6 @@
   nodejs_22
   bun
   github-desktop
-  yarn
 
 
   #internet
@@ -129,14 +127,22 @@
   celeste
   fclones-gui
   labwc
+  labwc-tweaks-gtk
+  labwc-menu-generator
+  waybar
+  fuzzel
   niri
   bemenu
   abiword
-  featherpad
   vlc
+  swww
+  nwg-bar
+  rustdesk
+  matugen
+  usbimager
+
   
   #office
-  spacedrive
   mailspring
   apostrophe
   inkscape
@@ -157,9 +163,12 @@
   brightnessctl
   featherpad
   labwc-gtktheme
-  kopia
   fusuma
   ventoy-full
+  networkmanagerapplet
+  nwg-panel
+  nwg-look
+  nwg-menu
 
   #iconsandcursors
   kanagawa-icon-theme
@@ -171,7 +180,6 @@
   #theming
   themechanger
   kdePackages.qtstyleplugin-kvantum
-  themix-gui
  
   #themes
   kanagawa-gtk-theme
@@ -179,8 +187,17 @@
   gruvbox-gtk-theme
   matcha-gtk-theme
   numix-solarized-gtk-theme
+  colloid-gtk-theme
+  colloid-kde
+  colloid-icon-theme
+  papirus-icon-theme
+  lightly-qt
 ];
   
+    programs.thunar.enable = true; # File manager
+    programs.xfconf.enable = true; # Xfce configuration to allow storing preferences
+    services.tumbler.enable = true; # Thumbnail support for images
+    services.gvfs.enable = true; # Mount, trash, and other functionalities
 
   #fonts
 fonts.packages = with pkgs; [
