@@ -4,6 +4,13 @@
 
 { config, pkgs, ... }:
 
+let
+# add unstable channel declaratively
+  unstableTarball =
+    fetchTarball
+      https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
+in
+
 {
   imports =
 	[ # Include the results of the hardware scan.
@@ -13,8 +20,9 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  networking.hostName = "nano"; # Define your hostname.
+  networking.hostName = "x13"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -45,14 +53,65 @@
 	LC_TIME = "en_US.UTF-8";
   };
 
+services.thermald.enable = true;
+	services.tlp = {
+		enable = true;
+		settings.STOP_CHARGE_THRESH_BAT0 = 80;
+                settings.START_CHARGE_THRESH_BAT0 = 50;
+	};
+
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the LXQT Desktop Environment.
   # services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.displayManager.gdm.wayland = true;  
-  services.xserver.desktopManager.lxqt.enable = true;
+#  services.xserver.displayManager.gdm.enable = true;
+ # services.xserver.displayManager.gdm.wayland = true;services = {
+
+    services.greetd.enable = true;
+
+    services.greetd.settings = {
+        default_session={
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --user-menu -rti --asterisks --cmd labwc";
+          user = "greeter";
+        };
+      };
+
+  systemd.services.greetd.serviceConfig = {
+    Type = "idle";
+    StandardInput = "tty";
+    StandardOutput = "tty";
+    StandardError = "journal"; # Without this errors will spam on screen
+    
+    # Without these bootlogs will spam on screen
+    TTYReset = true;
+    TTYVHangup = true;
+    TTYVTDisallocate = true;
+  };
+
+#services.tlp = {
+#      enable = true;
+#      settings = {
+#        CPU_SCALING_GOVERNOR_ON_AC = "performance";
+#        CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+
+#        CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+#        CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+
+#        CPU_MIN_PERF_ON_AC = 0;
+#        CPU_MAX_PERF_ON_AC = 80;
+#        CPU_MIN_PERF_ON_BAT = 0;
+#        CPU_MAX_PERF_ON_BAT = 40;
+
+       #Optional helps save long term battery health
+      # START_CHARGE_THRESH_BAT0 = 45;
+      # STOP_CHARGE_THRESH_BAT0 = 80; # 80 and above it stops charging
+
+#     };
+#};
+  
+# services.xserver.desktopManager.xfce.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
@@ -62,7 +121,6 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -98,7 +156,15 @@
   # Install firefox.
 
   # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    packageOverrides = pkgs: {
+      unstable = import unstableTarball {
+        config = config.nixpkgs.config;
+      };
+    };
+  };
+
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -108,48 +174,65 @@
   #  wget
 
   #coding
-  vscodium-fhs
+  unstable.vscodium-fhs
+  unstable.zed-editor
   nodejs_22
-  bun
+  unstable.bun
   github-desktop
 
 
   #internet
-  librewolf
+  unstable.librewolf
   qbittorrent
-  joplin-desktop
-  brave
-  onedriver
+  unstable.joplin-desktop
+  unstable.brave
+  onedrivegui
 
   #mis
   neothesia
   drawio
   celeste
   fclones-gui
-  labwc
-  labwc-tweaks-gtk
-  labwc-menu-generator
-  waybar
-  fuzzel
-  niri
-  bemenu
-  abiword
-  vlc
-  swww
-  nwg-bar
-  rustdesk
+  unstable.labwc-tweaks-gtk
+  unstable.labwc-menu-generator
+  vlc 
   matugen
   usbimager
+  unetbootin
+  gtypist
+  photoflare
 
+  #wayland
+  unstable.labwc
+  unstable.waybar
+  fuzzel
+  bemenu
+  abiword
+  swww
+  grim
+  slurp
+  swappy
+  imagemagick
+  swaylock-fancy
+  wlsunset
+  shotman
+  unstable.niri
+  espanso-wayland
+  wpgtk
+  swayidle
+  android-tools
+  swaylock-effects
+  xwayland
   
   #office
-  mailspring
   apostrophe
   inkscape
   pencil
+  koreader
 
   #utilities
-  gparted
+  xdg-desktop-portal-wlr
+  xdg-desktop-portal-gtk
   kitty
   fontfinder
   git
@@ -166,34 +249,51 @@
   fusuma
   ventoy-full
   networkmanagerapplet
-  nwg-panel
-  nwg-look
-  nwg-menu
+  xfce.thunar-volman
+  xfce.thunar-archive-plugin
+  appimage-run
+  libappimage
+  xarchiver
+  greetd.tuigreet
+  pavucontrol
+  unrar
+  syncthingtray
+  syncthing  
+
+  #video
+  obs-studio
+  obs-studio-plugins.wlrobs
 
   #iconsandcursors
-  kanagawa-icon-theme
-  gruvbox-dark-icons-gtk
+ # kanagawa-icon-theme
+ # gruvbox-dark-icons-gtk
   phinger-cursors
-  graphite-kde-theme
-  vimix-icon-theme
+ # graphite-kde-theme
 
   #theming
   themechanger
   kdePackages.qtstyleplugin-kvantum
  
   #themes
-  kanagawa-gtk-theme
-  graphite-gtk-theme
-  gruvbox-gtk-theme
-  matcha-gtk-theme
+#  kanagawa-gtk-theme
+#  unstable.graphite-gtk-theme
+#  unstable.colloid-gtk-theme
+#  unstable.colloid-icon-theme
+#  unstable.colloid-kde
   numix-solarized-gtk-theme
-  colloid-gtk-theme
-  colloid-kde
-  colloid-icon-theme
+  juno-theme
   papirus-icon-theme
-  lightly-qt
+  unstable.nordic
+#  unstable.everforest-gtk-theme
+#  unstable.orchis-theme
+
+  #llmgpt
+  gpt4all
+  local-ai
+  private-gpt
+  ollama
 ];
-  
+
     programs.thunar.enable = true; # File manager
     programs.xfconf.enable = true; # Xfce configuration to allow storing preferences
     services.tumbler.enable = true; # Thumbnail support for images
@@ -204,14 +304,21 @@ fonts.packages = with pkgs; [
   (nerdfonts.override { fonts = [ "IosevkaTermSlab" ]; })
   (google-fonts.override {fonts = [ "Buenard" "Libre Franklin" "Overpass" "Overpass Mono" "Philosopher" "Mulish" "Tenor Sans" "Gentium Book Plus" "Sintony" "Poppins" "Oswald"
   "Merriweather" "Quattrocento" "Lora" "Raleway" "Cormorant Garamond" "Changa" "Merriweather Sans" "Arsenal"  ]; })
-  lexend
+# lexend
   aileron
+  font-awesome
+  material-icons
 ];
 
 nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
 services.gnome.gnome-keyring.enable = true;
 services.onedrive.enable = true;
+services.flatpak.enable = true;
+xdg.portal.wlr.enable = true;
+services.system-config-printer.enable = true;
+services.syncthing.enable = true;
+
 
 programs.labwc.enable = true;
 
