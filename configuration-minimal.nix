@@ -188,7 +188,7 @@ services.thermald.enable = true;
   unstable.joplin-desktop
   unstable.ungoogled-chromium
   onedrivegui
-  unstable.zoom-us
+  #unstable.zoom-us
 
   #mis
   neothesia
@@ -215,10 +215,8 @@ services.thermald.enable = true;
   #wayland
   unstable.labwc
   unstable.waybar
-  unstable.sfwbar
   fuzzel
   bemenu
-  abiword
   swww
   grim
   slurp
@@ -271,18 +269,18 @@ services.thermald.enable = true;
   syncthingtray
   syncthing
   cnijfilter2
-  foomatic-db-engine
-  carps-cups
-  cups-bjnp
-  foomatic-db-nonfree
-  foomatic-db
+  #foomatic-db-engine
+  #carps-cups
+  #cups-bjnp
+  #foomatic-db-nonfree
+  #foomatic-db
   cnijfilter_4_00
   system-config-printer
-  foomatic-db-ppds-withNonfreeDb
+  #foomatic-db-ppds-withNonfreeDb
 
   #video
-  obs-studio
-  obs-studio-plugins.wlrobs
+  #obs-studio
+  #obs-studio-plugins.wlrobs
 
   #iconsandcursors
   kanagawa-icon-theme
@@ -296,7 +294,7 @@ services.thermald.enable = true;
  
   #themes
   kanagawa-gtk-theme
-  unstable.graphite-gtk-theme
+#  unstable.graphite-gtk-theme
 # unstable.colloid-gtk-theme
 # unstable.colloid-icon-theme
 # unstable.colloid-kde
@@ -309,10 +307,10 @@ services.thermald.enable = true;
   unstable.tokyonight-gtk-theme
 
   #llmgpt
-  gpt4all
-  local-ai
-  private-gpt
-  ollama
+#  gpt4all
+#  local-ai
+#  private-gpt
+#  ollama
 ];
 
     programs.thunar.enable = true; # File manager
@@ -327,8 +325,8 @@ fonts.packages = with pkgs; [
   "Merriweather" "Quattrocento" "Lora" "Raleway" "Cormorant Garamond" "Changa" "Merriweather Sans" "Arsenal"  ]; })
 # lexend
   aileron
-  font-awesome
-  material-icons
+#  font-awesome
+#  material-icons
 ];
 
 nix.settings.experimental-features = [ "nix-command" "flakes" ];
