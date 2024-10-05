@@ -66,29 +66,31 @@ services.thermald.enable = true;
 
   # Enable the LXQT Desktop Environment.
   # services.xserver.displayManager.lightdm.enable = true;
-#  services.xserver.displayManager.gdm.enable = true;
- # services.xserver.displayManager.gdm.wayland = true;services = {
+services.xserver.displayManager.gdm.enable = true;
+services.xserver.displayManager.gdm.wayland = true;
+    services.xserver.desktopManager.xfce.enable = true;
 
-    services.greetd.enable = true;
 
-    services.greetd.settings = {
-        default_session={
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --user-menu -rti --asterisks --cmd labwc";
-          user = "greeter";
-        };
-      };
+#    services.greetd.enable = true;
 
-  systemd.services.greetd.serviceConfig = {
-    Type = "idle";
-    StandardInput = "tty";
-    StandardOutput = "tty";
-    StandardError = "journal"; # Without this errors will spam on screen
+#   services.greetd.settings = {
+#       default_session={
+#          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --user-menu -rti --asterisks --cmd labwc";
+#          user = "greeter";
+#        };
+#      };
+
+#  systemd.services.greetd.serviceConfig = {
+#   Type = "idle";
+#    StandardInput = "tty";
+#    StandardOutput = "tty";
+#    StandardError = "journal"; # Without this errors will spam on screen
     
     # Without these bootlogs will spam on screen
-    TTYReset = true;
-    TTYVHangup = true;
-    TTYVTDisallocate = true;
-  };
+#    TTYReset = true;
+#    TTYVHangup = true;
+#    TTYVTDisallocate = true;
+# };
 
 #services.tlp = {
 #      enable = true;
@@ -111,13 +113,12 @@ services.thermald.enable = true;
 #     };
 #};
   
-# services.xserver.desktopManager.xfce.enable = true;
-
   # Configure keymap in X11
   services.xserver = {
 	layout = "us";
 	xkbVariant = "";
   };
+
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -175,7 +176,6 @@ services.thermald.enable = true;
 
   #coding
   unstable.vscodium-fhs
-  unstable.zed-editor
   nodejs_22
   unstable.bun
   github-desktop
@@ -183,16 +183,13 @@ services.thermald.enable = true;
 
 
   #internet
-  unstable.librewolf
+  librewolf  
   qbittorrent
-  unstable.joplin-desktop
-  unstable.ungoogled-chromium
+  unstable.chromium
   onedrivegui
-  unstable.zoom-us
 
   #mis
   neothesia
-  drawio
   celeste
   fclones-gui
   unstable.labwc-tweaks-gtk
@@ -202,8 +199,9 @@ services.thermald.enable = true;
   usbimager
   unetbootin
   gtypist
-  photoflare
   unstable.obsidian
+  unstable.yazi
+  khoj
 
   #gaming
   unstable.wineWowPackages.wayland
@@ -215,10 +213,8 @@ services.thermald.enable = true;
   #wayland
   unstable.labwc
   unstable.waybar
-  unstable.sfwbar
   fuzzel
   bemenu
-  abiword
   swww
   grim
   slurp
@@ -233,10 +229,13 @@ services.thermald.enable = true;
   swayidle
   android-tools
   swaylock-effects
-  xwayland
+  unstable.xwayland
+  sfwbar
+  kdePackages.qt6ct
+  kdePackages.qtwayland
+  libsForQt5.qt5.qtwayland
   
   #office
-  apostrophe
   inkscape
   pencil
   koreader
@@ -258,7 +257,6 @@ services.thermald.enable = true;
   featherpad
   labwc-gtktheme
   fusuma
-  ventoy-full
   networkmanagerapplet
   xfce.thunar-volman
   xfce.thunar-archive-plugin
@@ -270,25 +268,10 @@ services.thermald.enable = true;
   unrar
   syncthingtray
   syncthing
-  cnijfilter2
-  foomatic-db-engine
-  carps-cups
-  cups-bjnp
-  foomatic-db-nonfree
-  foomatic-db
-  cnijfilter_4_00
-  system-config-printer
-  foomatic-db-ppds-withNonfreeDb
-
-  #video
-  obs-studio
-  obs-studio-plugins.wlrobs
 
   #iconsandcursors
   kanagawa-icon-theme
- # gruvbox-dark-icons-gtk
   phinger-cursors
- # graphite-kde-theme
 
   #theming
   themechanger
@@ -297,16 +280,15 @@ services.thermald.enable = true;
   #themes
   kanagawa-gtk-theme
   unstable.graphite-gtk-theme
-# unstable.colloid-gtk-theme
-# unstable.colloid-icon-theme
-# unstable.colloid-kde
   numix-solarized-gtk-theme
-  juno-theme
+  unstable.juno-theme
   papirus-icon-theme
   unstable.nordic
-#  unstable.everforest-gtk-theme
-#  unstable.orchis-theme
   unstable.tokyonight-gtk-theme
+  fluent-icon-theme
+  flat-remix-icon-theme
+  unstable.gruvbox-plus-icons
+  gruvbox-gtk-theme
 
   #llmgpt
   gpt4all
@@ -342,6 +324,7 @@ services.syncthing.enable = true;
 services.blueman.enable = true;
 hardware.bluetooth.enable = true;
 hardware.bluetooth.powerOnBoot = true;
+services.dbus.enable = true;
 
 
 
