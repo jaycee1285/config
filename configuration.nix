@@ -66,10 +66,16 @@ services.thermald.enable = true;
 
   # Enable the LXQT Desktop Environment.
   # services.xserver.displayManager.lightdm.enable = true;
-services.xserver.displayManager.gdm.enable = true;
-services.xserver.displayManager.gdm.wayland = true;
-    services.xserver.desktopManager.xfce.enable = true;
+services.xserver.displayManager.gdm = {
+      enable = true;
+      wayland= true;
+    };
 
+environment.etc."gdm/wayland-sessions/lxqt-wayland.desktop".source = "/nix/store/gkicvl61zb5ggy57qc4s5ybsa9kwm3zh-lxqt-wayland-session-0.1.0/share/wayland-sessions/lxqt-wayland.desktop";
+
+
+#    services.xserver.desktopManager.xfce.enable = true;
+services.xserver.desktopManager.cinnamon.enable=true;
 
 #    services.greetd.enable = true;
 
@@ -166,6 +172,8 @@ services.xserver.displayManager.gdm.wayland = true;
     };
   };
 
+environment.etc."sddm/wayland-sessions/lxqt-wayland.desktop".source = "/nix/store/gkicvl61zb5ggy57qc4s5ybsa9kwm3zh-lxqt-wayland-session-0.1.0/share/wayland-sessions/lxqt-wayland.desktop";
+
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -174,19 +182,34 @@ services.xserver.displayManager.gdm.wayland = true;
   # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
 
+  onedriver
+  openssl
+  themix-gui
+  gtk-engine-murrine
+  gdk-pixbuf
+  sassc
+  gruvbox-kvantum
+  catppuccin-kvantum
+  orchis-theme
+  catppuccin-gtk
+  libreoffice
+
   #coding
   unstable.vscodium-fhs
   nodejs_22
   unstable.bun
   github-desktop
-  unstable.lite-xl
+#  unstable.lite-xl
+#  unstable.zed-editor
 
 
   #internet
   librewolf  
+
   qbittorrent
   unstable.chromium
-  onedrivegui
+  unstable.onedrivegui
+  unstable.onedrive
 
   #mis
   neothesia
@@ -200,12 +223,11 @@ services.xserver.displayManager.gdm.wayland = true;
   unetbootin
   gtypist
   unstable.obsidian
-  unstable.yazi
-  khoj
+  yazi
 
   #gaming
-  unstable.wineWowPackages.wayland
-  steam
+#  unstable.wineWowPackages.wayland  steam
+  mupen64plus
 
   #bluetooth
   unstable.blueman
@@ -223,14 +245,13 @@ services.xserver.displayManager.gdm.wayland = true;
   swaylock-fancy
   wlsunset
   shotman
-  unstable.niri
+#  unstable.niri
   espanso-wayland
   wpgtk
   swayidle
   android-tools
   swaylock-effects
   unstable.xwayland
-  sfwbar
   kdePackages.qt6ct
   kdePackages.qtwayland
   libsForQt5.qt5.qtwayland
@@ -250,7 +271,7 @@ services.xserver.displayManager.gdm.wayland = true;
   p7zip
   unzip
   nixos-generators
-  gnome.gnome-keyring
+  gnome-keyring
   libgnome-keyring
   home-manager
   brightnessctl
@@ -291,10 +312,10 @@ services.xserver.displayManager.gdm.wayland = true;
   gruvbox-gtk-theme
 
   #llmgpt
-  gpt4all
-  local-ai
-  private-gpt
-  ollama
+#  gpt4all
+#  local-ai
+#  private-gpt
+#  ollama
 ];
 
     programs.thunar.enable = true; # File manager
@@ -329,6 +350,8 @@ services.dbus.enable = true;
 
 
 programs.labwc.enable = true;
+programs.wayfire.enable = true;
+#programs.niri.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -358,3 +381,4 @@ programs.labwc.enable = true;
   system.stateVersion = "24.11"; # Did you read the comment?
 
 }
+
