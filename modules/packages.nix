@@ -1,13 +1,19 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nixpkgs-unstable, ... }:
+
 {
- nixpkgs.config = {
+  nixpkgs.config = {
     allowUnfree = true;
-    packageOverrides = pkgs: {
-      unstable = import unstableTarball {
+  };
+
+  nixpkgs.overlays = [
+    (final: prev: {
+      unstable = import nixpkgs-unstable {
+        system = pkgs.system;
         config = config.nixpkgs.config;
       };
-    };
-  };
+    })
+  ];
+}
 
 
  environment.systemPackages = with pkgs; [
