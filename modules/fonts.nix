@@ -17,5 +17,7 @@
   pkgs.nerd-fonts.zed-mono
   (google-fonts.override {fonts = [ "Buenard" "Libre Franklin" "Overpass" "Overpass Mono" "Philosopher" "Mulish" "Tenor Sans" "Gentium Book Plus" "Sintony" "Poppins" "Oswald" "Outfit" "Bricolage"
   "Merriweather" "Quattrocento" "Lora" "Raleway" "Cormorant Garamond" "Changa" "Merriweather Sans" "Arsenal" "Inter" "Mulish" "Tauri" "Libre Franklin" "Palanquin" "Tinos" "Source Sans" "Source Serif" ];
+  }
+  )
   ];
 }
