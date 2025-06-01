@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    gtk-themes.url = "path:./gtk-theme";
+    gtk-themes.url = "path:./gtk-themes";
   };
 
   outputs = { self, nixpkgs, gtk-themes, ... }: {
