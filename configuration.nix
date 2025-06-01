@@ -1,11 +1,13 @@
 { config, pkgs, ... }:
 
-imports = [
+{
+  imports = [
     ./hardware-configuration.nix
     ./modules/audio.nix
     ./modules/bootloader.nix
     ./modules/flatpak.nix
     ./modules/fonts.nix
+    ./modules/gtk-themes.nix
     ./modules/hardware.nix
     ./modules/localization.nix
     ./modules/networking.nix
