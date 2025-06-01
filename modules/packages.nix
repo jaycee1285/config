@@ -1,0 +1,137 @@
+{ config, pkgs, ... }:
+{
+ nixpkgs.config = {
+    allowUnfree = true;
+    packageOverrides = pkgs: {
+      unstable = import unstableTarball {
+        config = config.nixpkgs.config;
+      };
+    };
+  };
+
+
+ environment.systemPackages = with pkgs; [
+openssl
+  themix-gui
+  gtk-engine-murrine
+  gdk-pixbuf
+  sassc
+  qtscrcpy
+  localsend
+  kdePackages.full
+
+  #coding
+  unstable.vscodium
+  nodejs_22
+  unstable.bun
+  github-desktop
+
+
+  #internet
+ unstable.librewolf  
+  qbittorrent
+  unstable.chromium
+  unstable.onedrivegui
+  unstable.onedrive
+
+ #wayland
+  unstable.labwc-tweaks-gtk
+  unstable.labwc-menu-generator
+  rofi-wayland
+  wlogout
+  unstable.labwc
+  unstable.waybar
+  fuzzel
+  bemenu
+  swww
+  grim
+  slurp
+  swappy
+  swaylock-effects
+  unstable.xwayland
+  espanso-wayland
+  swaylock-fancy
+  sway-idle
+
+
+  #Phone
+  pixelflasher
+  android-tools
+
+
+
+  #mis
+  neothesia
+  celeste
+  fclones-gui
+  vlc 
+  matugen
+  usbimager
+  unetbootin
+  gtypist
+  unstable.obsidian
+  nnn
+  pixelflasher
+  cherry-studio
+  
+
+  #gaming
+  mupen64plus
+
+  #bluetooth
+  unstable.blueman
+
+  wpgtk
+  swayidle
+  android-tools
+  
+  #office
+  inkscape
+  pencil
+  koreader
+
+  #utilities
+  xdg-desktop-portal-wlr
+  xdg-desktop-portal-gtk
+  kitty
+  fontfinder
+  git
+  wget
+  p7zip
+  unzip
+  nixos-generators
+  gnome-keyring
+  libgnome-keyring
+  home-manager
+  brightnessctl
+  featherpad
+  fusuma
+  networkmanagerapplet
+  xfce.thunar-volman
+  xfce.thunar-archive-plugin
+  appimage-run
+  libappimage
+  xarchiver
+  greetd.tuigreet
+  pavucontrol
+  unrar
+  syncthingtray
+  syncthing
+  gnome-characters
+  gucharmap
+
+  #iconsandcursors
+  unstable.kanagawa-icon-theme
+  phinger-cursors
+  papirus-icon-theme
+  unstable.gruvbox-plusicons
+
+  #theming
+  themechanger
+  kdePackages.qtstyleplugin-kvantum    
+
+  ];
+
+
+
+}
