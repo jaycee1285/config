@@ -104,7 +104,7 @@
           pname = "everforest-gtk-theme";
           src = everforest-theme;
           style = "fausto";
-          installFlags = "-t gray --tweaks outline";
+          installFlags = "-t grey --tweaks outline";
           nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
           meta = with pkgs.lib; {
