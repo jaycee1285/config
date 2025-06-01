@@ -54,7 +54,7 @@
     unstable.xwayland
     espanso-wayland
     swaylock-fancy
-    sway-idle
+    swayidle
 
     # Phone
     pixelflasher
