@@ -77,7 +77,7 @@
           src = catppuccin-theme;
           style = "fausto";
           installFlags = "--tweaks outline";
-          nativeBuildInputs = [ pkgs.gtk3 ];
+          nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc  ];
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
           meta = with pkgs.lib; {
             description = "Catppuccin GTK theme (Fausto, always latest)";
@@ -91,7 +91,7 @@
           src = gruvbox-theme;
           style = "fausto";
           installFlags = "-t orange --tweaks outline";
-          nativeBuildInputs = [ pkgs.gtk3 ];
+          nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
           meta = with pkgs.lib; {
             description = "Gruvbox GTK theme (Fausto, always latest)";
@@ -105,7 +105,7 @@
           src = everforest-theme;
           style = "fausto";
           installFlags = "-t gray --tweaks outline";
-          nativeBuildInputs = [ pkgs.gtk3 ];
+          nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
           meta = with pkgs.lib; {
             description = "Everforest GTK theme (Fausto, always latest)";
@@ -119,7 +119,7 @@
           src = tokyonight-theme;
           style = "fausto";
           installFlags = "--tweaks outline storm";
-          nativeBuildInputs = [ pkgs.gtk3 ];
+          nativeBuildInputs = [ pkgs.gtk3  pkgs.sassc ];
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
           meta = with pkgs.lib; {
             description = "Tokyonight GTK theme (Fausto, always latest)";
@@ -133,7 +133,7 @@
           src = osaka-theme;
           style = "fausto";
           installFlags = "--tweaks outline solarized";
-          nativeBuildInputs = [ pkgs.gtk3 ];
+          nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
           meta = with pkgs.lib; {
             description = "Osaka GTK theme (Fausto, always latest)";
@@ -149,7 +149,7 @@
           src = kanagawa-theme;
           style = "fausto";
           installFlags = "-s compact --tweaks dragon";
-          nativeBuildInputs = [ pkgs.gtk3 ];
+          nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
           meta = with pkgs.lib; {
             description = "Kanagawa GTK theme (Fausto, always latest)";
