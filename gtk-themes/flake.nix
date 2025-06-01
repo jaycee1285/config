@@ -36,7 +36,7 @@
   src,
   style,     # "fausto", "eliver", "vince"
   installFlags ? "",
-  nativeBuildInputs ? [],
+  nativeBuildInputs ? [pkgs.gtk3 pkgs.sassc ],
   buildInputs ? [],
   propagatedUserEnvPkgs ? [],
   meta ? {},
