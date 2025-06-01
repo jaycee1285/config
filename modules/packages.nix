@@ -73,7 +73,7 @@
     nnn
     pixelflasher
     cherry-studio
-    #super-productivity
+    super-productivity
 
     # gaming
     mupen64plus
