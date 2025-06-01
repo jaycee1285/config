@@ -14,7 +14,7 @@
     # Kanagawa
     kanagawa-theme.url = "github:jaycee1285/Kanagawa-GTK-Theme";  
 
-    # Orchis
+    #Eliver
     orchis-theme.url = "github:jaycee1285/Orchis-theme";
 
     # Vince themes
@@ -31,25 +31,42 @@
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
 
-      makeTheme = {
-        pname,
-        src,
-        style,     # "fausto", "vince"
-        installFlags ? "",
-        nativeBuildInputs ? [],
-        buildInputs ? [],
-        propagatedUserEnvPkgs ? [],
-        meta ? {},
-      }:
-        pkgs.stdenvNoCC.mkDerivation {
-          inherit pname src nativeBuildInputs buildInputs propagatedUserEnvPkgs meta;
-          version = "unstable-${src.shortRev or "unknown"}";
-          installPhase = pkgs.lib.optionalString (style == "fausto") ''
-            cd themes
-          '' + ''
-            bash ./install.sh ${installFlags} -d $out/share/themes
-          '';
-        };
+    makeTheme = {
+  pname,
+  src,
+  style,     # "fausto", "eliver", "vince"
+  installFlags ? "",
+  nativeBuildInputs ? [],
+  buildInputs ? [],
+  propagatedUserEnvPkgs ? [],
+  meta ? {},
+}:
+  pkgs.stdenvNoCC.mkDerivation {
+    inherit pname src nativeBuildInputs buildInputs propagatedUserEnvPkgs meta;
+    version = "unstable-${src.shortRev or "unknown"}";
+
+    installPhase =
+      # Fausto themes: run install.sh from ./themes
+      (pkgs.lib.optionalString (style == "fausto") ''
+        cd themes
+        bash ./install.sh ${installFlags} -d $out/share/themes
+      '')
+      # Orchis (eliver): run install.sh from root
+      + (pkgs.lib.optionalString (style == "eliver") ''
+        bash ./install.sh ${installFlags} -d $out/share/themes
+      '')
+      # Vince themes: just copy contents to themes dir
+      + (pkgs.lib.optionalString (style == "vince") ''
+        mkdir -p $out/share/themes
+        # Copy only theme directories (e.g. Juno, Nordic-Polar) if present, otherwise everything
+        shopt -s dotglob
+        for dir in */; do
+          cp -r "$dir" $out/share/themes/
+        done
+        shopt -u dotglob
+      '');
+  };
+
 
     in
     {
@@ -146,7 +163,7 @@
         orchis-orange-compact = makeTheme {
           pname = "orchis-orange-compact";
           src = orchis-theme;
-          style = "vince";
+          style = "eliver";
           installFlags = "-t orange -c light --tweaks compact";
           nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
           buildInputs = [ pkgs.gnome-themes-extra ];
