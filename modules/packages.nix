@@ -123,7 +123,7 @@
     unstable.kanagawa-icon-theme
     phinger-cursors
     papirus-icon-theme
-    unstable.gruvbox-plusicons
+    unstable.gruvbox-plus-icons
 
     # theming
     themechanger
