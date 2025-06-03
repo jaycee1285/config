@@ -74,6 +74,8 @@
     pixelflasher
     cherry-studio
     #super-productivity
+    jq
+    amphetype
 
     # gaming
     mupen64plus
