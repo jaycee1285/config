@@ -7,7 +7,7 @@
 , npm-lockfile-fix
 , python3
 , stdenv
-, src  # Provided by flake input!
+, src
 }:
 
 buildNpmPackage rec {
