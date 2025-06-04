@@ -1,4 +1,4 @@
-{ config, pkgs, gtk-themes, super-productivity, ... }:
+{ config, pkgs, gtk-themes, ... }:
 
 {
   imports = [
@@ -18,7 +18,7 @@
     ./modules/system.nix
     ./modules/users.nix
     ./modules/xserver.nix
-    ./modules/super-productivity.nix
+  #  ./modules/super-productivity.nix
   ];
 
   # You can also set global overrides here, or import other .nix files

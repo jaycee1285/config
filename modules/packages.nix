@@ -30,6 +30,7 @@
     unstable.bun
     github-desktop
     gh
+    gearlever
     
     # internet
     unstable.librewolf  
