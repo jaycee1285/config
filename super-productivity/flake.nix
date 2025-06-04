@@ -11,7 +11,7 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
-        buildNpmPackage = pkgs.buildNpmPackage.override { nodejs = pkgs.nodejs_20; };
+        buildNpmPackage = pkgs.buildNpmPackage.override { nodejs = pkgs.nodejs_22; };
         superProductivity = pkgs.callPackage ./super-productivity.nix {
           inherit buildNpmPackage;
           src = super-productivity-src;
