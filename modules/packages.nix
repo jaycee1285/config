@@ -26,7 +26,7 @@
 
     # coding
     unstable.vscodium
-    nodejs_22
+    nodejs_24
     unstable.bun
     github-desktop
 
