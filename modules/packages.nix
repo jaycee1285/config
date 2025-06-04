@@ -29,6 +29,7 @@
     nodejs_24
     unstable.bun
     github-desktop
+    npm
 
     # internet
     unstable.librewolf  
