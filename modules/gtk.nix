@@ -1,15 +1,16 @@
 { config, ... }:
 
-  # Set GTK theme and font via dconf/gsettings
+{
   dconf.settings = {
     "org/gnome/desktop/interface" = {
-      gtk-theme = "Orchis-Orange-Light-Compact";    # Replace with your theme name
-      icon-theme = "Colloid";        # Optional: icon theme
-      font-name = "Iosevka 12";    # Replace with your desired font and size
-      cursor-theme = "Phinger-Cursors-Light";      # Optional: cursor theme
+      gtk-theme = "Orchis-Orange-Light-Compact";
+      icon-theme = "Colloid";
+      font-name = "Iosevka 12";
+      cursor-theme = "Phinger-Cursors-Light";
     };
     "org/gnome/desktop/wm/preferences" = {
-      titlebar-font = "Iosevka 12"; # Window title font
+      titlebar-font = "Iosevka 12";
     };
   };
 }
+
