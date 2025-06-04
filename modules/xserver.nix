@@ -3,7 +3,7 @@
   services.xserver = {
     enable = true;
     xkb.layout = "us";
-    xkb.Options = "eurosign:e";
+    xkbOptions = "eurosign:e";
     displayManager.gdm.enable = true;
     desktopManager.xfce.enable = true;
     desktopManager.xfce.enableWaylandSession = true;
