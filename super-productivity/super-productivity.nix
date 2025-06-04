@@ -14,8 +14,8 @@ buildNpmPackage rec {
   pname = "super-productivity";
   version = "unstable-${src.shortRev or "unknown"}";
   inherit src;
-
-  npmDepsHash = "sha256-0000000000000000000000000000000000000000000000000000"; # Let Nix tell you the right hash on build, or replace with a real one if you want it locked.
+ 
+ npmDepsHash = "sha256-SAmSvdPlJFDE6TQCr932MfPzlwDtGcm4YdHesVA6j8c=";
 
   npmFlags = [ "--legacy-peer-deps" ];
   makeCacheWritable = true;
