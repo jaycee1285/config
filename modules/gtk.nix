@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 
   # Set GTK theme and font via dconf/gsettings
   dconf.settings = {
