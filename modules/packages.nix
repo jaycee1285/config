@@ -29,7 +29,8 @@
     nodejs_24
     unstable.bun
     github-desktop
-
+    gh
+    
     # internet
     unstable.librewolf  
     qbittorrent
