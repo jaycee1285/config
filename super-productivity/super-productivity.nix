@@ -15,7 +15,7 @@ buildNpmPackage rec {
   version = "unstable-${src.shortRev or "unknown"}";
   inherit src;
  
- npmDepsHash = "sha256-SAmSvdPlJFDE6TQCr932MfPzlwDtGcm4YdHesVA6j8c=";
+ npmDepsHash = "sha256-/gdzghuh0KUjeaXMxibvgPbyPVJynoQWFtm7kHyVeog=";
 
   npmFlags = [ "--legacy-peer-deps" ];
   makeCacheWritable = true;
