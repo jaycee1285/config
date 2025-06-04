@@ -7,7 +7,7 @@
     ./modules/bootloader.nix
     ./modules/flatpak.nix
     ./modules/fonts.nix
-    ./moddules/gtk.nix
+    ./modules/gtk.nix
     ./modules/gtk-themes.nix
     ./modules/hardware.nix
     ./modules/localization.nix
