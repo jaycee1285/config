@@ -289,11 +289,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1749057507,
-        "narHash": "sha256-yE7AoPbUNckvvck+jEOKPN2/G07uUP7ZAvaJRoGLmgE=",
+        "lastModified": 1749068826,
+        "narHash": "sha256-dv77CucEIk74IhyqaE7u8pnHfx2wJOuXlLcgXwdANAY=",
         "owner": "jaycee1285",
         "repo": "super-productivity",
-        "rev": "a3e801995543d493a8d28809bbbef3069e0e84c5",
+        "rev": "372406445b4d7e426bf00810015e76698eb9f2ff",
         "type": "github"
       },
       "original": {
