@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     gtk-themes.url = "path:./gtk-themes";
-    super-productivity.url = "path:./super-productivity";  # <--- Added here!
+    super-productivity.url = "path:./super-productivty"
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, super-productivity, ... }: {
