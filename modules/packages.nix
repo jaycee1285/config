@@ -49,6 +49,7 @@
     wlogout
     unstable.labwc
     unstable.waybar
+    unstable.sfwbar
     fuzzel
     bemenu
     swww
@@ -81,6 +82,8 @@
     #super-productivity
     jq
     amphetype
+    kopia-ui
+    warehouse
 
     # gaming
     mupen64plus
