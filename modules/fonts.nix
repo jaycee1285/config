@@ -3,6 +3,7 @@
   fonts.fonts = with pkgs; [
   aileron
   font-awesome
+  line-awesome
   material-icons
   julia-mono
   geist-font
