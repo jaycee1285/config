@@ -12,6 +12,9 @@
         config = config.nixpkgs.config;
       };
     })
+     (final: prev: {
+    waybar = prev.waybar.override { withJson = true; };
+  })
   ];
 
   environment.systemPackages = with pkgs; [
