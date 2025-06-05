@@ -10,6 +10,6 @@
   services = {
   libinput.enable = true;
   displayManager.gdm.enable = true;
-  }
+  };
   console.keyMap = "us";
 }
