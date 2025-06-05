@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 {
-  hardware.pulseaudio.enable = false;
+   service.pulsewire.enable = false;
    services.pipewire = {
 	enable = true;
 	alsa.enable = true;

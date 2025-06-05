@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 {
-  fonts.fonts = with pkgs; [
+  fonts = with pkgs; [
   aileron
   font-awesome
   line-awesome
