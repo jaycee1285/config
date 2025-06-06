@@ -5,11 +5,11 @@
     "org/gnome/desktop/interface" = {
       gtk-theme = "Orchis-Orange-Light-Compact";
       icon-theme = "Colloid";
-      font-name = "Mulish 12";
+      font-name = "Iosevka Aile";
       cursor-theme = "Phinger-Cursors-Light";
     };
     "org/gnome/desktop/wm/preferences" = {
-      titlebar-font = "Mulish 12";
+      titlebar-font = "Iosevka Aile 12";
     };
   };
 }
