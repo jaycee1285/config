@@ -8,6 +8,7 @@
     gtk-themes.packages.x86_64-linux.tokyonight-gtk-theme
     gtk-themes.packages.x86_64-linux.osaka-gtk-theme
     gtk-themes.packages.x86_64-linux.kanagawa-gtk-theme
+    gtk-themes.packages.x86_64-linux.nordfox-gtk-theme
     gtk-themes.packages.x86_64-linux.orchis-orange-compact
     gtk-themes.packages.x86_64-linux.nordic-polar-gtk-theme
     gtk-themes.packages.x86_64-linux.juno-gtk-theme

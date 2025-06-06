@@ -14,6 +14,9 @@
     # Kanagawa
     kanagawa-theme.url = "github:jaycee1285/Kanagawa-GTK-Theme";  
 
+    # Nordfox
+    nordfox-theme.url = "github:jaycee1285/Nightfox-GTK-Theme";
+
     #Eliver
     orchis-theme.url = "github:jaycee1285/Orchis-theme";
 
@@ -24,7 +27,7 @@
 
   outputs = { self, nixpkgs
     , catppuccin-theme, gruvbox-theme, everforest-theme, tokyonight-theme, osaka-theme
-    , kanagawa-theme, orchis-theme
+    , kanagawa-theme, nordfox-theme, orchis-theme
     , nordic-polar-theme, juno-theme
     , ... }:
     let
@@ -201,6 +204,21 @@
           meta = with pkgs.lib; {
             description = "Juno GTK theme (Vince, always latest)";
             homepage = "https://github.com/EliverLara/Juno";
+            license = licenses.gpl3Only;
+            platforms = platforms.linux;
+          };
+        };
+        # Nordfox GTK Theme
+        nordfox-gtk-theme = makeTheme {
+          pname = "nordfox-gtk-theme";
+          src = nordfox-theme;
+          style = "fausto";
+          installFlags = "-s compact --tweaks outline nord";
+          nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
+          propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
+          meta = with pkgs.lib; {
+            description = "Nordfox GTK theme (Fausto, always latest)";
+            homepage = "https://github.com/jaycee1285/Nightfox-GTK-Theme";
             license = licenses.gpl3Only;
             platforms = platforms.linux;
           };
