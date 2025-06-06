@@ -14,6 +14,4 @@
   displayManager.gdm.enable = true;
   };
   console.keyMap = "us";
-  services.desktopManager.cosmic.enable = true;
-  services.desktopManager.plasma6.enable = true;
 }
