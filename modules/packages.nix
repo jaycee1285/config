@@ -25,7 +25,7 @@
     sassc
     qtscrcpy
     localsend
-    kdePackages.full
+    kdePackages.polkit-kde-agent-1
 
     # coding
     unstable.vscodium
