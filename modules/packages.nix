@@ -26,6 +26,7 @@
     qtscrcpy
     localsend
     kdePackages.polkit-kde-agent-1
+    pcloud
 
     # coding
     unstable.vscodium
