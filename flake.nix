@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     gtk-themes.url = "path:./gtk-themes";
-  inputs.ob-themes.url = "path:./ob-themes";
+    ob-themes.url = "path:./ob-themes";
 
 #    super-productivity.url = "path:./super-productivity";
     home-manager.url = "github:nix-community/home-manager";  # <-- Add this!
