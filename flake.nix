@@ -10,7 +10,7 @@
     home-manager.url = "github:nix-community/home-manager";  # <-- Add this!
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, home-manager, ... }: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes home-manager, ... }: {
     nixosConfigurations = {
       john = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
