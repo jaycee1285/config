@@ -5,7 +5,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     gtk-themes.url = "path:./gtk-themes";
-    ob-themes.url = "path:./ob-themes";
+    ob-themes = {
+  url = "path:./ob-themes";
+  inputs.ob-themes.follows = "";  # prevent cyclic self-import
+};
 #    super-productivity.url = "path:./super-productivity";
     home-manager.url = "github:nix-community/home-manager";  # <-- Add this!
   };
