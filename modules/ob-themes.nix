@@ -1,4 +1,4 @@
-{ config, pkgs, ob-themes, ... }:
+{ pkgs, ob-themes, ... }:
 
 {
   environment.systemPackages = [
