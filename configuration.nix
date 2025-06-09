@@ -19,6 +19,7 @@
     ./modules/users.nix
     ./modules/xserver.nix
   #  ./modules/super-productivity.nix
+    ./modules/ob-themes.nix
   ];
 
   # You can also set global overrides here, or import other .nix files
