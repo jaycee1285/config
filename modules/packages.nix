@@ -41,8 +41,8 @@
     unstable.librewolf  
     qbittorrent
     unstable.chromium
-    unstable.onedrivegui
-    unstable.onedrive
+    #unstable.onedrivegui
+    #unstable.onedrive
 
     # wayland
     unstable.labwc-tweaks-gtk
