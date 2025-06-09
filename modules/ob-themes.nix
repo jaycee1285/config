@@ -2,6 +2,6 @@
 
 {
   environment.systemPackages = [
-    ob-themes.packages.x86_64-linux
+    ob-themes.packages.${pkgs.system}.default
   ];
 }
