@@ -211,22 +211,6 @@
         "type": "indirect"
       }
     },
-    "nixpkgs_6": {
-      "locked": {
-        "lastModified": 1749285348,
-        "narHash": "sha256-frdhQvPbmDYaScPFiCnfdh3B/Vh81Uuoo0w5TkWmmjU=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "3e3afe5174c561dee0df6f2c2b2236990146329f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nordfox-theme": {
       "inputs": {
         "nixpkgs": "nixpkgs_2"
@@ -263,7 +247,7 @@
     "ob-themes": {
       "inputs": {
         "nixpkgs": "nixpkgs_5",
-        "ob-themes": "ob-themes_2"
+        "ob-themes": []
       },
       "locked": {
         "path": "./ob-themes",
@@ -274,24 +258,6 @@
         "type": "path"
       },
       "parent": []
-    },
-    "ob-themes_2": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_6"
-      },
-      "locked": {
-        "lastModified": 1749504484,
-        "narHash": "sha256-AJMmxyj7N1ey1fDNhQdPEeGeG/v3fhZKVpz9xY8J350=",
-        "owner": "jaycee1285",
-        "repo": "ob-themes",
-        "rev": "a10b10c634736e5cf3534f3ef045a8ff5faa16da",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jaycee1285",
-        "repo": "ob-themes",
-        "type": "github"
-      }
     },
     "orchis-theme": {
       "locked": {
