@@ -1,23 +1,26 @@
 {
-  inputs = {
-    ob-themes.url = "github:jaycee1285/ob-themes";
-  };
+  description = "Jaycee1285 Openbox themes";
 
-  outputs = { nixpkgs, ob-themes, ... }@inputs:
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+  outputs = { self, nixpkgs }: 
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
     in {
-      # NixOS module
-      nixosConfigurations.my-hostname = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = [
-          {
-            environment.systemPackages = [
-              ob-themes.packages.${system}.default
-            ];
-          }
-        ];
+      packages.${system}.default = pkgs.stdenvNoCC.mkDerivation {
+        pname = "ob-themes";
+        version = "unstable-${self.shortRev or "unknown"}";
+        src = ./.;
+        installPhase = ''
+          mkdir -p $out/share/themes
+          cp -r $src/* $out/share/themes/
+        '';
+        meta = with pkgs.lib; {
+          description = "Jaycee1285 Openbox themes";
+          license = licenses.gpl3Only;
+          platforms = platforms.linux;
+        };
       };
     };
 }
