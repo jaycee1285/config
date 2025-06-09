@@ -197,6 +197,36 @@
         "type": "github"
       }
     },
+    "nixpkgs_5": {
+      "locked": {
+        "lastModified": 1749401433,
+        "narHash": "sha256-HXIQzULIG/MEUW2Q/Ss47oE3QrjxvpUX7gUl4Xp6lnc=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "08fcb0dcb59df0344652b38ea6326a2d8271baff",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_6": {
+      "locked": {
+        "lastModified": 1749285348,
+        "narHash": "sha256-frdhQvPbmDYaScPFiCnfdh3B/Vh81Uuoo0w5TkWmmjU=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "3e3afe5174c561dee0df6f2c2b2236990146329f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nordfox-theme": {
       "inputs": {
         "nixpkgs": "nixpkgs_2"
@@ -227,6 +257,39 @@
       "original": {
         "owner": "jaycee1285",
         "repo": "Nordic-Polar",
+        "type": "github"
+      }
+    },
+    "ob-themes": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_5",
+        "ob-themes": "ob-themes_2"
+      },
+      "locked": {
+        "path": "./ob-themes",
+        "type": "path"
+      },
+      "original": {
+        "path": "./ob-themes",
+        "type": "path"
+      },
+      "parent": []
+    },
+    "ob-themes_2": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_6"
+      },
+      "locked": {
+        "lastModified": 1749504484,
+        "narHash": "sha256-AJMmxyj7N1ey1fDNhQdPEeGeG/v3fhZKVpz9xY8J350=",
+        "owner": "jaycee1285",
+        "repo": "ob-themes",
+        "rev": "a10b10c634736e5cf3534f3ef045a8ff5faa16da",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jaycee1285",
+        "repo": "ob-themes",
         "type": "github"
       }
     },
@@ -265,7 +328,8 @@
         "gtk-themes": "gtk-themes",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_4",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "ob-themes": "ob-themes"
       }
     },
     "tokyonight-theme": {
