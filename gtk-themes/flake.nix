@@ -242,7 +242,7 @@
           pname = "magnetic-gtk-theme";
           src = magnetic-theme;
           style = "eliver";
-          installFlags = "-t grey,orange --tweaks Nord Gruvbox compact";
+          installFlags = "-t grey orange --tweaks Nord Gruvbox compact";
           nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
           meta = with pkgs.lib; {
@@ -256,7 +256,7 @@
           pname = "graphite-gtk-theme";
           src = graphite-theme;
           style = "eliver";
-          installFlags = "-t orange,default --tweaks compact normal Nord";
+          installFlags = "-t orange default --tweaks compact normal Nord";
           nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
           meta = with pkgs.lib; {
