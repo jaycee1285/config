@@ -1,5 +1,5 @@
 {
-  description = "Always-latest GTK theme bundle (Fausto, Vince, Orchis, Kanagawa)";
+  description = "Always-latest GTK theme bundle (Fausto, Vince, Orchis, Kanagawa, Juno Mirage)";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -17,56 +17,56 @@
     # Nordfox
     nordfox-theme.url = "github:jaycee1285/Nightfox-GTK-Theme";
 
-    #Eliver
+    # Eliver
     orchis-theme.url = "github:jaycee1285/Orchis-theme";
 
     # Vince themes
     nordic-polar-theme.url = "github:jaycee1285/Nordic-Polar";
-    juno-theme.url = "github:jaycee1285/Juno";
+    # No juno-theme input
   };
 
   outputs = { self, nixpkgs
     , catppuccin-theme, gruvbox-theme, everforest-theme, tokyonight-theme, osaka-theme
     , kanagawa-theme, nordfox-theme, orchis-theme
-    , nordic-polar-theme, juno-theme
+    , nordic-polar-theme
     , ... }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
 
-    makeTheme = {
-      pname,
-      src,
-      style,     # "fausto", "eliver", "vince"
-      themeFolder ? null,
-      installFlags ? "",
-      nativeBuildInputs ? [pkgs.gtk3 pkgs.sassc ],
-      buildInputs ? [],
-      propagatedUserEnvPkgs ? [],
-      meta ? {},
-    }:
-      pkgs.stdenvNoCC.mkDerivation {
-        inherit pname src nativeBuildInputs buildInputs propagatedUserEnvPkgs meta;
-        version = "unstable-${src.shortRev or "unknown"}";
+      makeTheme = {
+        pname,
+        src,
+        style,     # "fausto", "eliver", "vince"
+        themeFolder ? null,
+        installFlags ? "",
+        nativeBuildInputs ? [pkgs.gtk3 pkgs.sassc ],
+        buildInputs ? [],
+        propagatedUserEnvPkgs ? [],
+        meta ? {},
+      }:
+        pkgs.stdenvNoCC.mkDerivation {
+          inherit pname src nativeBuildInputs buildInputs propagatedUserEnvPkgs meta;
+          version = "unstable-${src.shortRev or "unknown"}";
 
-        installPhase =
-          # Fausto themes: run install.sh from ./themes
-          (pkgs.lib.optionalString (style == "fausto") ''
-            cd themes
-            bash ./install.sh ${installFlags} -d $out/share/themes
-          '')
-          # Orchis (eliver): run install.sh from root
-          + (pkgs.lib.optionalString (style == "eliver") ''
-            bash ./install.sh ${installFlags} -d $out/share/themes
-          '')
-          # Vince themes: copy all contents to a single subfolder
-          + (pkgs.lib.optionalString (style == "vince" && themeFolder != null) ''
-            mkdir -p $out/share/themes/${themeFolder}
-            shopt -s dotglob
-            cp -r * $out/share/themes/${themeFolder}/
-            shopt -u dotglob
-          '');
-      };
+          installPhase =
+            # Fausto themes: run install.sh from ./themes
+            (pkgs.lib.optionalString (style == "fausto") ''
+              cd themes
+              bash ./install.sh ${installFlags} -d $out/share/themes
+            '')
+            # Orchis (eliver): run install.sh from root
+            + (pkgs.lib.optionalString (style == "eliver") ''
+              bash ./install.sh ${installFlags} -d $out/share/themes
+            '')
+            # Vince themes: copy all contents to a single subfolder
+            + (pkgs.lib.optionalString (style == "vince" && themeFolder != null) ''
+              mkdir -p $out/share/themes/${themeFolder}
+              shopt -s dotglob
+              cp -r * $out/share/themes/${themeFolder}/
+              shopt -u dotglob
+            '');
+        };
 
     in
     {
@@ -191,16 +191,29 @@
             platforms = platforms.linux;
           };
         };
-        juno-gtk-theme = makeTheme {
-          pname = "juno-gtk-theme";
-          src = juno-theme;
-          style = "vince";
-          themeFolder = "Juno";
-          nativeBuildInputs = [ pkgs.gtk3 ];
+
+        # Juno Mirage only!
+        juno-mirage-gtk-theme = pkgs.stdenvNoCC.mkDerivation rec {
+          pname = "juno-mirage-gtk-theme";
+          version = "0.0.2";
+          src = pkgs.fetchurl {
+            url = "https://github.com/gvolpe/Juno/releases/download/${version}/Juno-mirage-standard-buttons.tar.xz";
+            sha256 = "0000000000000000000000000000000000000000000000000000"; # <-- FIX ME after first build!
+          };
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
+          unpackPhase = ''
+            tar xf $src
+          '';
+          installPhase = ''
+            runHook preInstall
+            mkdir -p $out/share/themes/Juno-mirage-standard-buttons
+            cp -a Juno-mirage-standard-buttons/* $out/share/themes/Juno-mirage-standard-buttons/
+            rm -f $out/share/themes/Juno-mirage-standard-buttons/{LICENSE,README.md}
+            runHook postInstall
+          '';
           meta = with pkgs.lib; {
-            description = "Juno GTK theme (Vince, always latest)";
-            homepage = "https://github.com/EliverLara/Juno";
+            description = "Juno Mirage GTK theme (standard buttons, official)";
+            homepage = "https://github.com/gvolpe/Juno";
             license = licenses.gpl3Only;
             platforms = platforms.linux;
           };
