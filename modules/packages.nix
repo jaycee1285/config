@@ -30,6 +30,7 @@
     qdirstat
     gowall
     kdePackages.dolphin
+    graphite-gtk-theme
 
     # coding
     unstable.vscodium
