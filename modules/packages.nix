@@ -29,6 +29,7 @@
     pcloud
     qdirstat
     gowall
+    nautilus
 
     # coding
     unstable.vscodium
