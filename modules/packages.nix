@@ -28,7 +28,8 @@
     kdePackages.polkit-kde-agent-1
     pcloud
     qdirstat
-    gowall    
+    gowall
+    gnomePackages.nautilus
 
     # coding
     unstable.vscodium
