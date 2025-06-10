@@ -31,6 +31,7 @@
     gowall
     kdePackages.dolphin
     graphite-gtk-theme
+    wayshot
 
     # coding
     unstable.vscodium
