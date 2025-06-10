@@ -27,7 +27,8 @@
     localsend
     kdePackages.polkit-kde-agent-1
     pcloud
-    qdirstat    
+    qdirstat
+    gowall    
 
     # coding
     unstable.vscodium
