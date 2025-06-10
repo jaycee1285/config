@@ -35,49 +35,38 @@
       pkgs = import nixpkgs { inherit system; };
 
     makeTheme = {
-  pname,
-  src,
-  style,     # "fausto", "eliver", "vince"
-  installFlags ? "",
-  nativeBuildInputs ? [pkgs.gtk3 pkgs.sassc ],
-  buildInputs ? [],
-  propagatedUserEnvPkgs ? [],
-  meta ? {},
-}:
-  pkgs.stdenvNoCC.mkDerivation {
-    inherit pname src nativeBuildInputs buildInputs propagatedUserEnvPkgs meta;
-    version = "unstable-${src.shortRev or "unknown"}";
+      pname,
+      src,
+      style,     # "fausto", "eliver", "vince"
+      themeFolder ? null,
+      installFlags ? "",
+      nativeBuildInputs ? [pkgs.gtk3 pkgs.sassc ],
+      buildInputs ? [],
+      propagatedUserEnvPkgs ? [],
+      meta ? {},
+    }:
+      pkgs.stdenvNoCC.mkDerivation {
+        inherit pname src nativeBuildInputs buildInputs propagatedUserEnvPkgs meta;
+        version = "unstable-${src.shortRev or "unknown"}";
 
-    installPhase =
-      # Fausto themes: run install.sh from ./themes
-      (pkgs.lib.optionalString (style == "fausto") ''
-        cd themes
-        bash ./install.sh ${installFlags} -d $out/share/themes
-      '')
-      # Orchis (eliver): run install.sh from root
-      + (pkgs.lib.optionalString (style == "eliver") ''
-        bash ./install.sh ${installFlags} -d $out/share/themes
-      '')
-      # Vince themes: just copy contents to themes dir
-      + (pkgs.lib.optionalString (style == "vince") ''
-  # Derive the folder name from pname
-  themeFolder=""
-  if [ "$pname" = "nordic-polar-gtk-theme" ]; then
-    themeFolder="Nordic-Polar"
-  elif [ "$pname" = "juno-gtk-theme" ]; then
-    themeFolder="Juno"
-  else
-    themeFolder="${pname}"
-  fi
-
-  mkdir -p $out/share/themes/$themeFolder
-  shopt -s dotglob
-  cp -r * $out/share/themes/$themeFolder/
-  shopt -u dotglob
-'')
-
-  };
-
+        installPhase =
+          # Fausto themes: run install.sh from ./themes
+          (pkgs.lib.optionalString (style == "fausto") ''
+            cd themes
+            bash ./install.sh ${installFlags} -d $out/share/themes
+          '')
+          # Orchis (eliver): run install.sh from root
+          + (pkgs.lib.optionalString (style == "eliver") ''
+            bash ./install.sh ${installFlags} -d $out/share/themes
+          '')
+          # Vince themes: copy all contents to a single subfolder
+          + (pkgs.lib.optionalString (style == "vince" && themeFolder != null) ''
+            mkdir -p $out/share/themes/${themeFolder}
+            shopt -s dotglob
+            cp -r * $out/share/themes/${themeFolder}/
+            shopt -u dotglob
+          '');
+      };
 
     in
     {
@@ -187,12 +176,12 @@
           };
         };
 
-        # Vince themes
+        # Vince themes (now with custom folder logic)
         nordic-polar-gtk-theme = makeTheme {
           pname = "nordic-polar-gtk-theme";
           src = nordic-polar-theme;
           style = "vince";
-          # no installFlags
+          themeFolder = "Nordic-Polar";
           nativeBuildInputs = [ pkgs.gtk3 ];
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
           meta = with pkgs.lib; {
@@ -206,7 +195,7 @@
           pname = "juno-gtk-theme";
           src = juno-theme;
           style = "vince";
-          # no installFlags
+          themeFolder = "Juno";
           nativeBuildInputs = [ pkgs.gtk3 ];
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
           meta = with pkgs.lib; {
@@ -216,6 +205,7 @@
             platforms = platforms.linux;
           };
         };
+
         # Nordfox GTK Theme
         nordfox-gtk-theme = makeTheme {
           pname = "nordfox-gtk-theme";
