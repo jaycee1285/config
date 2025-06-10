@@ -60,14 +60,22 @@
       '')
       # Vince themes: just copy contents to themes dir
       + (pkgs.lib.optionalString (style == "vince") ''
-        mkdir -p $out/share/themes
-        # Copy only theme directories (e.g. Juno, Nordic-Polar) if present, otherwise everything
-        shopt -s dotglob
-        for dir in */; do
-          cp -r "$dir" $out/share/themes/
-        done
-        shopt -u dotglob
-      '');
+  # Derive the folder name from pname
+  themeFolder=""
+  if [ "$pname" = "nordic-polar-gtk-theme" ]; then
+    themeFolder="Nordic-Polar"
+  elif [ "$pname" = "juno-gtk-theme" ]; then
+    themeFolder="Juno"
+  else
+    themeFolder="${pname}"
+  fi
+
+  mkdir -p $out/share/themes/$themeFolder
+  shopt -s dotglob
+  cp -r * $out/share/themes/$themeFolder/
+  shopt -u dotglob
+'')
+
   };
 
 
