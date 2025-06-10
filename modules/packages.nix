@@ -29,7 +29,6 @@
     pcloud
     qdirstat
     gowall
-    gnomePackages.nautilus
 
     # coding
     unstable.vscodium
