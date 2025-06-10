@@ -11,6 +11,6 @@
     gtk-themes.packages.x86_64-linux.nordfox-gtk-theme
     gtk-themes.packages.x86_64-linux.orchis-orange-compact
     gtk-themes.packages.x86_64-linux.nordic-polar-gtk-theme
-    gtk-themes.packages.x86_64-linux.juno-gtk-theme
+    gtk-themes.packages.x86_64-linux.juno-mirage-gtk-theme
   ];
 }
