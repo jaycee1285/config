@@ -29,7 +29,7 @@
     pcloud
     qdirstat
     gowall
-    nautilus
+    kdePackages.dolphin
 
     # coding
     unstable.vscodium
