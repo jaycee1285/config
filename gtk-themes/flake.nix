@@ -23,12 +23,16 @@
     # Vince themes
     nordic-polar-theme.url = "github:jaycee1285/Nordic-Polar";
     # No juno-theme input
+
+     # Eliver themes
+    magnetic-theme.url = "github:jaycee1285/magnetic-gtk-theme";
+    graphite-theme.url = "github:jaycee1285/graphite-gtk-theme";
   };
 
   outputs = { self, nixpkgs
     , catppuccin-theme, gruvbox-theme, everforest-theme, tokyonight-theme, osaka-theme
     , kanagawa-theme, nordfox-theme, orchis-theme
-    , nordic-polar-theme
+    , nordic-polar-theme, magnetic-theme, graphite-theme
     , ... }:
     let
       system = "x86_64-linux";
@@ -230,6 +234,34 @@
           meta = with pkgs.lib; {
             description = "Nordfox GTK theme (Fausto, always latest)";
             homepage = "https://github.com/jaycee1285/Nightfox-GTK-Theme";
+            license = licenses.gpl3Only;
+            platforms = platforms.linux;
+          };
+        };
+          magnetic-gtk-theme = makeTheme {
+          pname = "magnetic-gtk-theme";
+          src = magnetic-theme;
+          style = "eliver";
+          installFlags = "-t grey,orange --tweaks Nord Gruvbox compact";
+          nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
+          propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
+          meta = with pkgs.lib; {
+            description = "Magnetic GTK theme (Eliver, always latest)";
+            homepage = "https://github.com/jaycee1285/magnetic-gtk-theme";
+            license = licenses.gpl3Only;
+            platforms = platforms.linux;
+          };
+        };
+        graphite-gtk-theme = makeTheme {
+          pname = "graphite-gtk-theme";
+          src = graphite-theme;
+          style = "eliver";
+          installFlags = "-t orange,default --tweaks compact normal Nord";
+          nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
+          propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
+          meta = with pkgs.lib; {
+            description = "Graphite GTK theme (Eliver, always latest)";
+            homepage = "https://github.com/jaycee1285/graphite-gtk-theme";
             license = licenses.gpl3Only;
             platforms = platforms.linux;
           };
