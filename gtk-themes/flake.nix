@@ -286,7 +286,7 @@
           pname = "graphite-gtk-theme";
           src = graphite-theme;
           style = "eliver";
-          installFlags = "-t orange default -s compact --tweaks normal all";
+          installFlags = "-t orange default -s compact --tweaks normal";
           nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
           meta = with pkgs.lib; {
