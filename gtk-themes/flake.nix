@@ -272,7 +272,7 @@
           pname = "magnetic-gtk-theme";
           src = magnetic-theme;
           style = "eliver";
-          installFlags = "-t grey orange --tweaks outline compact";
+          installFlags = "-t grey orange -s compact --tweaks outline";
           nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
           meta = with pkgs.lib; {
@@ -286,7 +286,7 @@
           pname = "graphite-gtk-theme";
           src = graphite-theme;
           style = "eliver";
-          installFlags = "-t orange default --tweaks compact normal all";
+          installFlags = "-t orange default -s compact --tweaks normal all";
           nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
           meta = with pkgs.lib; {
