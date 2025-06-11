@@ -30,8 +30,8 @@
     qdirstat
     gowall
     kdePackages.dolphin
-    graphite-gtk-theme
     wayshot
+    super-productivity
 
     # coding
     unstable.vscodium
