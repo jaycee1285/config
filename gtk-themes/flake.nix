@@ -178,51 +178,52 @@
 
         # Nordic Polar - only the standard-buttons variant, custom derivation
         nordic-polar-gtk-theme = pkgs.stdenvNoCC.mkDerivation rec {
-          pname = "nordic-polar-gtk-theme";
-          version = "2.2.0-unstable-2025-03-21";
-          src = pkgs.fetchFromGitHub {
-            owner = "EliverLara";
-            repo = "Nordic-polar";
-            rev = "ca23b9460713e72defae777162175921beae6e27"; # <-- Standard Buttons variant
-            hash = "sha256-wkmmpviQBGoE/+/tPTIIgkWFUYtYney5Yz12m8Zlak8=";
-            name = "Nordic-Polar-standard-buttons";
-          };
-          propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
-          nativeBuildInputs = [ pkgs.jdupes ];
-          dontCheckForBrokenSymlinks = true;
-          installPhase = ''
-            runHook preInstall
+  pname = "nordic-polar-gtk-theme";
+  version = "2.2.0-unstable-2025-03-21";
+  src = pkgs.fetchFromGitHub {
+    owner = "EliverLara";
+    repo = "Nordic-polar";
+    rev = "ca23b9460713e72defae777162175921beae6e27";
+    hash = "sha256-wkmmpviQBGoE/+/tPTIIgkWFUYtYney5Yz12m8Zlak8=";
+    name = "Nordic-Polar-standard-buttons";
+  };
+  propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
+  nativeBuildInputs = [ pkgs.jdupes ];
+  dontCheckForBrokenSymlinks = true;
+  installPhase = ''
+    runHook preInstall
 
-            mkdir -p $out/share/themes
-            cp -a Nordic-Polar-standard-buttons $out/share/themes/
+    mkdir -p $out/share/themes/Nordic-Polar-standard-buttons
+    cp -a ./* $out/share/themes/Nordic-Polar-standard-buttons/
 
-            # Clean up extraneous files
-            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/.gitignore
-            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/Art
-            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/FUNDING.yml
-            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/LICENSE
-            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/README.md
-            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/{package.json,package-lock.json,Gulpfile.js}
-            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/src
-            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/cinnamon/*.scss
-            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/gnome-shell/{earlier-versions,extensions,*.scss}
-            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/gtk-2.0/{assets.svg,assets.txt,links.fish,render-assets.sh}
-            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/gtk-3.0/{apps,widgets,*.scss}
-            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/gtk-4.0/{apps,widgets,*.scss}
-            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/xfwm4/{assets,render_assets.fish}
+    # Clean up extraneous files
+    rm -rf $out/share/themes/Nordic-Polar-standard-buttons/.gitignore
+    rm -rf $out/share/themes/Nordic-Polar-standard-buttons/Art
+    rm -rf $out/share/themes/Nordic-Polar-standard-buttons/FUNDING.yml
+    rm -rf $out/share/themes/Nordic-Polar-standard-buttons/LICENSE
+    rm -rf $out/share/themes/Nordic-Polar-standard-buttons/README.md
+    rm -rf $out/share/themes/Nordic-Polar-standard-buttons/{package.json,package-lock.json,Gulpfile.js}
+    rm -rf $out/share/themes/Nordic-Polar-standard-buttons/src
+    rm -rf $out/share/themes/Nordic-Polar-standard-buttons/cinnamon/*.scss
+    rm -rf $out/share/themes/Nordic-Polar-standard-buttons/gnome-shell/{earlier-versions,extensions,*.scss}
+    rm -rf $out/share/themes/Nordic-Polar-standard-buttons/gtk-2.0/{assets.svg,assets.txt,links.fish,render-assets.sh}
+    rm -rf $out/share/themes/Nordic-Polar-standard-buttons/gtk-3.0/{apps,widgets,*.scss}
+    rm -rf $out/share/themes/Nordic-Polar-standard-buttons/gtk-4.0/{apps,widgets,*.scss}
+    rm -rf $out/share/themes/Nordic-Polar-standard-buttons/xfwm4/{assets,render_assets.fish}
 
-            # Link duplicates to save space
-            jdupes --quiet --link-soft --recurse $out/share/themes/Nordic-Polar-standard-buttons || true
+    # Link duplicates to save space
+    jdupes --quiet --link-soft --recurse $out/share/themes/Nordic-Polar-standard-buttons || true
 
-            runHook postInstall
-          '';
-          meta = with pkgs.lib; {
-            description = "Nordic Polar GTK theme (standard buttons variant only)";
-            homepage = "https://github.com/EliverLara/Nordic-polar";
-            license = licenses.gpl3Only;
-            platforms = platforms.linux;
-          };
-        };
+    runHook postInstall
+  '';
+  meta = with pkgs.lib; {
+    description = "Nordic Polar GTK theme (standard buttons variant only)";
+    homepage = "https://github.com/EliverLara/Nordic-polar";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+  };
+};
+
 
         # Juno Mirage only!
         juno-mirage-gtk-theme = pkgs.stdenvNoCC.mkDerivation rec {
