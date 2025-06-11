@@ -22,9 +22,8 @@
 
     # Vince themes
     nordic-polar-theme.url = "github:jaycee1285/Nordic-Polar";
-    # No juno-theme input
 
-     # Eliver themes
+    # Eliver themes
     magnetic-theme.url = "github:jaycee1285/magnetic-gtk-theme";
     graphite-theme.url = "github:jaycee1285/graphite-gtk-theme";
   };
@@ -54,16 +53,13 @@
           version = "unstable-${src.shortRev or "unknown"}";
 
           installPhase =
-            # Fausto themes: run install.sh from ./themes
             (pkgs.lib.optionalString (style == "fausto") ''
               cd themes
               bash ./install.sh ${installFlags} -d $out/share/themes
             '')
-            # Orchis (eliver): run install.sh from root
             + (pkgs.lib.optionalString (style == "eliver") ''
               bash ./install.sh ${installFlags} -d $out/share/themes
             '')
-            # Vince themes: copy all contents to a single subfolder
             + (pkgs.lib.optionalString (style == "vince" && themeFolder != null) ''
               mkdir -p $out/share/themes/${themeFolder}
               shopt -s dotglob
@@ -180,17 +176,49 @@
           };
         };
 
-        # Vince themes (now with custom folder logic)
-        nordic-polar-gtk-theme = makeTheme {
+        # Nordic Polar - only the standard-buttons variant, custom derivation
+        nordic-polar-gtk-theme = pkgs.stdenvNoCC.mkDerivation rec {
           pname = "nordic-polar-gtk-theme";
-          src = nordic-polar-theme;
-          style = "vince";
-          themeFolder = "Nordic-Polar";
-          nativeBuildInputs = [ pkgs.gtk3 ];
+          version = "2.2.0-unstable-2025-03-21";
+          src = pkgs.fetchFromGitHub {
+            owner = "EliverLara";
+            repo = "Nordic-polar";
+            rev = "ca23b9460713e72defae777162175921beae6e27"; # <-- Standard Buttons variant
+            hash = "sha256-wkmmpviQBGoE/+/tPTIIgkWFUYtYney5Yz12m8Zlak8=";
+            name = "Nordic-Polar-standard-buttons";
+          };
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
+          nativeBuildInputs = [ pkgs.jdupes ];
+          dontCheckForBrokenSymlinks = true;
+          installPhase = ''
+            runHook preInstall
+
+            mkdir -p $out/share/themes
+            cp -a Nordic-Polar-standard-buttons $out/share/themes/
+
+            # Clean up extraneous files
+            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/.gitignore
+            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/Art
+            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/FUNDING.yml
+            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/LICENSE
+            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/README.md
+            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/{package.json,package-lock.json,Gulpfile.js}
+            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/src
+            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/cinnamon/*.scss
+            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/gnome-shell/{earlier-versions,extensions,*.scss}
+            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/gtk-2.0/{assets.svg,assets.txt,links.fish,render-assets.sh}
+            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/gtk-3.0/{apps,widgets,*.scss}
+            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/gtk-4.0/{apps,widgets,*.scss}
+            rm -rf $out/share/themes/Nordic-Polar-standard-buttons/xfwm4/{assets,render_assets.fish}
+
+            # Link duplicates to save space
+            jdupes --quiet --link-soft --recurse $out/share/themes/Nordic-Polar-standard-buttons || true
+
+            runHook postInstall
+          '';
           meta = with pkgs.lib; {
-            description = "Nordic Polar GTK theme (Vince, always latest)";
-            homepage = "https://github.com/EliverLara/Nordic-Polar";
+            description = "Nordic Polar GTK theme (standard buttons variant only)";
+            homepage = "https://github.com/EliverLara/Nordic-polar";
             license = licenses.gpl3Only;
             platforms = platforms.linux;
           };
@@ -238,11 +266,12 @@
             platforms = platforms.linux;
           };
         };
-          magnetic-gtk-theme = makeTheme {
+
+        magnetic-gtk-theme = makeTheme {
           pname = "magnetic-gtk-theme";
           src = magnetic-theme;
           style = "eliver";
-          installFlags = "-t grey orange -s compact --tweaks nord gruvbox";
+          installFlags = "-t grey orange --tweaks outline compact";
           nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
           meta = with pkgs.lib; {
@@ -256,7 +285,7 @@
           pname = "graphite-gtk-theme";
           src = graphite-theme;
           style = "eliver";
-          installFlags = "-t orange default -s compact --tweaks normal nord";
+          installFlags = "-t orange,default --tweaks compact normal all";
           nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
           propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
           meta = with pkgs.lib; {
