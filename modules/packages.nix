@@ -40,6 +40,13 @@
     github-desktop
     gh
     gearlever
+    zellij
+    micro
+
+    #CLI
+    fish
+    fishPlugins.fifc
+    zoxide
     
     # internet
     unstable.librewolf  
