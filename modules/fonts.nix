@@ -17,7 +17,7 @@
   pkgs.nerd-fonts.symbols-only
   pkgs.nerd-fonts.zed-mono
   pkgs.nerd-fonts.martian-mono
-  pkgs.nerd-fonts.rec-mono
+  pkgs.nerd-fonts.recursive-mono
   pkgs.nerd-fonts.monaspace
   pkgs.nerd-fonts.lekton
   pkgs.nerd-fonts.intone-mono
