@@ -1,0 +1,125 @@
+{
+        "layer": "top",
+        "position": "top",
+        "icon-theme": "Gruvbox Plus Dark",
+
+        "modules-left" : ["custom/ram_icon", "custom/swap_icon"],
+
+        "modules-center": ["wlr/taskbar","network#vpn"],
+
+
+        "modules-right": ["tray", "pulseaudio", "battery", "custom/clock"],
+
+        "custom/clock": {
+        "exec": "~/.config/waybar/scripts/clock.sh",
+  "interval": 60,
+  "return-type": "json",
+  "format": "{}"
+},
+
+
+        "tray": {
+          "icon-size": 36,
+          "spacing": 3,
+          "icon-theme": "Gruvbox Plus Dark"
+        },
+    "pulseaudio": {
+       "scroll-step": 5,
+        "format":"{volume}% {icon}",
+        "format-muted": "",
+        "format-icons": {
+        "default": ["","","",""],
+        "tooltip-format": "{volume}%"        
+      },
+      "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+      "on-right-click": "pavucontrol",
+      "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ -l 1.0",
+      "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- -l 1.0"
+    },
+
+
+    "network": {
+      "interface": "wlp0s20f3",
+      "format-wifi": "",
+      "format-ethernet": "{ipaddr}/{cidr} ",
+      "tooltip-format": "{essid} via {gwaddr} ",
+      "format-linked": "{ifnameessid (No IP) ",
+      "format-disconnected": "Disconnected ⚠",
+      "on-click": "kitty -e nmtui connect"
+  },
+
+"battery": {
+  "full-at": 80,
+      "format": "{capacity}% {icon}",
+      "format-icons": {
+      "charging": [
+                      "󰢜",
+                      "󰂆",
+                      "󰂇",
+                      "󰂈",
+                      "󰢝",
+                      "󰂉",
+                      "󰢞",
+                      "󰂊",
+                      "󰂋",
+                      "󰂅"
+                  ],
+                  "default": [
+                      "󰁺",
+                      "󰁻",
+                      "󰁼",
+                      "󰁽",
+                      "󰁾",
+                      "󰁿",
+                      "󰂀",
+                      "󰂁",
+                      "󰂂",
+                      "󰁹"
+                  ]
+              },
+              "format-full": "Charged ",
+              "interval": 5,
+              "states": {
+                  "warning": 20,
+                  "critical": 10
+              }
+            },    
+  "wlr/taskbar": {
+	"format": "{icon}",
+  "active-first": true,
+  "font-size": 36,
+	"icon-size": 30,
+  "icon-theme": "Gruvbox Plus Dark",
+	"tooltip-format": "{title}",
+	"on-click": "minimize-raise",
+	"on-click-right": "close",
+	"ignore-list": [
+	    "waybar",
+      "pcloud"
+	]
+},
+"custom/ram_icon": {
+  "exec": "~/.config/waybar/scripts/ram_icon.sh",
+  "interval": 5,
+  "return-type": "json",
+  "format": "{}"
+},
+"custom/swap_icon": {
+  "exec": "~/.config/waybar/scripts/swap_icon.sh",
+  "interval": 5,
+  "return-type": "json",
+  "format": "{}"
+},
+
+"network#vpn": {
+  "interval": 5,
+  "interface": "tun0",
+  "format": "\uf3ed",
+  "format-disconnected": "",
+  "tooltip-format": "VPN Connected: {ipaddr}"
+},
+"app_ids-mapping": {
+      "codium": "vscodium"
+  }
+}
+

@@ -1,0 +1,39 @@
+# Configure output directives such as mode, position, scale and transform.
+# Use wlr-randr to get your output names
+# Set background image.
+swww-daemon &
+
+/nix/store/$(ls -la /nix/store | grep polkit-kde-agent | grep '^d' | awk '{print $9}')/libexec/polkit-kde-authentication-agent-1 2>&1&
+
+# Launch a panel such as yambar or waybar.
+waybar >/dev/null 2>&1 &
+#lxqt-session >/dev/null 2>&1 &
+#xfce4-panel >/dev/null 2>&1 &
+#nwg-panel >/dev/null 2>&1 &
+#sfwbar >/dev/null 2>&1 &
+
+# Enable notifications. Typically GNOME/KDE application notifications go
+# through the org.freedesktop.Notifications D-Bus API and require a client such
+# as mako to function correctly. Thunderbird is an example of this.
+#mako >/dev/null 2>&1 &
+
+nm-applet >/dev/null 2>&1 &
+
+# Start the Thunar daemon for better startup
+thunar --daemon 2>&1 &
+
+pcloud 2>&1 &
+
+syncthing 2>&1 &
+
+#wlsunset -l 32.4 -L -80.7 &
+
+# Deploy swww wallpapers
+swww img $HOME/Pictures/elephant-nord-light.png 2>&1 &
+
+# Define custom programs to start
+    exec swayidle -w \
+        timeout 600 'swaylock --screenshots --effect-pixelate 40' \
+        timeout 600 'swaymsg "output * dpms off"' \
+            resume 'swaymsg "output * dpms on"' \
+        before-sleep 'swaylock --screenshots --effect-pixelate 40'

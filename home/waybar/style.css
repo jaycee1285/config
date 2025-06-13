@@ -1,0 +1,113 @@
+* {
+    font-family: FontAwesome, material-design-icons, Spline Sans Mono, sans-serif;
+    font-size: 24px;
+  }
+
+  window#waybar {
+  background: transparent;
+  border-radius: 10px;
+  border-color: @theme_fg_color;           /* Or @theme_fg_color for a subtler look */
+  border-width: 5px;
+  }
+
+  .modules-left {
+  background: @theme_base_color;
+  color: @theme_text_color;
+  border-radius: 15px;
+  border: 2px solid @accent_color;}
+
+  .modules-center {
+  background: @theme_base_color;
+  color: @theme_text_color;
+  border-radius: 15px;
+  border: 2px solid @accent_color;}
+
+.modules-right {
+  color: @theme_text_color;
+  background: @theme_base_color;
+  border-radius: 15px;
+  border: 2px solid @accent_color;
+  padding: 0 6px;
+  min-width: 24px
+}
+  
+
+  #network{
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+
+  #pulseaudio{
+
+  margin: 3px;
+  padding: 5px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  font-size: 20px;
+  margin-right: 5px; 
+  }
+  #tray{
+
+  margin: 3px;
+  padding: 5px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  font-size: 28px;
+  margin-right: 5px; 
+
+  }
+  #custom-clock{
+  margin: 3px;
+  padding: 5px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  font-size: 20px;
+  margin-right: 5px; 
+}
+
+  #battery {
+    font-size: 20px;
+    margin-left: 10px;
+  }
+
+#taskbar button.active {
+  background-color: @theme_selected_bg_color;
+  color: @theme_selected_fg_color;
+  border-radius: 15px;
+  border: 2px solid @theme_fg_color; /* Or @accent_color, or @theme_selected_bg_color */
+}
+#taskbar button.hover {
+    border: 2px solid @theme_selected_bg_color;
+}
+
+.modules-center:hover {
+  border: 2px solid @theme_selected_fg_color;
+  box-shadow: 0 0 8px 2px @accent_color;
+}
+
+#custom-ram_icon.low {
+  color: #a3be8c;
+}
+#custom-ram_icon.medium {
+  color: #facc15;
+}
+#custom-ram_icon.high {
+  color: #f87171;
+}
+
+#custom-swap_icon.swap_low {
+  color: #a3be8c;
+}
+#custom-swap_icon.swap_medium {
+  color: #facc15;
+}
+#custom-swap_icon.swap_high {
+  color: #f87171;
+}
+
+#custom-ram_icon,
+#custom-swap_icon {
+  padding: 0 6px;
+  min-width: 24px; /* ensures breathing room */
+  font-size: 18px;  /* optional, to increase visibility */
+}

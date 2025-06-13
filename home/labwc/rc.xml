@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!--
+This file contains all supported config elements & attributes with
+default values.
+-->
+<labwc_config>
+  <core>
+    <decoration>server</decoration>
+    <gap>0</gap>
+    <adaptiveSync>yes</adaptiveSync>
+    <reuseOutputMode>no</reuseOutputMode>
+  </core>
+  <!-- <font><theme> can be defined without an attribute to set all places -->
+  <theme>
+    <name>nordic-polar-OB</name>
+    <cornerRadius>10</cornerRadius>
+    <keepBorder>yes</keepBorder>
+    <font>
+      <name>Iosevka Aile</name>
+      <size>16</size>
+      <slant>normal</slant>
+    </font>
+  </theme>
+  <!--
+Just as for window-rules, 'identif  ier' relates to app_id for native Wayland
+windows and WM_CLASS for XWayland clients.
+-->
+  <keyboard>
+    <keybind key="A-Tab">
+      <action name="NextWindow"/>
+    </keybind>
+    <keybind key="W-Return">
+      <action name="Execute" command="kitty"/>
+    </keybind>
+    <keybind key="W-w">
+      <action name="Execute" command="librewolf"/>
+    </keybind>
+    <keybind key="W-S-w">
+      <action name="Execute" command="librewolf --private-window"/>
+    </keybind>
+    <keybind key="W-space">
+      <action name="Execute" command="fuzzel"/>
+    </keybind>
+    <keybind key="W-f">
+      <action name="Execute" command="thunar"/>
+    </keybind>
+    <keybind key="W-o">
+      <action name="Execute" command="obsidian"/>
+    </keybind>
+    <keybind key="F3">
+      <action name="Execute" command="grim"/>
+    </keybind>
+    <keybind key="XF86_MonBrightnessUp">
+      <action name="Execute" command="brightnessctl set +10%"/>
+    </keybind>
+    <keybind key="XF86_MonBrightnessDown">
+      <action name="Execute" command="brightnessctl set 10%-"/>
+    </keybind>
+    <keybind key="XF86_AudioLowerVolume">
+      <action name="Execute" command="wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- -l 1.0"/>
+    </keybind>
+    <keybind key="XF86_AudioRaiseVolume">
+      <action name="Execute" command="wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ -l 1.0"/>
+    </keybind>
+    <keybind key="XF86_AudioMute">
+      <action name="Execute" command="wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"/>
+    </keybind>
+    <keybind key="W-m">
+      <action name="ToggleMaximize" direction="both"/>
+    </keybind>
+    <keybind key="W-n">
+      <action name="UnMaximize" direction="both"/>
+    </keybind>
+    <keybind key="W-i">
+      <action name="Iconify" direction="both"/>
+    </keybind>
+    <keybind key="A-X">
+      <action name="Execute" command="wlogout"/>
+    </keybind>
+    <keybind key="W-p">
+      <action name="Execute">
+        <command>appimage-run /home/john/Downloads/superProductivity.AppImage</command>
+      </action>
+    </keybind>
+  </keyboard>
+  <libinput>
+    <device>
+      <naturalScroll>yes</naturalScroll>
+    </device>
+  </libinput>
+  <windowSwitcher show="yes" preview="yes" outlines="yes" allWorkspaces="no">
+    <fields>
+      <field content="icon" width="10%"/>
+      <field content="title" width="70%"/>
+      <!--
+        Just as for window-rules, you can use 'identifier' or
+        'trimmed_identifier' to show the app_id for native wayland clients or
+        WM_CLASS for XWayland clients.
+
+        <field content="trimmed_identifier" width="65%" />
+      -->
+    </fields>
+  </windowSwitcher>
+</labwc_config>
