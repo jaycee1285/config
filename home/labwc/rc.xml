@@ -79,7 +79,7 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="W-p">
       <action name="Execute">
-        <command>appimage-run /home/john/Downloads/superProductivity.AppImage</command>
+        <command>super-productivity</command>
       </action>
     </keybind>
   </keyboard>
