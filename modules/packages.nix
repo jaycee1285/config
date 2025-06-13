@@ -32,7 +32,6 @@
     kdePackages.dolphin
     wayshot
     super-productivity
-    joplin-desktop
 
     # coding
     unstable.vscodium
