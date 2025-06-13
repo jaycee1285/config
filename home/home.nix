@@ -7,7 +7,10 @@
   programs.home-manager.enable = true;
 
   imports = [
+    ./fuzzel.nix
     ./gtk.nix
+    ./labwc.nix
+    ./waybar.nix
     # Add more user modules here if you want (e.g., ./cli.nix, ./vim.nix, etc)
   ];
 }
