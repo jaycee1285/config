@@ -12,18 +12,12 @@
   outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, ... }:
     let
       system = "x86_64-linux";
-
-      # Stable and unstable pkgs
       pkgs = import nixpkgs { inherit system; };
       unstable = import nixpkgs-unstable { inherit system; };
-
-      # Precomputed Openbox theme derivation
-      obThemesPkg = ob-themes.packages.${system}.default;
     in {
       nixosConfigurations = {
         john = nixpkgs.lib.nixosSystem {
           inherit system;
-
           modules = [
             ./configuration.nix
             home-manager.nixosModules.home-manager
@@ -31,19 +25,16 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
-
               home-manager.users.john = import ./home/home.nix;
-
               home-manager.extraSpecialArgs = {
                 inherit pkgs unstable gtk-themes;
-                ob-themes = obThemesPkg;
+                ob-themes = ob-themes.packages.${system}.default;
               };
             }
           ];
-
           specialArgs = {
             inherit pkgs unstable gtk-themes;
-            ob-themes = obThemesPkg;
+            ob-themes = ob-themes.packages.${system}.default;
           };
         };
       };
