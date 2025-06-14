@@ -6,7 +6,11 @@
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     gtk-themes.url = "path:./gtk-themes";
     ob-themes.url = "path:./ob-themes";
-    nur.url = "github:nix-community/NUR";
+      nur = {
+    url = "github:nix-community/NUR";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
     home-manager.url = "github:nix-community/home-manager";
   };
 
