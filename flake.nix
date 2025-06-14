@@ -11,33 +11,32 @@
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, nur, ob-themes, home-manager, ... }:
-    let
-      system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [ nur.overlay ];
-      };
-    in {
-      nixosConfigurations = {
-        john = nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules = [
-            ./configuration.nix
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "backup";
-              home-manager.users.john = import ./home/home.nix;
-               home-manager.extraSpecialArgs = {
-    inherit pkgs nur gtk-themes ob-themes nixpkgs-unstable;
+  let
+  system = "x86_64-linux";
+  pkgs = import nixpkgs {
+    inherit system;
+    overlays = [ nur.overlay ];
   };
-            }
-          ];
-          specialArgs = {
-            inherit pkgs nur gtk-themes ob-themes nixpkgs-unstable;
+  nurModules = import nur { inherit pkgs; };  # ← this fixes it
+in {
+  nixosConfigurations = {
+    john = nixpkgs.lib.nixosSystem {
+      inherit system;
+      modules = [
+        ./configuration.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.backupFileExtension = "backup";
+          home-manager.users.john = import ./home/home.nix;
+          home-manager.extraSpecialArgs = {
+            inherit pkgs gtk-themes ob-themes nixpkgs-unstable;
+            nur = nurModules;  # ← this makes `nur.repos.rycee` available
           };
-        };
-      };
+        }
+      ];
     };
+  };
+};
 }
