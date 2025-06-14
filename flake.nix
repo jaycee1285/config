@@ -30,7 +30,8 @@
               home-manager.users.john = import ./home/home.nix;
 
               home-manager.extraSpecialArgs = {
-                inherit pkgs gtk-themes ob-themes nixpkgs-unstable;
+                inherit pkgs gtk-themes nixpkgs-unstable;
+                ob-themes = ob-themes.packages.${system}.default;
               };
             }
           ];
