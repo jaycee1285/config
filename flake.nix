@@ -19,7 +19,7 @@
       };
     in {
       nixosConfigurations = {
-        john = nixpkgs.lib.nixosSystem {
+        john = pkgs.lib.nixosSystem {  # <-- This is the key change
           inherit system;
           modules = [
             ./configuration.nix
