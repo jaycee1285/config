@@ -1,21 +1,14 @@
-{ config, pkgs, nixpkgs-unstable, ... }:
+{ config, pkgs, unstable, ... }:
 
 {
-  nixpkgs.config = {
-    allowUnfree = true;
-  };
+  nixpkgs.config.allowUnfree = true;
 
   nixpkgs.overlays = [
     (final: prev: {
-      unstable = import nixpkgs-unstable {
-        system = pkgs.system;
-        config = config.nixpkgs.config;
-      };
+      waybar = prev.waybar.override { withJson = true; };
     })
-     (final: prev: {
-    waybar = prev.waybar.override { withJson = true; };
-  })
   ];
+
 
   environment.systemPackages = with pkgs; [
     openssl
