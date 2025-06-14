@@ -34,6 +34,10 @@
     gearlever
     zellij
     micro
+    flutter
+    gtk3
+    pkg-config
+    clang
 
     #CLI
     fish
