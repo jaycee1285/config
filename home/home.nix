@@ -11,7 +11,7 @@
     ./firefox.nix
     ./fuzzel.nix
     ./gtk.nix
-    ./labwc.nix
+   # ./labwc.nix
     ./scripts.nix
     ./vscodium.nix
     ./waybar.nix
