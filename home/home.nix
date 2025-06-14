@@ -5,9 +5,10 @@
   home.homeDirectory = "/home/john";    # Adjust as needed
   home.stateVersion = "25.05";
   programs.home-manager.enable = true;
-   home-manager.backupFileExtension = "backup";
-   
+  home.backupFileExtension = "backup";
+
   imports = [
+    ./firefox.nix
     ./fuzzel.nix
     ./gtk.nix
     ./labwc.nix
