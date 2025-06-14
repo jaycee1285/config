@@ -26,15 +26,17 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
-
               home-manager.users.john = import ./home/home.nix;
-
               home-manager.extraSpecialArgs = {
                 inherit pkgs gtk-themes nixpkgs-unstable;
-                ob-themes = ob-themes.packages.${system}.default;
               };
             }
           ];
+          # THIS is where ob-themes should be passed!
+          specialArgs = {
+            inherit pkgs gtk-themes nixpkgs-unstable;
+            ob-themes = ob-themes.packages.${system}.default;
+          };
         };
       };
     };
