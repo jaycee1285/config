@@ -12,7 +12,7 @@
   outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, ... }:
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; };
+      pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
       unstable = import nixpkgs-unstable { inherit system; };
     in {
       nixosConfigurations = {
