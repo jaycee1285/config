@@ -13,7 +13,7 @@
     home-manager.url = "github:nix-community/home-manager";  # <-- Add this!
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, nur, ob-themes, home-manager, ... }:
+outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, nur, ob-themes, home-manager, ... }:
 let
   system = "x86_64-linux";
   pkgs = import nixpkgs {
@@ -39,4 +39,6 @@ in {
       };
     };
   };
+};
+
 }
