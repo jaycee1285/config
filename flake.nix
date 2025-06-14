@@ -34,7 +34,7 @@
             home-manager.users.john = import ./home/home.nix;
           }
         ];
-        specialArgs = { inherit gtk-themes ob-themes nixpkgs-unstable; };
+        specialArgs = { inherit gtk-themes nur ob-themes nixpkgs-unstable; };
       };
     };
   };
