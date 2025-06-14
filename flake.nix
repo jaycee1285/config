@@ -12,8 +12,20 @@
   outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, ... }:
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
-      unstable = import nixpkgs-unstable { inherit system; };
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+
+        overlays = [
+          # Define `unstable` overlay
+          (final: prev: {
+            unstable = import nixpkgs-unstable {
+              inherit system;
+              config.allowUnfree = true;
+            };
+          })
+        ];
+      };
     in {
       nixosConfigurations = {
         john = nixpkgs.lib.nixosSystem {
@@ -25,15 +37,17 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
+
               home-manager.users.john = import ./home/home.nix;
+
               home-manager.extraSpecialArgs = {
-                inherit pkgs unstable gtk-themes;
+                inherit pkgs gtk-themes nixpkgs-unstable;
                 ob-themes = ob-themes.packages.${system}.default;
               };
             }
           ];
           specialArgs = {
-            inherit pkgs unstable gtk-themes;
+            inherit pkgs gtk-themes nixpkgs-unstable;
             ob-themes = ob-themes.packages.${system}.default;
           };
         };
