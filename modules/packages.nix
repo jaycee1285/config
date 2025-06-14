@@ -80,7 +80,7 @@
     usbimager
     unetbootin
     gtypist
-    unstable.obsidian
+    pkgs.unstable.obsidian
     nnn
     pixelflasher
     cherry-studio
