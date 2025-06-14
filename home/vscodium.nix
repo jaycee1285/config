@@ -13,7 +13,7 @@
       yzhang.markdown-all-in-one
       svelte.svelte-vscode
       naumovs.color-highlight
-      vscode-tailwindcss
+      bradlc.vscode-tailwindcss
       catppuccin.catppuccin-vsc
       astro-build.astro-vscode
     ];
