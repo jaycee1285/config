@@ -28,6 +28,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
 
             # Set the user (change "john" to your actual username if different)
             home-manager.users.john = import ./home/home.nix;
