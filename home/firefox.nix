@@ -1,4 +1,4 @@
-{ config, nur, pkgs, ... }:
+{ config, pkgs, nur, ... }:
 
 let
   myProfile = "default";
@@ -9,63 +9,56 @@ in {
 
     profiles.${myProfile} = {
       id = 0;
-
       isDefault = true;
       name = myProfile;
 
-      # Allow custom chrome styling
       userChrome = ''
-/* Modify these values to match your preferences
-These reserve extra space on both sides of the nav-bar to be able to drag the window */
-:root:is([tabsintitlebar], [sizemode="fullscreen"]) {
-  --uc-window-drag-space-pre: 30px; /* left side*/
-  --uc-window-drag-space-post: 30px; /* right side*/
-}
+        :root:is([tabsintitlebar], [sizemode="fullscreen"]) {
+          --uc-window-drag-space-pre: 30px;
+          --uc-window-drag-space-post: 30px;
+        }
 
-:root:is([tabsintitlebar][sizemode="maximized"], [sizemode="fullscreen"]) {
-  --uc-window-drag-space-pre: 0px; /* Remove pre space */
-}
+        :root:is([tabsintitlebar][sizemode="maximized"], [sizemode="fullscreen"]) {
+          --uc-window-drag-space-pre: 0px;
+        }
 
-@media (-moz-gtk-csd-minimize-button) and (-moz-gtk-csd-maximize-button) and (-moz-gtk-csd-close-button) {
-  :root:is([tabsintitlebar],[sizemode="fullscreen"]) {
-    --uc-window-control-width: 84px;
-  }
-}
+        @media (-moz-gtk-csd-minimize-button) and (-moz-gtk-csd-maximize-button) and (-moz-gtk-csd-close-button) {
+          :root:is([tabsintitlebar],[sizemode="fullscreen"]) {
+            --uc-window-control-width: 84px;
+          }
+        }
 
-.titlebar-buttonbox{ color: var(--toolbar-color) }
-:root[sizemode="fullscreen"] .titlebar-buttonbox-container{ display: none }
+        .titlebar-buttonbox { color: var(--toolbar-color); }
+        :root[sizemode="fullscreen"] .titlebar-buttonbox-container { display: none; }
 
-:root[sizemode="fullscreen"] #TabsToolbar > .titlebar-buttonbox-container:last-child{
-  position: absolute;
-  display: flex;
-  top: 0;
-  right:0;
-  height: 40px;
-}
+        :root[sizemode="fullscreen"] #TabsToolbar > .titlebar-buttonbox-container:last-child {
+          position: absolute;
+          display: flex;
+          top: 0;
+          right: 0;
+          height: 32px;
+        }
 
-:root[sizemode="fullscreen"] #TabsToolbar > .titlebar-buttonbox-container:last-child{ height: 32px }
-
-#nav-bar{
-  border-inline: var(--uc-window-drag-space-pre,0px) solid transparent;
-  border-inline-style: solid !important;
-  border-right-width: calc(var(--uc-window-control-width,0px) + var(--uc-window-drag-space-post,0px));
-  background-clip: border-box !important;
-}
+        #nav-bar {
+          border-inline: var(--uc-window-drag-space-pre, 0px) solid transparent;
+          border-inline-style: solid !important;
+          border-right-width: calc(var(--uc-window-control-width, 0px) + var(--uc-window-drag-space-post, 0px));
+          background-clip: border-box !important;
+        }
       '';
 
       settings = {
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
         "browser.ctrlTab.sortByRecentlyUsed" = true;
         "browser.link.open_newwindow" = 3;
-        "browser.warnOnQuitShortcut" = true;
         "browser.tabs.warnOnCloseMultipleTabs" = true;
-        "signon.rememberSignons" = true;
+        "browser.warnOnQuitShortcut" = true;
         "middlemouse.paste" = true;
+        "services.sync.username" = "your@email.com";
         "services.sync.engine.bookmarks" = true;
-        "services.sync.username" = "your@email.com"; # Replace if using sync
         "network.dns.disableIPv6" = true;
 
-        # Font settings
+        # Fonts
         "font.name.sans-serif.x-western" = "Iosevka Aile";
         "font.size.variable.x-western" = 20;
         "font.name.monospace.x-western" = "Iosevka Aile";
