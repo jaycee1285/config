@@ -7,37 +7,34 @@
     gtk-themes.url = "path:./gtk-themes";
     ob-themes.url = "path:./ob-themes";
     nur.url = "github:nix-community/NUR";
-
-
-#    super-productivity.url = "path:./super-productivity";
-    home-manager.url = "github:nix-community/home-manager";  # <-- Add this!
+    home-manager.url = "github:nix-community/home-manager";
   };
 
-outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, nur, ob-themes, home-manager, ... }:
-let
-  system = "x86_64-linux";
-  pkgs = import nixpkgs {
-    inherit system;
-    overlays = [ nur.overlay ];  # <- Add this line
-  };
-in {
-  nixosConfigurations = {
-    john = nixpkgs.lib.nixosSystem {
-      inherit system;
-      modules = [
-        ./configuration.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.backupFileExtension = "backup";
-          home-manager.users.john = import ./home/home.nix;
-        }
-      ];
-      specialArgs = {
-        inherit gtk-themes ob-themes nixpkgs-unstable nur pkgs;
+  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, nur, ob-themes, home-manager, ... }:
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [ nur.overlay ];
+      };
+    in {
+      nixosConfigurations = {
+        john = nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = [
+            ./configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "backup";
+              home-manager.users.john = import ./home/home.nix;
+            }
+          ];
+          specialArgs = {
+            inherit gtk-themes ob-themes nixpkgs-unstable nur pkgs;
+          };
+        };
       };
     };
-  };
-};
 }
