@@ -101,7 +101,7 @@ in {
         "font.size.fixed.x-western" = 18;
       };
 
-      extensions = extensions;
+      extensions,packages = extensions;
 
       userChrome = ''
 :root:is([tabsintitlebar], [sizemode="fullscreen"]) {
