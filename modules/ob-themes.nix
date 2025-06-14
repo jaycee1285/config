@@ -2,6 +2,6 @@
 
 {
   environment.systemPackages = [
-    ob-themes.packages.${pkgs.system}.default
+    ob-themes  # It's already a package, not a flake
   ];
 }
