@@ -24,7 +24,10 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
-              home-manager.users.john = import ./home/home.nix;
+              home-manager.users.john = import ./home/home.nix {
+                inherit pkgs nur gtk-themes ob-themes nixpkgs-unstable;
+};
+
             }
           ];
 
