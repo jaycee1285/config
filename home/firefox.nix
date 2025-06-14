@@ -3,10 +3,19 @@
 let
   myProfile = "default";
 
-  mkAddon = { name, url, sha256 }: pkgs.fetchurl {
+mkAddon = { name, url, sha256 }: pkgs.stdenvNoCC.mkDerivation {
+  pname = name;
+  version = "1.0";
+  src = pkgs.fetchurl {
     inherit url sha256;
-    name = "${name}.xpi";
   };
+  dontUnpack = true;
+  installPhase = ''
+    mkdir -p $out
+    cp $src $out/${name}.xpi
+  '';
+};
+
 
   extensions = [
     (mkAddon {
