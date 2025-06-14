@@ -6,41 +6,35 @@
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     gtk-themes.url = "path:./gtk-themes";
     ob-themes.url = "path:./ob-themes";
-      nur = {
-    url = "github:nix-community/NUR";
-    inputs.nixpkgs.follows = "nixpkgs";
-  };
-
     home-manager.url = "github:nix-community/home-manager";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, nur, ob-themes, home-manager, ... }:
-  let
-  system = "x86_64-linux";
-  pkgs = import nixpkgs {
-    inherit system;
-    overlays = [ nur.overlay ];
-  };
-  nurModules = import nur { inherit pkgs; };  # ← this fixes it
-in {
-  nixosConfigurations = {
-    john = nixpkgs.lib.nixosSystem {
-      inherit system;
-      modules = [
-        ./configuration.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.backupFileExtension = "backup";
-          home-manager.users.john = import ./home/home.nix;
-          home-manager.extraSpecialArgs = {
-            inherit pkgs gtk-themes ob-themes nixpkgs-unstable;
-            nur = nurModules;  # ← this makes `nur.repos.rycee` available
-          };
-        }
-      ];
+  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, ... }:
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs {
+        inherit system;
+      };
+    in {
+      nixosConfigurations = {
+        john = nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = [
+            ./configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "backup";
+
+              home-manager.users.john = import ./home/home.nix;
+
+              home-manager.extraSpecialArgs = {
+                inherit pkgs gtk-themes ob-themes nixpkgs-unstable;
+              };
+            }
+          ];
+        };
+      };
     };
-  };
-};
 }
