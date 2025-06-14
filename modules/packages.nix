@@ -1,4 +1,4 @@
-{ config, pkgs, unstable, ... }:
+{ config, pkgs, pkgs.unstable, ... }:
 
 {
   nixpkgs.config.allowUnfree = true;
@@ -28,7 +28,7 @@
 
     # coding
     nodejs_24
-    unstable.bun
+    pkgs.unstable.bun
     github-desktop
     gh
     gearlever
@@ -41,20 +41,20 @@
     zoxide
     
     # internet
-    unstable.librewolf  
+    pkgs.unstable.librewolf  
     qbittorrent
-    unstable.chromium
-    #unstable.onedrivegui
-    #unstable.onedrive
+    pkgs.unstable.chromium
+    #pkgs.unstable.onedrivegui
+    #pkgs.unstable.onedrive
 
     # wayland
-    unstable.labwc-tweaks-gtk
-    unstable.labwc-menu-generator
+    pkgs.unstable.labwc-tweaks-gtk
+    pkgs.unstable.labwc-menu-generator
     rofi-wayland
     wlogout
-    unstable.labwc
-    unstable.waybar
-    unstable.sfwbar
+    pkgs.unstable.labwc
+    pkgs.unstable.waybar
+    pkgs.unstable.sfwbar
     fuzzel
     bemenu
     swww
@@ -62,7 +62,7 @@
     slurp
     swappy
     swaylock-effects
-    unstable.xwayland
+    pkgs.unstable.xwayland
     espanso-wayland
     swaylock-fancy
     swayidle
@@ -94,7 +94,7 @@
     mupen64plus
 
     # bluetooth
-    unstable.blueman
+    pkgs.unstable.blueman
 
     wpgtk
     swayidle
@@ -136,10 +136,10 @@
     gucharmap
 
     # icons and cursors
-    unstable.kanagawa-icon-theme
+    pkgs.unstable.kanagawa-icon-theme
     phinger-cursors
     papirus-icon-theme
-    unstable.gruvbox-plus-icons
+    pkgs.unstable.gruvbox-plus-icons
 
     # theming
     themechanger
