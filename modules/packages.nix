@@ -34,7 +34,6 @@
     super-productivity
 
     # coding
-    unstable.vscodium
     nodejs_24
     unstable.bun
     github-desktop
