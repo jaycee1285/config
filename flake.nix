@@ -13,13 +13,9 @@
   outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, nur, ob-themes, home-manager, ... }:
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [ nur.overlay ];
-      };
     in {
       nixosConfigurations = {
-        john = pkgs.lib.nixosSystem {  # <-- This is the key change
+        john = nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
             ./configuration.nix
@@ -31,8 +27,13 @@
               home-manager.users.john = import ./home/home.nix;
             }
           ];
+
           specialArgs = {
-            inherit gtk-themes ob-themes nixpkgs-unstable nur pkgs;
+            inherit gtk-themes ob-themes nixpkgs-unstable nur;
+            pkgs = import nixpkgs {
+              inherit system;
+              overlays = [ nur.overlay ];
+            };
           };
         };
       };
