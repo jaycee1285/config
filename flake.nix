@@ -35,7 +35,7 @@ in {
         }
       ];
       specialArgs = {
-        inherit gtk-themes ob-themes nixpkgs-unstable nur;
+        inherit gtk-themes ob-themes nixpkgs-unstable nur pkgs;
       };
     };
   };
