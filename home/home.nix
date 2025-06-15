@@ -9,12 +9,12 @@
 
   imports = [
     ./firefox.nix
-    ./fuzzel.nix
+   # ./fuzzel.nix
     ./gtk.nix
    # ./labwc.nix
     ./scripts.nix
     ./vscodium.nix
-    ./waybar.nix
+   # ./waybar.nix
     # Add more user modules here if you want (e.g., ./cli.nix, ./vim.nix, etc)
   ];
 }
