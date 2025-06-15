@@ -1,4 +1,4 @@
-7;6u!/usr/bin/env bash
+#!/usr/bin/env bash
 
 # Directories to check for GTK themes
 THEME_DIRS=(
