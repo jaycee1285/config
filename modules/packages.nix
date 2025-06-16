@@ -25,6 +25,9 @@
     kdePackages.dolphin
     wayshot
     super-productivity
+    zafiro-icons
+    nordzy-icon-theme
+    graphite-cursors
 
     # coding
     nodejs_24
