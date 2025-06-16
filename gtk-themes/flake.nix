@@ -37,36 +37,55 @@
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
 
-      makeTheme = {
-        pname,
-        src,
-        style,     # "fausto", "eliver", "vince"
-        themeFolder ? null,
-        installFlags ? "",
-        nativeBuildInputs ? [pkgs.gtk3 pkgs.sassc ],
-        buildInputs ? [],
-        propagatedUserEnvPkgs ? [],
-        meta ? {},
-      }:
-        pkgs.stdenvNoCC.mkDerivation {
-          inherit pname src nativeBuildInputs buildInputs propagatedUserEnvPkgs meta;
-          version = "unstable-${src.shortRev or "unknown"}";
+makeTheme = {
+  pname,
+  src,
+  style,     # "fausto", "eliver", "vince"
+  themeFolder ? null, # e.g. "Catppuccin-gtk-theme" or "Orchis-orange-compact"
+  installFlags ? "",
+  nativeBuildInputs ? [ pkgs.gtk3 pkgs.sassc ],
+  buildInputs ? [],
+  propagatedUserEnvPkgs ? [],
+  meta ? {},
+}:
+  pkgs.stdenvNoCC.mkDerivation {
+    inherit pname src nativeBuildInputs buildInputs propagatedUserEnvPkgs meta;
+    version = "unstable-${src.shortRev or "unknown"}";
+    installPhase =
+      # Fausto themes: run install.sh, then move/rename any auto-versioned folder to themeFolder
+      (pkgs.lib.optionalString (style == "fausto") ''
+        cd themes
+        bash ./install.sh ${installFlags} -d $out/share/themes
 
-          installPhase =
-            (pkgs.lib.optionalString (style == "fausto") ''
-              cd themes
-              bash ./install.sh ${installFlags} -d $out/share/themes
-            '')
-            + (pkgs.lib.optionalString (style == "eliver") ''
-              bash ./install.sh ${installFlags} -d $out/share/themes
-            '')
-            + (pkgs.lib.optionalString (style == "vince" && themeFolder != null) ''
-              mkdir -p $out/share/themes/${themeFolder}
-              shopt -s dotglob
-              cp -r * $out/share/themes/${themeFolder}/
-              shopt -u dotglob
-            '');
-        };
+        # Find the just-installed theme dir
+        cd $out/share/themes
+        for d in *; do
+          # If folder name contains "-unstable-" (common for fausto scripts)
+          if [[ "$d" =~ ^${themeFolder}-unstable- ]]; then
+            mv "$d" "${themeFolder}"
+          fi
+        done
+      '')
+      # Orchis/Eliver: same logic
+      + (pkgs.lib.optionalString (style == "eliver") ''
+        bash ./install.sh ${installFlags} -d $out/share/themes
+        cd $out/share/themes
+        for d in *; do
+          if [[ "$d" =~ ^${themeFolder}-unstable- ]]; then
+            mv "$d" "${themeFolder}"
+          fi
+        done
+      '')
+      # Vince themes: already using a fixed name
+      + (pkgs.lib.optionalString (style == "vince" && themeFolder != null) ''
+        mkdir -p $out/share/themes/${themeFolder}
+        shopt -s dotglob
+        dir=$(find . -maxdepth 1 -type d ! -name '.' | head -n1)
+        cp -r "$dir"/* $out/share/themes/${themeFolder}/
+        shopt -u dotglob
+      '');
+  };
+
 
     in
     {

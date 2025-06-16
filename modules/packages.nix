@@ -41,6 +41,7 @@
     gtk3
     pkg-config
     clang
+    ox
 
     #CLI
     fish
