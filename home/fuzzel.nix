@@ -1,7 +1,8 @@
 { config, pkgs, ... }:
 
-let
-  configDir = ./fuzzel;
-in {
-  home.file.".config/fuzzel".source = configDir;
+home.file.".config/fuzzel" = {
+  source = ./config/fuzzel;
+  target = ".config/fuzzel";
+  recursive = true;
+  onChange = "true"; # always update
 }

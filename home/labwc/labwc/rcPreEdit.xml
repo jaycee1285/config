@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<!--
+This file contains all supported config elements & attributes with
+default values.
+-->
+<labwc_config><core><decoration>server</decoration><gap>0</gap><adaptiveSync>no</adaptiveSync><reuseOutputMode>no</reuseOutputMode></core><!-- <font><theme> can be defined without an attribute to set all places --><theme><name>Kanagawa-openbox</name><cornerRadius>3</cornerRadius><keepBorder>yes</keepBorder><font><name>Buenard</name><size>14</size><slant>normal</slant><weight>bold</weight></font></theme><!--
+Just as for window-rules, 'identifier' relates to app_id for native Wayland
+windows and WM_CLASS for XWayland clients.
+--><keyboard>
+<keybind key="A-Tab"><action name="NextWindow"/></keybind>
+<keybind key="W-Return"><action name="Execute" command="kitty"/></keybind>
+<keybind key="W-w"><action name="Execute" command="librewolf"/></keybind>
+<keybind key="W-S-w"><action name="Execute" command="librewolf --private-window"/></keybind>
+<keybind key="W-space"><action name="Execute" command="fuzzel"/></keybind>
+<keybind key="W-f"><action name="Execute" command="thunar"/></keybind><keybind key="W-c"><action name="Close"/></keybind><!--    <keybind key="W-1">
+      <action name="GoToDesktop" to="1"></action>
+      <action name="Execute" command="bash -c &#39;echo 1 &gt; /tmp/workspace&#39;"></action>
+    </keybind>
+    <keybind key="W-2">
+      <action name="GoToDesktop" to="2"></action>
+      <action name="Execute" command="bash -c &#39;echo 2 &gt; /tmp/workspace&#39;"></action>
+    </keybind>
+    <keybind key="W-3">
+      <action name="GoToDesktop" to="3"></action>
+      <action name="Execute" command="bash -c &#39;echo 3 &gt; /tmp/workspace&#39;"></action>
+    </keybind>
+    <keybind key="W-4">
+      <action name="GoToDesktop" to="4"></action>
+      <action name="Execute" command="bash -c &#39;echo 4 &gt; /tmp/workspace&#39;"></action>
+    </keybind>
+    <keybind key="W-S-1">
+      <action name="SendToDesktop" to="1"></action>
+      <action name="Execute" command="bash -c &#39;echo 1 &gt; /tmp/workspace&#39;"></action>
+    </keybind>
+    <keybind key="W-S-2">
+      <action name="SendToDesktop" to="2"></action>
+      <action name="Execute" command="bash -c &#39;echo 2 &gt; /tmp/workspace&#39;"></action>
+    </keybind>
+    <keybind key="W-S-3">
+      <action name="SendToDesktop" to="3"></action>
+      <action name="Execute" command="bash -c &#39;echo 3 &gt; /tmp/workspace&#39;"></action>
+    </keybind>
+    <keybind key="W-S-4">
+      <action name="SendToDesktop" to="4"></action>
+      <action name="Execute" command="bash -c &#39;echo 4 &gt; /tmp/workspace&#39;"></action>
+    </keybind>
+    <keybind key="W-S-Left">
+      <action name="GoToDesktop" to="left"></action>
+      <action name="Execute" command="bash -c &#39;echo left &gt; /tmp/workspace&#39;"></action>
+    </keybind>
+    <keybind key="W-S-Right">
+      <action name="GoToDesktop" to="right"></action>
+      <action name="Execute" command="bash -c &#39;echo right &gt; /tmp/workspace&#39;"></action>
+    </keybind>
+    <keybind key="W-C-S-Right">
+      <action name="SendToDesktop" to="right"></action>
+      <action name="Execute" command="bash -c &#39;echo right &gt; /tmp/workspace&#39;"></action>
+    </keybind>
+    <keybind key="W-C-S-Left">
+      <action name="SendToDesktop" to="left"></action>
+      <action name="Execute" command="bash -c &#39;echo left &gt; /tmp/workspace&#39;"></action>
+    </keybind>
+    --><keybind key="W-Left"><action name="SnapToEdge" direction="left"/><action name="Focus"/><action name="Raise"/></keybind><keybind key="W-Right"><action name="SnapToEdge" direction="right"/><action name="Focus"/><action name="Raise"/></keybind><keybind key="W-Up"><action name="ToggleMaximize"/><action name="Focus"/><action name="Raise"/></keybind><keybind key="W-Down"><action name="SnapToRegion" region="center"/><action name="Focus"/><action name="Raise"/></keybind><keybind key="W-A-C-Right"><action name="SnapToRegion" region="top-right"/></keybind><keybind key="W-A-Right"><action name="SnapToRegion" region="bottom-right"/></keybind><keybind key="W-A-C-Left"><action name="SnapToRegion" region="top-left"/></keybind><keybind key="W-A-Left"><action name="SnapToRegion" region="bottom-left"/></keybind><keybind key="A-Space"><action name="ShowMenu" menu="client-menu"/></keybind><keybind key="XF86_AudioLowerVolume"><action name="Execute" command="amixer sset Master 5%-"/></keybind><keybind key="XF86_AudioRaiseVolume"><action name="Execute" command="amixer sset Master 5%+"/></keybind><keybind key="XF86_AudioMute"><action name="Execute" command="amixer sset Master toggle"/></keybind><keybind key="XF86_MonBrightnessUp"><action name="Execute" command="brightnessctl set +10%"/></keybind><keybind key="XF86_MonBrightnessDown"><action name="Execute" command="brightnessctl set 10%-"/></keybind></keyboard><!--
+<keybind key="W-KP_7"><action name="SnapToRegion" region="top-left" /></keybind>
+<keybind key="W-KP_8"><action name="SnapToRegion" region="top" /></keybind>
+<keybind key="W-KP_9"><action name="SnapToRegion" region="top-right" /></keybind>
+<keybind key="W-KP_4"><action name="SnapToRegion" region="left" /></keybind>
+<keybind key="W-KP_5"><action name="SnapToRegion" region="center" /></keybind>
+<keybind key="W-KP_6"><action name="SnapToRegion" region="right" /></keybind>
+<keybind key="W-KP_1"><action name="SnapToRegion" region="bottom-left" /></keybind>
+<keybind key="W-KP_2"><action name="SnapToRegion" region="bottom" /></keybind>
+<keybind key="W-KP_3"><action name="SnapToRegion" region="bottom-right" /></keybind>
+--><!--
+Multiple <mousebind> can exist within one <context>
+Multiple <actions> can exist within one <mousebind>
+Currently, the only openbox-action not supported is "Unshade"
+
+Use <mouse><default /> to load all the default mousebinds (those listed
+below). If the default mousebinds are largely what you want, a sensible
+approach could be to start the <mouse> section with a <default />
+element, and then (re-)define any special binds you need such as launching
+a custom menu when right-clicking on your desktop. See rc.xml for an example.
+--><mouse><!-- time is in ms --><doubleClickTime>500</doubleClickTime><scrollFactor>1.0</scrollFactor><context name="Frame"><mousebind button="W-Left" action="Press"><action name="Focus"/><action name="Raise"/></mousebind><mousebind button="W-Left" action="Drag"><action name="Move"/></mousebind><mousebind button="W-Right" action="Press"><action name="Focus"/><action name="Raise"/></mousebind><mousebind button="W-Right" action="Drag"><action name="Resize"/></mousebind></context><context name="Top"><mousebind button="Left" action="Drag"><action name="Resize"/></mousebind></context><context name="Left"><mousebind button="Left" action="Drag"><action name="Resize"/></mousebind></context><context name="Right"><mousebind button="Left" action="Drag"><action name="Resize"/></mousebind></context><context name="Bottom"><mousebind button="Left" action="Drag"><action name="Resize"/></mousebind></context><context name="TRCorner"><mousebind button="Left" action="Drag"><action name="Resize"/></mousebind></context><context name="BRCorner"><mousebind button="Left" action="Drag"><action name="Resize"/></mousebind></context><context name="TLCorner"><mousebind button="Left" action="Drag"><action name="Resize"/></mousebind></context><context name="BLCorner"><mousebind button="Left" action="Drag"><action name="Resize"/></mousebind></context><context name="Client"><mousebind button="Left" action="Press"><action name="Focus"/><action name="Raise"/></mousebind><mousebind button="Middle" action="Press"><action name="Focus"/><action name="Raise"/></mousebind><mousebind button="Right" action="Press"><action name="Focus"/><action name="Raise"/></mousebind></context><context name="Root">//
+      <mousebind button="Left" action="Press"><action name="ShowMenu" menu="root-menu"/></mousebind>
+      <mousebind button="Right" action="Press"><action name="ShowMenu" menu="sys-menu"/></mousebind>
+      <mousebind button="Middle" action="Press"><action name="ShowMenu" menu="root-menu"/></mousebind>
+      <mousebind direction="Up" action="Scroll"><action name="GoToDesktop" to="left" wrap="yes"/><action name="Execute" command="bash -c 'echo left &gt; /tmp/workspace'"/></mousebind>
+      <mousebind direction="Down" action="Scroll"><action name="GoToDesktop" to="right" wrap="yes"/><action name="Execute" command="bash -c 'echo right &gt; /tmp/workspace'"/></mousebind>
+    </context></mouse><!--
+The *category* element can be set to touch, non-touch, default or the name
+of a device. You can obtain device names by running *libinput list-devices*
+as root or member of the input group.
+
+Tap is set to *yes* be default. All others are left blank in order to use
+device defaults.
+
+All values are [yes|no] except for:
+- pointerSpeed [-1.0 to 1.0]
+- accelProfile [flat|adaptive]
+- tapButtonMap [lrm|lmr]
+--><libinput><device category=""><naturalScroll/><leftHanded/><pointerSpeed/><accelProfile/><tap>yes</tap><tapButtonMap/><tapAndDrag/><dragLock/><middleEmulation/><disableWhileTyping/></device></libinput><!--
+# Window Rules
+#   - Criteria can consist of 'identifier' or 'title' or both (in which case
+#     AND logic is used).
+#   - 'identifier' relates to app_id for native Wayland windows and WM_CLASS
+#     for XWayland clients.
+#   - Criteria can also contain `matchOnce="true"` meaning that the rule
+#     must only apply to the first instance of the window with that
+#     particular 'identifier' or 'title'.
+#   - Matching against patterns with '*' (wildcard) and '?' (joker) is
+#     supported. Pattern matching is case-insensitive.
+
+<windowRules>
+<windowRule identifier="*"><action name="Maximize"/></windowRule>
+<windowRule identifier="foo" serverDecoration="yes"/>
+<windowRule title="bar" serverDecoration="yes"/>
+<windowRule identifier="baz" title="quax" serverDecoration="yes"/>
+</windowRules>
+
+# Example below for `lxqt-panel` and `pcmanfm-qt \-\-desktop`
+# where 'matchOnce' is used to avoid applying rule to the panel configuration
+# window with the same 'app_id'
+
+<windowRules>
+<windowRule identifier="lxqt-panel" matchOnce="true">
+<skipTaskbar>yes</skipTaskbar>
+<action name="MoveTo" x="0" y="0" />
+<action name="ToggleAlwaysOnTop"/>
+</windowRule>
+<windowRule title="pcmanfm-desktop*">
+<skipTaskbar>yes</skipTaskbar>
+<skipWindowSwitcher>yes</skipWindowSwitcher>
+<action name="MoveTo" x="0" y="0" />
+<action name="ToggleAlwaysOnBottom"/>
+</windowRule>
+</windowRules>
+--><windowRules><windowRule identifier="*"><action name="SetDecorations" decorations="full" forceSSD="yes"/></windowRule></windowRules>&gt;
+</labwc_config>

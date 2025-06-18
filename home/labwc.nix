@@ -1,7 +1,9 @@
 { config, pkgs, ... }:
 
-let
-  configDir = ./labwc;
-in {
-  home.file.".config/labwc".source = configDir;
-}
+home.file.".config/labwc" = {
+  source = ./config/labwc;
+  target = ".config/labwc";
+  recursive = true;
+  onChange = "true"; # always update
+};
+

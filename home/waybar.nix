@@ -1,7 +1,8 @@
 { config, pkgs, ... }:
 
-let
-  configDir = ./waybar;
-in {
-  home.file.".config/waybar".source = configDir;
+home.file.".config/waybar" = {
+  source = ./config/waybar;
+  target = ".config/waybar";
+  recursive = true;
+  onChange = "true"; # always update
 }
