@@ -50,13 +50,28 @@
             cd themes
             bash ./install.sh ${installFlags} -d $out/share/themes
             cd $out/share/themes
-            # Remove the full "unstable-latest-<githash>" pattern from Fausto theme names
+            # Remove various unstable patterns from Fausto theme names
             for d in *; do
-              # Pattern: -unstable-latest-<hash> or -unstable-latest-<hash>- with more after
-              if [[ "$d" =~ ^(.*)-unstable-latest-[a-f0-9]+(-.*)?$ ]]; then
+              new_name="$d"
+              # Remove -unstable-latest-<hash> pattern
+              if [[ "$new_name" =~ ^(.*)-unstable-latest-[a-f0-9]+(-.*)?$ ]]; then
                 base_name="''${BASH_REMATCH[1]}"
                 suffix="''${BASH_REMATCH[2]}"
                 new_name="$base_name$suffix"
+              # Remove -unstable-latest (without hash)
+              elif [[ "$new_name" == *"-unstable-latest-"* ]]; then
+                new_name="''${new_name/-unstable-latest-/-}"
+              elif [[ "$new_name" == *"-unstable-latest" ]]; then
+                new_name="''${new_name/-unstable-latest/}"
+              # Remove any other -unstable-<hash> patterns
+              elif [[ "$new_name" =~ ^(.*)-unstable-[a-f0-9]+(-.*)?$ ]]; then
+                base_name="''${BASH_REMATCH[1]}"
+                suffix="''${BASH_REMATCH[2]}"
+                new_name="$base_name$suffix"
+              fi
+              # Rename if changed
+              if [[ "$new_name" != "$d" ]]; then
+                echo "Renaming: $d -> $new_name"
                 mv "$d" "$new_name"
               fi
             done
@@ -64,13 +79,28 @@
           + (pkgs.lib.optionalString (style == "eliver") ''
             bash ./install.sh ${installFlags} -d $out/share/themes
             cd $out/share/themes
-            # Remove the full "unstable-latest-<githash>" pattern from Eliver theme names
+            # Remove various unstable patterns from Eliver theme names
             for d in *; do
-              # Pattern: -unstable-latest-<hash> or -unstable-latest-<hash>- with more after
-              if [[ "$d" =~ ^(.*)-unstable-latest-[a-f0-9]+(-.*)?$ ]]; then
+              new_name="$d"
+              # Remove -unstable-latest-<hash> pattern
+              if [[ "$new_name" =~ ^(.*)-unstable-latest-[a-f0-9]+(-.*)?$ ]]; then
                 base_name="''${BASH_REMATCH[1]}"
                 suffix="''${BASH_REMATCH[2]}"
                 new_name="$base_name$suffix"
+              # Remove -unstable-latest (without hash)
+              elif [[ "$new_name" == *"-unstable-latest-"* ]]; then
+                new_name="''${new_name/-unstable-latest-/-}"
+              elif [[ "$new_name" == *"-unstable-latest" ]]; then
+                new_name="''${new_name/-unstable-latest/}"
+              # Remove any other -unstable-<hash> patterns
+              elif [[ "$new_name" =~ ^(.*)-unstable-[a-f0-9]+(-.*)?$ ]]; then
+                base_name="''${BASH_REMATCH[1]}"
+                suffix="''${BASH_REMATCH[2]}"
+                new_name="$base_name$suffix"
+              fi
+              # Rename if changed
+              if [[ "$new_name" != "$d" ]]; then
+                echo "Renaming: $d -> $new_name"
                 mv "$d" "$new_name"
               fi
             done
