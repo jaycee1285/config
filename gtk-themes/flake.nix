@@ -1,10 +1,7 @@
-{
-description = "Always-latest GTK theme bundle (Fausto, Vince, Orchis, Kanagawa, Juno Mirage)";
+{ description = "Always-latest GTK theme bundle (Fausto, Vince, Orchis, Kanagawa, Juno Mirage)";
 
-inputs = {
-nixpkgs.url = "github\:NixOS/nixpkgs/nixos-unstable";
+inputs = { nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-```
 # Fausto themes
 catppuccin-theme.url = "github:jaycee1285/Catppuccin-GTK-Theme";
 gruvbox-theme.url = "github:jaycee1285/Gruvbox-GTK-Theme";
@@ -27,20 +24,11 @@ nordic-polar-theme.url = "github:jaycee1285/Nordic-Polar";
 # Eliver themes
 magnetic-theme.url = "github:jaycee1285/magnetic-gtk-theme";
 graphite-theme.url = "github:jaycee1285/graphite-gtk-theme";
-```
 
 };
 
-outputs = { self, nixpkgs
-, catppuccin-theme, gruvbox-theme, everforest-theme, tokyonight-theme, osaka-theme
-, kanagawa-theme, nordfox-theme, orchis-theme
-, nordic-polar-theme, magnetic-theme, graphite-theme
-, ... }:
-let
-system = "x86\_64-linux";
-pkgs = import nixpkgs { inherit system; };
+outputs = { self, nixpkgs , catppuccin-theme, gruvbox-theme, everforest-theme, tokyonight-theme, osaka-theme , kanagawa-theme, nordfox-theme, orchis-theme , nordic-polar-theme, magnetic-theme, graphite-theme , ... }: let system = "x86_64-linux"; pkgs = import nixpkgs { inherit system; };
 
-```
   makeTheme = {
     pname,
     src,
@@ -322,6 +310,5 @@ in
     };
   };
 };
-```
 
 }
