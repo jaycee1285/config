@@ -332,7 +332,7 @@
         src = graphite-theme;
         style = "eliver";
         themeFolder = "Graphite";
-        installFlags = "-t orange -t default -s compact --tweaks normal --tweaks nord";
+        installFlags = "-s compact --tweaks normal";
         nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
         propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
         meta = with pkgs.lib; {
