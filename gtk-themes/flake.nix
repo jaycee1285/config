@@ -54,9 +54,8 @@
           # Override version variables that cause -unstable-hash suffixes
           find . -name "install.sh" -type f -exec sed -i 's/version=.*/version="stable"/' {} \;
           find . -name "install.sh" -type f -exec sed -i 's/VERSION=.*/VERSION="stable"/' {} \;
-          # Remove git hash detection patterns specifically
-          find . -name "install.sh" -type f -exec sed -i 's/\$\{shortRev[^}]*\}//g' {} \;
-          find . -name "install.sh" -type f -exec sed -i 's/\$\{src\.shortRev[^}]*\}//g' {} \;
+          # Remove git hash detection patterns - simpler approach
+          find . -name "install.sh" -type f -exec sed -i 's/-unstable-[a-f0-9]*//g' {} \;
         '';
         
         installPhase =
@@ -317,7 +316,7 @@
         src = magnetic-theme;
         style = "eliver";
         themeFolder = "Magnetic";
-        installFlags = "-t grey -t orange -s compact --tweaks nord,gruvbox";
+        installFlags = "-t grey -t orange -s compact --tweaks nord --tweaks gruvbox";
         nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
         propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
         meta = with pkgs.lib; {
@@ -333,7 +332,7 @@
         src = graphite-theme;
         style = "eliver";
         themeFolder = "Graphite";
-        installFlags = "-t orange -t default -s compact --tweaks normal,nord";
+        installFlags = "-t orange -t default -s compact --tweaks normal --tweaks nord";
         nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
         propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
         meta = with pkgs.lib; {
