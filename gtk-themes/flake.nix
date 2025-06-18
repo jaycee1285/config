@@ -22,12 +22,9 @@
 
     # Vince themes
     nordic-polar-theme.url = "github:jaycee1285/Nordic-Polar";
-
-    # Eliver themes
-    magnetic-theme.url = "github:jaycee1285/magnetic-gtk-theme";
   };
 
-  outputs = { self, nixpkgs , catppuccin-theme, gruvbox-theme, everforest-theme, tokyonight-theme, osaka-theme , kanagawa-theme, nordfox-theme, orchis-theme , nordic-polar-theme, magnetic-theme , ... }: 
+  outputs = { self, nixpkgs , catppuccin-theme, gruvbox-theme, everforest-theme, tokyonight-theme, osaka-theme , kanagawa-theme, nordfox-theme, orchis-theme , nordic-polar-theme , ... }: 
   let 
     system = "x86_64-linux"; 
     pkgs = import nixpkgs { inherit system; };
@@ -48,24 +45,14 @@
         src = src;
         version = "unstable-latest"; 
         
-        # Patch install scripts to prevent Git hash suffixes
-        patchPhase = ''
-          # Override version variables that cause -unstable-hash suffixes
-          find . -name "install.sh" -type f -exec sed -i 's/version=.*/version="stable"/' {} \;
-          find . -name "install.sh" -type f -exec sed -i 's/VERSION=.*/VERSION="stable"/' {} \;
-          # Remove git hash detection patterns - simpler approach
-          find . -name "install.sh" -type f -exec sed -i 's/-unstable-[a-f0-9]*//g' {} \;
-        '';
-        
         installPhase =
           (pkgs.lib.optionalString (style == "fausto") ''
             cd themes
             bash ./install.sh ${installFlags} -d $out/share/themes
             cd $out/share/themes
-            # Only remove -unstable-<hash> patterns, keep legitimate variants
+            # Clean up -unstable-<hash> suffixes AFTER install completes
             for d in *; do
               if [[ "$d" =~ ^(.*)-unstable-[a-f0-9]+(-.*)?$ ]]; then
-                # Extract base name and any legitimate suffix after the hash
                 base_name="''${BASH_REMATCH[1]}"
                 suffix="''${BASH_REMATCH[2]}"
                 new_name="$base_name$suffix"
@@ -78,10 +65,9 @@
           + (pkgs.lib.optionalString (style == "eliver") ''
             bash ./install.sh ${installFlags} -d $out/share/themes
             cd $out/share/themes
-            # Only remove -unstable-<hash> patterns, keep legitimate variants
+            # Clean up -unstable-<hash> suffixes AFTER install completes
             for d in *; do
               if [[ "$d" =~ ^(.*)-unstable-[a-f0-9]+(-.*)?$ ]]; then
-                # Extract base name and any legitimate suffix after the hash
                 base_name="''${BASH_REMATCH[1]}"
                 suffix="''${BASH_REMATCH[2]}"
                 new_name="$base_name$suffix"
@@ -305,22 +291,6 @@
         meta = with pkgs.lib; {
           description = "Nordfox GTK theme (Fausto, always latest)";
           homepage = "https://github.com/jaycee1285/Nightfox-GTK-Theme";
-          license = licenses.gpl3Only;
-          platforms = platforms.linux;
-        };
-      };
-
-      magnetic-gtk-theme = makeTheme {
-        pname = "magnetic-gtk-theme";
-        src = magnetic-theme;
-        style = "eliver";
-        themeFolder = "Magnetic";
-        installFlags = "-t grey -t orange -s compact --tweaks nord --tweaks gruvbox";
-        nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
-        propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
-        meta = with pkgs.lib; {
-          description = "Magnetic GTK theme (Eliver, always latest)";
-          homepage = "https://github.com/jaycee1285/magnetic-gtk-theme";
           license = licenses.gpl3Only;
           platforms = platforms.linux;
         };
