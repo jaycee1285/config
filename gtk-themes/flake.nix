@@ -25,10 +25,9 @@
 
     # Eliver themes
     magnetic-theme.url = "github:jaycee1285/magnetic-gtk-theme";
-    graphite-theme.url = "github:jaycee1285/graphite-gtk-theme";
   };
 
-  outputs = { self, nixpkgs , catppuccin-theme, gruvbox-theme, everforest-theme, tokyonight-theme, osaka-theme , kanagawa-theme, nordfox-theme, orchis-theme , nordic-polar-theme, magnetic-theme, graphite-theme , ... }: 
+  outputs = { self, nixpkgs , catppuccin-theme, gruvbox-theme, everforest-theme, tokyonight-theme, osaka-theme , kanagawa-theme, nordfox-theme, orchis-theme , nordic-polar-theme, magnetic-theme , ... }: 
   let 
     system = "x86_64-linux"; 
     pkgs = import nixpkgs { inherit system; };
@@ -322,22 +321,6 @@
         meta = with pkgs.lib; {
           description = "Magnetic GTK theme (Eliver, always latest)";
           homepage = "https://github.com/jaycee1285/magnetic-gtk-theme";
-          license = licenses.gpl3Only;
-          platforms = platforms.linux;
-        };
-      };
-      
-      graphite-gtk-theme = makeTheme {
-        pname = "graphite-gtk-theme";
-        src = graphite-theme;
-        style = "eliver";
-        themeFolder = "Graphite";
-        installFlags = "-s compact --tweaks normal";
-        nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
-        propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
-        meta = with pkgs.lib; {
-          description = "Graphite GTK theme (Eliver, always latest)";
-          homepage = "https://github.com/jaycee1285/graphite-gtk-theme";
           license = licenses.gpl3Only;
           platforms = platforms.linux;
         };
