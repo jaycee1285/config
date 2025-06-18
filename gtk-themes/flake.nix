@@ -55,8 +55,8 @@
           find . -name "install.sh" -type f -exec sed -i 's/version=.*/version="stable"/' {} \;
           find . -name "install.sh" -type f -exec sed -i 's/VERSION=.*/VERSION="stable"/' {} \;
           # Remove git hash detection patterns specifically
-          find . -name "install.sh" -type f -exec sed -i 's/\${\?shortRev[^}]*}\?//g' {} \;
-          find . -name "install.sh" -type f -exec sed -i 's/\${\?src\.shortRev[^}]*}\?//g' {} \;
+          find . -name "install.sh" -type f -exec sed -i 's/\$\{shortRev[^}]*\}//g' {} \;
+          find . -name "install.sh" -type f -exec sed -i 's/\$\{src\.shortRev[^}]*\}//g' {} \;
         '';
         
         installPhase =
