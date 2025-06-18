@@ -50,30 +50,28 @@
             cd themes
             bash ./install.sh ${installFlags} -d $out/share/themes
             cd $out/share/themes
-            # Clean up -unstable-<hash> suffixes AFTER install completes
+            # Remove the full "unstable-latest-<githash>" pattern from Fausto theme names
             for d in *; do
-              if [[ "$d" =~ ^(.*)-unstable-[a-f0-9]+(-.*)?$ ]]; then
+              # Pattern: -unstable-latest-<hash> or -unstable-latest-<hash>- with more after
+              if [[ "$d" =~ ^(.*)-unstable-latest-[a-f0-9]+(-.*)?$ ]]; then
                 base_name="''${BASH_REMATCH[1]}"
                 suffix="''${BASH_REMATCH[2]}"
                 new_name="$base_name$suffix"
-                if [[ "$new_name" != "$d" ]]; then
-                  mv "$d" "$new_name"
-                fi
+                mv "$d" "$new_name"
               fi
             done
           '')
           + (pkgs.lib.optionalString (style == "eliver") ''
             bash ./install.sh ${installFlags} -d $out/share/themes
             cd $out/share/themes
-            # Clean up -unstable-<hash> suffixes AFTER install completes
+            # Remove the full "unstable-latest-<githash>" pattern from Eliver theme names
             for d in *; do
-              if [[ "$d" =~ ^(.*)-unstable-[a-f0-9]+(-.*)?$ ]]; then
+              # Pattern: -unstable-latest-<hash> or -unstable-latest-<hash>- with more after
+              if [[ "$d" =~ ^(.*)-unstable-latest-[a-f0-9]+(-.*)?$ ]]; then
                 base_name="''${BASH_REMATCH[1]}"
                 suffix="''${BASH_REMATCH[2]}"
                 new_name="$base_name$suffix"
-                if [[ "$new_name" != "$d" ]]; then
-                  mv "$d" "$new_name"
-                fi
+                mv "$d" "$new_name"
               fi
             done
           '')
