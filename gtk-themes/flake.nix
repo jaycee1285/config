@@ -283,7 +283,7 @@ in
       src = magnetic-theme;
       style = "eliver";
       themeFolder = "Magnetic";
-      installFlags = "-t grey,orange --tweaks nord,gruvbox,compact";
+      installFlags = "-t grey,orange -t default -s compact --tweaks nord,gruvbox";
       nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
       propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
       meta = with pkgs.lib; {
