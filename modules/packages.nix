@@ -78,6 +78,7 @@
     # Phone
     pixelflasher
     android-tools
+    androidStudioPackages.dev
 
     # mis
     neothesia
