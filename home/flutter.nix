@@ -1,18 +1,25 @@
+# ~/.config/home-manager/modules/flutter.nix
 { pkgs, ... }:
-{
-  programs.android-sdk = {
-    enable = true;
-    platformTools = true;
-    tools          = true;
-    buildToolsVersions = [ "34.0.0" ];
-    platforms       = [ "android-34" ];
-    accept_license  = true;
-  };
 
-  home.packages = with pkgs; [ flutter ];
+let
+  sdk = pkgs.androidsdk;   # vanilla SDK package from nixpkgs
+in
+{
+  home.packages = [
+    pkgs.flutter
+    pkgs.jdk17
+    sdk
+  ];
 
   home.sessionVariables = {
-    ANDROID_SDK_ROOT = "${pkgs.android-sdk}/libexec/android-sdk";
-    ANDROID_HOME     = "${pkgs.android-sdk}/libexec/android-sdk";
+    ANDROID_SDK_ROOT = "${sdk}/libexec/android-sdk";
+    ANDROID_HOME     = "${sdk}/libexec/android-sdk";
+    JAVA_HOME        = "${pkgs.jdk17}";
   };
+
+  home.sessionPath = [
+    "${sdk}/libexec/android-sdk/platform-tools"
+    "${sdk}/libexec/android-sdk/cmdline-tools/latest/bin"
+    "${sdk}/libexec/android-sdk/tools/bin"   # some old build scripts still look here
+  ];
 }

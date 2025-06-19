@@ -1,41 +1,39 @@
-# home-manager module (≈ same keys exist under services.kanshi in system config)
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   services.kanshi = {
     enable = true;
 
-    profiles = [
-      ## Profile when the external monitor is present
-      {
-        name = "docked";
+    profiles = {
+      # ── When the external monitor is attached ────────────────────────────────
+      docked = {
         outputs = [
-          # External DP-3 goes on the left
+          # External monitor (left)
           {
-            criteria = "DP-3";          # use the exact name from `wlr-randr`
-            mode     = "1920x1080@60Hz"; # or just "1920x1080" if you don’t care
+            criteria = "DP-3";              # exact name from `wlr-randr`
+            mode     = "1920x1080@60Hz";    # or just "1920x1080"
             position = "0,0";
           }
-          # Laptop panel stays on the right
+
+          # Laptop panel (right)
           {
             criteria = "eDP-1";
             mode     = "1920x1080@60Hz";
-            position = "1920,0";         # width of DP-3, y=0
+            position = "1920,0";            # x == width of DP-3
           }
         ];
-      }
+      };
 
-      ## Fallback when you’re on battery with no external monitor
-      {
-        name = "undocked";
+      # ── Fallback when you’re on battery ──────────────────────────────────────
+      undocked = {
         outputs = [
           {
             criteria = "eDP-1";
             position = "0,0";
-            # mode optional—kanshi will keep the current native mode
+            # mode omitted → keep whatever is current/native
           }
         ];
-      }
-    ];
+      };
+    };
   };
 }

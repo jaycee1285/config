@@ -26,6 +26,7 @@
       pkgs = import nixpkgs {
         inherit system overlays;
         config.allowUnfree = true;
+        config.android_sdk.accept_license = true;
       };
 
       obThemesPkg = ob-themes.packages.${system}.default;
