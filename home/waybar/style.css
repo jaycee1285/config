@@ -1,5 +1,5 @@
 * {
-    font-family: FontAwesome, material-design-icons, Spline Sans Mono, sans-serif;
+    font-family: line-awesome, material-design-icons, Spline Sans Mono, sans-serif;
     font-size: 24px;
   }
 
@@ -110,4 +110,5 @@
   padding: 0 6px;
   min-width: 24px; /* ensures breathing room */
   font-size: 18px;  /* optional, to increase visibility */
+  font-family: la-regular-400;
 }
