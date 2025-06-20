@@ -1,25 +1,85 @@
 # ~/.config/home-manager/modules/flutter.nix
 { pkgs, ... }:
-
 let
-  sdk = pkgs.androidsdk;   # vanilla SDK package from nixpkgs
+  androidComposition = pkgs.androidenv.composeAndroidPackages {
+    cmdLineToolsVersion = "11.0";
+    toolsVersion = "26.1.1";
+    platformToolsVersion = "35.0.1";
+    buildToolsVersions = [ "34.0.0" "33.0.2" ];
+    includeEmulator = false;
+    emulatorVersion = "34.1.9";
+    platformVersions = [ "34" "33" ];
+    includeSources = false;
+    includeSystemImages = false;
+    systemImageTypes = [ "google_apis_playstore" ];
+    abiVersions = [ "armeabi-v7a" "arm64-v8a" ];
+    cmakeVersions = [ "3.22.1" ];
+    includeNDK = true;
+    ndkVersions = ["25.1.8937393"];
+    useGoogleAPIs = false;
+    useGoogleTVAddOns = false;
+    includeExtras = [
+      "extras;google;gcm"
+    ];
+    extraLicenses = [
+      "android-sdk-license"
+      "android-sdk-preview-license"
+      "android-googletv-license"
+      "android-sdk-arm-dbt-license"
+      "google-gdk-license"
+      "intel-android-extra-license"
+      "intel-android-sysimage-license"
+      "mips-android-sysimage-license"
+    ];
+  };
+  
+  androidSdk = androidComposition.androidsdk;
 in
 {
   home.packages = [
-    pkgs.flutter
-    pkgs.jdk17
-    sdk
+    flutter
+    jdk17
+    androidSdk
+    # Additional tools that might be needed
+    cmake
+    ninja
+    pkg-config
   ];
-
+  
   home.sessionVariables = {
-    ANDROID_SDK_ROOT = "${sdk}/libexec/android-sdk";
-    ANDROID_HOME     = "${sdk}/libexec/android-sdk";
-    JAVA_HOME        = "${pkgs.jdk17}";
+    ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
+    ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
+    JAVA_HOME = "${pkgs.jdk17}";
+    ANDROID_AVD_HOME = "$HOME/.android/avd";
   };
-
+  
   home.sessionPath = [
-    "${sdk}/libexec/android-sdk/platform-tools"
-    "${sdk}/libexec/android-sdk/cmdline-tools/latest/bin"
-    "${sdk}/libexec/android-sdk/tools/bin"   # some old build scripts still look here
+    "${androidSdk}/libexec/android-sdk/platform-tools"
+    "${androidSdk}/libexec/android-sdk/cmdline-tools/latest/bin"
+    "${androidSdk}/libexec/android-sdk/build-tools/34.0.0"
+  ];
+  
+  # Create local.properties automatically
+  home.file.".local/share/flutter-local-properties" = {
+    text = ''
+      sdk.dir=${androidSdk}/libexec/android-sdk
+      flutter.sdk=${pkgs.flutter}
+      flutter.buildMode=release
+      flutter.versionName=1.0.0
+      flutter.versionCode=1
+    '';
+  };
+  
+  # Script to set up Flutter projects
+  home.packages = with pkgs; [
+    (writeScriptBin "flutter-setup-project" ''
+      #!${stdenv.shell}
+      if [ -d "android" ]; then
+        echo "sdk.dir=${androidSdk}/libexec/android-sdk" > android/local.properties
+        echo "Flutter project configured for NixOS!"
+      else
+        echo "No android directory found. Run this from your Flutter project root."
+      fi
+    '')
   ];
 }
