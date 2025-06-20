@@ -3,6 +3,8 @@
 {
   services.kanshi = {
     enable = true;
+    systemdTarget = "labwc-session.target";
+
 
     profiles = {
       # ── When the external monitor is attached ────────────────────────────────

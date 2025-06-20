@@ -12,7 +12,7 @@
     ./flutter.nix
     ./fuzzel.nix
     ./gtk.nix
-    ./kanshi.nix
+   # ./kanshi.nix
     ./labwc.nix
     ./scripts.nix
     ./vscodium.nix

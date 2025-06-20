@@ -76,7 +76,6 @@
     swayidle
 
     # Phone
-    pixelflasher
     android-tools
 
     # mis

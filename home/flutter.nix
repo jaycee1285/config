@@ -37,13 +37,23 @@ let
 in
 {
   home.packages = [
-    flutter
-    jdk17
+    pkgs.flutter
+    pkgs.jdk17
     androidSdk
     # Additional tools that might be needed
-    cmake
-    ninja
-    pkg-config
+    pkgs.cmake
+    pkgs.ninja
+    pkgs.pkg-config
+    # Script to set up Flutter projects
+    (pkgs.writeScriptBin "flutter-setup-project" ''
+      #!${pkgs.stdenv.shell}
+      if [ -d "android" ]; then
+        echo "sdk.dir=${androidSdk}/libexec/android-sdk" > android/local.properties
+        echo "Flutter project configured for NixOS!"
+      else
+        echo "No android directory found. Run this from your Flutter project root."
+      fi
+    '')
   ];
   
   home.sessionVariables = {
@@ -69,17 +79,4 @@ in
       flutter.versionCode=1
     '';
   };
-  
-  # Script to set up Flutter projects
-  home.packages = with pkgs; [
-    (writeScriptBin "flutter-setup-project" ''
-      #!${stdenv.shell}
-      if [ -d "android" ]; then
-        echo "sdk.dir=${androidSdk}/libexec/android-sdk" > android/local.properties
-        echo "Flutter project configured for NixOS!"
-      else
-        echo "No android directory found. Run this from your Flutter project root."
-      fi
-    '')
-  ];
 }
