@@ -1,5 +1,5 @@
 { 
-  description = "Always-latest GTK theme bundle (Fausto, Vince, Orchis, Kanagawa, Juno Mirage)";
+  description = "Always-latest GTK theme bundle (Fausto, Vince, Orchis, Kanagawa, Juno Mirage, Rose-Pine)";
 
   inputs = { 
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -22,9 +22,17 @@
 
     # Vince themes
     nordic-polar-theme.url = "github:jaycee1285/Nordic-Polar";
+
+    # Rose-Pine
+    rose-pine-theme = {
+      url = "github:jaycee1285/Rose-Pine-GTK-Theme";
+      flake = false;  # Treat as source, not a flake to avoid circular import
+    };
   };
 
-  outputs = { self, nixpkgs , catppuccin-theme, gruvbox-theme, everforest-theme, tokyonight-theme, osaka-theme , kanagawa-theme, nordfox-theme, orchis-theme , nordic-polar-theme , ... }: 
+  outputs = { self, nixpkgs, catppuccin-theme, gruvbox-theme, everforest-theme, 
+              tokyonight-theme, osaka-theme, kanagawa-theme, nordfox-theme, 
+              orchis-theme, nordic-polar-theme, rose-pine-theme, ... }: 
   let 
     system = "x86_64-linux"; 
     pkgs = import nixpkgs { inherit system; };
@@ -215,6 +223,40 @@
         };
       };
 
+      # Nordfox
+      nordfox-gtk-theme = makeTheme {
+        pname = "nordfox-gtk-theme";
+        src = nordfox-theme;
+        style = "fausto";
+        themeFolder = "Nordfox-gtk-theme";
+        installFlags = "-s compact --tweaks outline nord";
+        nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
+        propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
+        meta = with pkgs.lib; {
+          description = "Nordfox GTK theme (Fausto, always latest)";
+          homepage = "https://github.com/jaycee1285/Nightfox-GTK-Theme";
+          license = licenses.gpl3Only;
+          platforms = platforms.linux;
+        };
+      };
+
+      # Rose Pine
+      rose-pine-gtk-theme = makeTheme {
+        pname = "rose-pine-gtk-theme";
+        src = rose-pine-theme;
+        style = "fausto";
+        themeFolder = "Rose-Pine-gtk-theme";
+        installFlags = "-t grey --tweaks outline";
+        nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
+        propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
+        meta = with pkgs.lib; {
+          description = "Rose Pine GTK theme (Fausto, always latest)";
+          homepage = "https://github.com/jaycee1285/Rose-Pine-GTK-Theme";
+          license = licenses.gpl3Only;
+          platforms = platforms.linux;
+        };
+      };
+
       # Orchis
       orchis-orange-compact = makeTheme {
         pname = "orchis-orange-compact";
@@ -239,7 +281,7 @@
         version = "2.2.0-unstable-2025-03-21";
         src = pkgs.fetchFromGitHub {
           owner = "EliverLara";
-          repo = "Nordic-polar";
+          repo = "Nordic-Polar";
           rev = "ca23b9460713e72defae777162175921beae6e27";
           hash = "sha256-wkmmpviQBGoE/+/tPTIIgkWFUYtYney5Yz12m8Zlak8=";
           name = "Nordic-Polar-standard-buttons";
@@ -275,7 +317,7 @@
         '';
         meta = with pkgs.lib; {
           description = "Nordic Polar GTK theme (standard buttons variant only)";
-          homepage = "https://github.com/EliverLara/Nordic-polar";
+          homepage = "https://github.com/EliverLara/Nordic-Polar";
           license = licenses.gpl3Only;
           platforms = platforms.linux;
         };
@@ -303,22 +345,6 @@
         meta = with pkgs.lib; {
           description = "Juno Mirage GTK theme (standard buttons, official)";
           homepage = "https://github.com/gvolpe/Juno";
-          license = licenses.gpl3Only;
-          platforms = platforms.linux;
-        };
-      };
-
-      nordfox-gtk-theme = makeTheme {
-        pname = "nordfox-gtk-theme";
-        src = nordfox-theme;
-        style = "fausto";
-        themeFolder = "Nordfox-gtk-theme";
-        installFlags = "-s compact --tweaks outline nord";
-        nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
-        propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
-        meta = with pkgs.lib; {
-          description = "Nordfox GTK theme (Fausto, always latest)";
-          homepage = "https://github.com/jaycee1285/Nightfox-GTK-Theme";
           license = licenses.gpl3Only;
           platforms = platforms.linux;
         };

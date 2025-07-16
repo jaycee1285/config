@@ -1,22 +1,27 @@
 { config, pkgs, ... }:
 
 {
-  home.username = "john";               # Change to your actual user!
-  home.homeDirectory = "/home/john";    # Adjust as needed
-  home.stateVersion = "25.05";
+  home.username      = "john";
+  home.homeDirectory = "/home/john";
+  home.stateVersion  = "25.05";
+
   programs.home-manager.enable = true;
 
+  # One place for nixpkgs options that apply to *this* HM profile
+  nixpkgs.config = {
+    android_sdk.accept_license = true;   # let HM build the Android SDK
+    allowUnfree                = true;   # needed by flutter → chromium, etc.
+  };
 
   imports = [
     ./firefox.nix
     ./flutter.nix
     ./fuzzel.nix
     ./gtk.nix
-   # ./kanshi.nix
+    # ./kanshi.nix
     ./labwc.nix
     ./scripts.nix
     ./vscodium.nix
     ./waybar.nix
-    # Add more user modules here if you want (e.g., ./cli.nix, ./vim.nix, etc)
   ];
 }

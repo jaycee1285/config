@@ -42,6 +42,9 @@
         <command>thunar</command>
       </action>
     </item>
+        <item label="Theme Change">
+      <action name="Execute" command="labwcchanger"></action>
+    </item>
 <separator></separator>
     <item label="Reconfigure">
       <action name="Reconfigure"></action>

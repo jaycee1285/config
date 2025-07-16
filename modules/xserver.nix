@@ -7,7 +7,7 @@
   #  desktopManager.xfce.enable = true;
   #  desktopManager.xfce.enableWaylandSession = true;
   #  desktopManager.budgie.enable = true;
-    desktopManager.lxqt.enable = true;
+     desktopManager.cinnamon.enable = true;
   };
   services = {
   libinput.enable = true;

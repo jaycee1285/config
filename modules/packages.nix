@@ -22,15 +22,21 @@
     pcloud
     qdirstat
     gowall
-    kdePackages.dolphin
     wayshot
     super-productivity
     zafiro-icons
     nordzy-icon-theme
     graphite-cursors
+    labwcchanger
+    gcc13
+    xwayland-satellite
+    zlib
+    open-webui
+    cherry-studio
+    lmstudio
 
     # coding
-    nodejs_24
+    nodejs-slim
     pkgs.unstable.bun
     github-desktop
     gh
@@ -89,7 +95,6 @@
     gtypist
     pkgs.unstable.obsidian
     nnn
-    pixelflasher
     cherry-studio
     #super-productivity
     jq

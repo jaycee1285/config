@@ -6,6 +6,7 @@
   services.gvfs.enable = true;
   services.gnome.gnome-keyring.enable = true;
   services.onedrive.enable = false;
+  services.power-profiles-daemon.enable = false;
   services.flatpak.enable = true;
   xdg.portal.wlr.enable = true;
   services.system-config-printer.enable = true;

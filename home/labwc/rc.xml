@@ -12,7 +12,7 @@ default values.
   </core>
   <!-- <font><theme> can be defined without an attribute to set all places -->
   <theme>
-    <name>nordic-polar-OB</name>
+    <name>ayu-light-OB</name>
     <cornerRadius>10</cornerRadius>
     <keepBorder>yes</keepBorder>
     <font>
@@ -82,10 +82,20 @@ windows and WM_CLASS for XWayland clients.
         <command>"super-productivity"</command>
       </action>
     </keybind>
+    <keybind key="W-c">
+      <action name="Execute">
+        <command>"labwcchanger"</command>
+      </action>
+    </keybind>
   </keyboard>
   <libinput>
     <device>
       <naturalScroll>yes</naturalScroll>
+    </device>
+     <device category="non-touch">
+      <!-- accelProfile can be “adaptive” (default) or “flat” (no accel) -->
+      <!-- pointerSpeed: –1.0 (slowest) to 1.0 (fastest), 0.0 is default -->
+      <pointerSpeed>0.5</pointerSpeed>
     </device>
   </libinput>
   <windowSwitcher show="yes" preview="yes" outlines="yes" allWorkspaces="no">

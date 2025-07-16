@@ -7,9 +7,10 @@
     gtk-themes.url = "path:./gtk-themes";
     ob-themes.url = "path:./ob-themes";
     home-manager.url = "github:nix-community/home-manager";
+    labwcchanger.url = "github:jaycee1285/labwcchanger";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, ... }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, labwcchanger, ... }:
     let
       system = "x86_64-linux";
 
@@ -21,12 +22,18 @@
             config.allowUnfree = true;
           };
         })
+        # Add labwcchanger overlay
+        (final: prev: {
+          labwcchanger = labwcchanger.packages.${system}.default;
+        })
       ];
 
       pkgs = import nixpkgs {
         inherit system overlays;
-        config.allowUnfree = true;
-        config.android_sdk.accept_license = true;
+        config = {
+          allowUnfree = true;
+          android_sdk.accept_license = true;
+        };
       };
 
       obThemesPkg = ob-themes.packages.${system}.default;
@@ -41,7 +48,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = ".backup";
+              home-manager.backupFileExtension = ".bakbuk";
               home-manager.users.john = import ./home/home.nix;
 
               home-manager.extraSpecialArgs = {
@@ -53,6 +60,7 @@
           specialArgs = {
             inherit pkgs gtk-themes nixpkgs-unstable;
             ob-themes = obThemesPkg;
+            # Remove labwcchanger from here since it's now in the overlay
           };
         };
       };
