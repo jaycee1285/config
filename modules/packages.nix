@@ -31,9 +31,29 @@
     gcc13
     xwayland-satellite
     zlib
-    open-webui
+    #open-webui
     cherry-studio
     lmstudio
+    glib
+    inkscape-with-extensions
+    flow-control
+    typora
+    cudatext-gtk
+    notepadqq
+    lite-xl 
+    helix
+    zee
+    micro-with-wl-clipboard
+    marker
+    ox
+    lapce
+    libnotify
+    mako
+    dconf-editor
+    gsettings-qt
+    pkgs.unstable.super-productivity
+    dbeaver-bin
+    xdg-desktop-portal-gtk
 
     # coding
     nodejs-slim
@@ -95,12 +115,11 @@
     gtypist
     pkgs.unstable.obsidian
     nnn
-    cherry-studio
-    #super-productivity
+    super-productivity
     jq
     amphetype
     kopia-ui
-    warehouse
+#    warehouse
 
     # gaming
     mupen64plus
@@ -119,7 +138,6 @@
 
     # utilities
     xdg-desktop-portal-wlr
-    xdg-desktop-portal-gtk
     kitty
     fontfinder
     git
@@ -139,7 +157,6 @@
     appimage-run
     libappimage
     xarchiver
-    greetd.tuigreet
     pavucontrol
     unrar
     syncthingtray
@@ -154,7 +171,6 @@
     pkgs.unstable.gruvbox-plus-icons
 
     # theming
-    themechanger
     kdePackages.qtstyleplugin-kvantum    
   ];
 }

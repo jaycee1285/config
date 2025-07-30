@@ -5,13 +5,18 @@
     xkb.layout = "us";
     xkb.options = "eurosign:e";
   #  desktopManager.xfce.enable = true;
-  #  desktopManager.xfce.enableWaylandSession = true;
+  # desktopManager.xfce.enableWaylandSession = true;
   #  desktopManager.budgie.enable = true;
-     desktopManager.cinnamon.enable = true;
+   desktopManager.cinnamon.enable = true;
+  
   };
   services = {
   libinput.enable = true;
   displayManager.ly.enable = true;
+  
+  
   };
+  security.soteria.enable = true;
+  xdg.portal.wlr.enable = true;
   console.keyMap = "us";
 }

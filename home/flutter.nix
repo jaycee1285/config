@@ -82,7 +82,7 @@ EOF
 in
 {
   home.packages = [
-    pkgs.jdk17
+    pkgs.jdk
     androidSdk
     pkgs.android-tools
     pkgs.cmake pkgs.ninja pkgs.pkg-config pkgs.sqlite
@@ -153,7 +153,7 @@ in
       
       export ANDROID_SDK_ROOT="$WRITABLE_SDK"
       export ANDROID_HOME="$ANDROID_SDK_ROOT"
-      export JAVA_HOME='${pkgs.jdk17}'
+      export JAVA_HOME='${pkgs.jdk}'
       export PATH="$WRITABLE_SDK/platform-tools:$WRITABLE_SDK/cmdline-tools/latest/bin:$PATH"
       export CHROME_EXECUTABLE='${pkgs.ungoogled-chromium}/bin/chromium'
       
@@ -181,7 +181,7 @@ in
     # The Flutter wrapper overrides them with the writable version
     ANDROID_SDK_ROOT  = sdkRoot;
     ANDROID_HOME      = sdkRoot;
-    JAVA_HOME         = "${pkgs.jdk17}";
+    JAVA_HOME         = "${pkgs.jdk}";
     CHROME_EXECUTABLE = "${pkgs.ungoogled-chromium}/bin/chromium";
   };
   home.sessionPath = [

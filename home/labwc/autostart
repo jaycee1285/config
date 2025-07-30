@@ -17,7 +17,7 @@ waybar >/dev/null 2>&1 &
 # as mako to function correctly. Thunderbird is an example of this.
 #mako >/dev/null 2>&1 &
 
-nm-applet >/dev/null 2>&1 &
+#nm-applet >/dev/null 2>&1 &
 
 # Start the Thunar daemon for better startup
 thunar --daemon 2>&1 &

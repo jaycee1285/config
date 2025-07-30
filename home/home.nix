@@ -15,7 +15,7 @@
 
   imports = [
     ./firefox.nix
-    ./flutter.nix
+   # ./flutter.nix
     ./fuzzel.nix
     ./gtk.nix
     # ./kanshi.nix

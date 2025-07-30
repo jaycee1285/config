@@ -8,7 +8,7 @@
         "modules-center": ["wlr/taskbar","network#vpn"],
 
 
-        "modules-right": ["tray", "pulseaudio", "battery", "custom/clock"],
+        "modules-right": ["tray", "network", "pulseaudio", "battery", "custom/clock"],
 
         "custom/clock": {
         "exec": "~/.config/waybar/scripts/clock.sh",
@@ -45,7 +45,7 @@
       "tooltip-format": "{essid} via {gwaddr} ",
       "format-linked": "{ifnameessid (No IP) ",
       "format-disconnected": "Disconnected ⚠",
-      "on-click": "kitty -e nmtui connect"
+      "on-click": "~/bin/fuzzelfi.sh"
   },
 
 "battery": {

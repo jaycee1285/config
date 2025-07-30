@@ -12,7 +12,7 @@ default values.
   </core>
   <!-- <font><theme> can be defined without an attribute to set all places -->
   <theme>
-    <name>ayu-light-OB</name>
+    <name>nordic-polar-OB</name>
     <cornerRadius>10</cornerRadius>
     <keepBorder>yes</keepBorder>
     <font>
@@ -87,12 +87,27 @@ windows and WM_CLASS for XWayland clients.
         <command>"labwcchanger"</command>
       </action>
     </keybind>
+    <keybind key="F10">
+      <action name="Execute">
+        <command>"~/bin/fuzzelfi.sh"</command>
+      </action>
+    </keybind>
+    <keybind key="A-k">
+      <action name="Execute">
+        <command>"pkill -f waybar"</command>
+      </action>
+    </keybind>
+    <keybind key="A-s">
+      <action name="Execute">
+        <command>"nohup waybar &gt;/dev/null 2&gt;&amp;1 &amp;"</command>
+      </action>
+    </keybind>
   </keyboard>
   <libinput>
     <device>
       <naturalScroll>yes</naturalScroll>
     </device>
-     <device category="non-touch">
+    <device category="non-touch">
       <!-- accelProfile can be “adaptive” (default) or “flat” (no accel) -->
       <!-- pointerSpeed: –1.0 (slowest) to 1.0 (fastest), 0.0 is default -->
       <pointerSpeed>0.5</pointerSpeed>
