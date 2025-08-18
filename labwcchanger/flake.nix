@@ -1,62 +1,120 @@
 {
   description = "LabWC theme changer (Flutter)";
-
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
-
+  
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = import nixpkgs { 
+          inherit system;
+          config.allowUnfree = true;  # Needed for some graphics drivers
+        };
+        lib = pkgs.lib;
         
-        app = pkgs.stdenv.mkDerivation rec {
+        bundle = builtins.fetchTarball {
+          url = "https://github.com/jaycee1285/labwcchanger/releases/download/release/labwcchanger1.0.tar.gz";
+          sha256 = "sha256:125b6snri611j31qlp4hqr9056gd14g2z70hi09q4pkkq4gj5754";
+        };
+      in
+      {
+        packages.default = pkgs.stdenv.mkDerivation {
           pname = "labwcchanger";
-          version = "0.1";
+          version = "1.0";
+          src = bundle;
           
-          src = pkgs.fetchurl {
-            url = "https://github.com/jaycee1285/labwcchanger/releases/download/${version}/labwcchanger";
-            sha256 = "sha256-VoYIgTq+wYBFx73mFSF9x9R24K0uYbcWgcP+VfGgWPw=";
-          };
-          
-          dontUnpack = true;
-          
-          nativeBuildInputs = with pkgs; [ 
-            autoPatchelfHook 
+          nativeBuildInputs = with pkgs; [
+            autoPatchelfHook
+            makeWrapper
+            wrapGAppsHook
           ];
           
           buildInputs = with pkgs; [
+            # Core GTK/GDK dependencies
             gtk3
-            libxkbcommon
-            xorg.libX11
-            xorg.libXext
-            xorg.libXi
-            xorg.libXrender
-            xorg.libXtst
-            libGL
-            stdenv.cc.cc.lib
             glib
             pango
             cairo
             gdk-pixbuf
             atk
+            at-spi2-atk
+            
+            # X11/Wayland dependencies
+            xorg.libX11
+            xorg.libXext
+            xorg.libXi
+            xorg.libXrender
+            xorg.libXtst
+            libxkbcommon
             wayland
+            
+            # Critical: OpenGL dependencies
+            libGL
+            libGLU
+            mesa
+            mesa.drivers
             libepoxy
+            
+            # Video/Graphics
+            libdrm
+            
+            # Other runtime dependencies
+            zlib
+            harfbuzz
+            stdenv.cc.cc.lib
           ];
           
+          # Tell autoPatchelfHook where to find Flutter's bundled libs
+          appendRunpaths = [ 
+            "$out/share/labwcchanger/lib"
+            "${pkgs.mesa}/lib"
+            "${pkgs.libGL}/lib"
+          ];
+          
+          dontStrip = true;
+          dontWrapGApps = true;  # We'll do it manually
+          
           installPhase = ''
+            runHook preInstall
+            
+            mkdir -p $out/share/labwcchanger
+            cp -r . $out/share/labwcchanger/
+            chmod -R +w $out/share/labwcchanger
+            
+            runHook postInstall
+          '';
+          
+          postFixup = ''
+            # Manually wrap with GApps and additional environment
+            wrapProgram $out/share/labwcchanger/labwcchanger \
+              ''${gappsWrapperArgs[@]} \
+              --chdir $out/share/labwcchanger \
+              --prefix LD_LIBRARY_PATH : "$out/share/labwcchanger/lib:${lib.makeLibraryPath buildInputs}" \
+              --set-default LIBGL_ALWAYS_SOFTWARE 1 \
+              --set-default GDK_BACKEND x11
+            
+            # Create the bin wrapper
             mkdir -p $out/bin
-            cp $src $out/bin/labwcchanger
-            chmod +x $out/bin/labwcchanger
+            ln -s $out/share/labwcchanger/labwcchanger $out/bin/labwcchanger
           '';
         };
         
-      in {
-        packages.default = app;
-
+        # Development shell with Flutter
         devShell = pkgs.mkShell {
-          buildInputs = with pkgs; [ flutter dart ];
+          buildInputs = with pkgs; [ 
+            flutter 
+            dart
+            pkg-config
+            gtk3
+            libGL
+          ];
+          
+          shellHook = ''
+            export LD_LIBRARY_PATH="${pkgs.libGL}/lib:${pkgs.mesa}/lib:$LD_LIBRARY_PATH"
+          '';
         };
-      });
+      };
+    );
 }

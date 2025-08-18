@@ -12,11 +12,11 @@ default values.
   </core>
   <!-- <font><theme> can be defined without an attribute to set all places -->
   <theme>
-    <name>nordic-polar-OB</name>
+    <name>catppuccin-latte-OB</name>
     <cornerRadius>10</cornerRadius>
     <keepBorder>yes</keepBorder>
     <font>
-      <name>Iosevka Aile</name>
+      <name>kanagawa-dragon-light-OB</name>
       <size>16</size>
       <slant>normal</slant>
     </font>
@@ -79,17 +79,22 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="W-p">
       <action name="Execute">
-        <command>"super-productivity"</command>
+        <command>sh -c "superproductivity --force-x11"</command>
       </action>
     </keybind>
     <keybind key="W-c">
       <action name="Execute">
-        <command>"labwcchanger"</command>
+        <command>sh -c "GDK_BACKEND=x11 labwcchanger"</command>
       </action>
     </keybind>
     <keybind key="F10">
       <action name="Execute">
         <command>"~/bin/fuzzelfi.sh"</command>
+      </action>
+    </keybind>
+    <keybind key="Print">
+      <action name="Execute">
+        <command>"flameshot gui"</command>
       </action>
     </keybind>
     <keybind key="A-k">
@@ -99,7 +104,7 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="A-s">
       <action name="Execute">
-        <command>"nohup waybar &gt;/dev/null 2&gt;&amp;1 &amp;"</command>
+        <command>"nohup waybar >/dev/null 2>&amp;1 &amp;"</command>
       </action>
     </keybind>
   </keyboard>

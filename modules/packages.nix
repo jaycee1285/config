@@ -23,15 +23,12 @@
     qdirstat
     gowall
     wayshot
-    super-productivity
     zafiro-icons
     nordzy-icon-theme
     graphite-cursors
     labwcchanger
     gcc13
-    xwayland-satellite
     zlib
-    #open-webui
     cherry-studio
     lmstudio
     glib
@@ -52,8 +49,11 @@
     dconf-editor
     gsettings-qt
     pkgs.unstable.super-productivity
-    dbeaver-bin
     xdg-desktop-portal-gtk
+    flameshot
+    chawan
+    steam-run
+    
 
     # coding
     nodejs-slim
@@ -100,6 +100,8 @@
     espanso-wayland
     swaylock-fancy
     swayidle
+    pkgs.unstable.xwayland-run
+    pkgs.unstable.xwayland-satellite
 
     # Phone
     android-tools
@@ -115,7 +117,6 @@
     gtypist
     pkgs.unstable.obsidian
     nnn
-    super-productivity
     jq
     amphetype
     kopia-ui
@@ -132,7 +133,6 @@
     android-tools
 
     # office
-    inkscape
     pencil
     koreader
 
