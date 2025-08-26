@@ -16,6 +16,13 @@
       bradlc.vscode-tailwindcss
       catppuccin.catppuccin-vsc
       astro-build.astro-vscode
+      ionic.ionic
+      sdras.night-owl
+      mvllow.rose-pine
+      continue.continue
+      dart-code.dart-code
+      unifiedjs.vscode-mdx
+      brandonkirbyson.solarized-palenight
     ];
   };
 }

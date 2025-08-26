@@ -12,7 +12,7 @@ default values.
   </core>
   <!-- <font><theme> can be defined without an attribute to set all places -->
   <theme>
-    <name>nordfox-light-OB</name>
+    <name>ayu-light-OB</name>
     <cornerRadius>10</cornerRadius>
     <keepBorder>yes</keepBorder>
     <font>
@@ -26,6 +26,18 @@ Just as for window-rules, 'identif  ier' relates to app_id for native Wayland
 windows and WM_CLASS for XWayland clients.
 -->
   <keyboard>
+    <keybind key="Super_L" onRelease="yes">
+      <action name="Execute" command="fuzzel"/>
+    </keybind>
+    <keybind key="Super_R" onRelease="yes">
+      <action name="Execute" command="fuzzel"/>
+    </keybind>
+    <keybind key="Alt_L" onRelease="yes">
+      <action name="Execute" command="kitty"/>
+    </keybind>
+    <keybind key="Alt_R" onRelease="yes">
+      <action name="Execute" command="kitty"/>
+    </keybind>
     <keybind key="A-Tab">
       <action name="NextWindow"/>
     </keybind>
@@ -107,6 +119,18 @@ windows and WM_CLASS for XWayland clients.
         <command>"nohup waybar >/dev/null 2>&amp;1 &amp;"</command>
       </action>
     </keybind>
+    <keybind key="W-Left">
+      <action name="ToggleSnapToEdge" direction="left"/>
+    </keybind>
+    <keybind key="W-Right">
+      <action name="ToggleSnapToEdge" direction="right"/>
+    </keybind>
+    <keybind key="W-Up">
+      <action name="ToggleSnapToEdge" direction="up"/>
+    </keybind>
+    <keybind key="W-Down">
+      <action name="ToggleSnapToEdge" direction="down"/>
+    </keybind>
   </keyboard>
   <libinput>
     <device>
@@ -131,4 +155,25 @@ windows and WM_CLASS for XWayland clients.
       -->
     </fields>
   </windowSwitcher>
+  <snapping>
+    <!-- How close to an edge/corner the cursor must be at drag end -->
+    <range>16</range>
+    <!-- 0 disables snapping; default is 10 -->
+    <cornerRange>80</cornerRange>
+    <!-- default is 50 -->
+    <!-- Visual overlay while snapping (nice for feedback) -->
+    <overlay>
+      <enabled>yes</enabled>
+      <delay>
+        <inner>150</inner>
+        <!-- adjacent monitor edge -->
+        <outer>150</outer>
+        <!-- outer screen edge -->
+      </delay>
+    </overlay>
+    <!-- Drag to top edge maximizes; left/right halves the screen -->
+    <topMaximize>yes</topMaximize>
+    <!-- Who gets “tiled” hints: always|region|edge|never -->
+    <notifyClient>edge</notifyClient>
+  </snapping>
 </labwc_config>

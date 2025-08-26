@@ -23,9 +23,6 @@
     qdirstat
     gowall
     wayshot
-    zafiro-icons
-    nordzy-icon-theme
-    graphite-cursors
     labwcchanger
     gcc13
     zlib
@@ -46,6 +43,7 @@
     lapce
     libnotify
     mako
+    eza
     dconf-editor
     gsettings-qt
     pkgs.unstable.super-productivity
@@ -54,7 +52,10 @@
     chawan
     steam-run
     lxqt.lxqt-wayland-session
-    czkawka-full  
+    czkawka-full
+    pkgs.unstable.better-control
+    wgnord
+
 
     # coding
     nodejs-slim
@@ -172,6 +173,10 @@
     phinger-cursors
     papirus-icon-theme
     pkgs.unstable.gruvbox-plus-icons
+    zafiro-icons
+    nordzy-icon-theme
+    graphite-cursors
+
 
     # theming
     kdePackages.qtstyleplugin-kvantum    
