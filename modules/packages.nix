@@ -53,7 +53,8 @@
     flameshot
     chawan
     steam-run
-    
+    lxqt.lxqt-wayland-session
+    czkawka-full  
 
     # coding
     nodejs-slim
@@ -68,6 +69,8 @@
     pkg-config
     clang
     ox
+    pragtical
+  
 
     #CLI
     fish

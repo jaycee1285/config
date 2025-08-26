@@ -21,6 +21,7 @@
     # ./kanshi.nix
     ./labwc.nix
     ./scripts.nix
+    ./steam.nix
     ./vscodium.nix
     ./waybar.nix
   ];

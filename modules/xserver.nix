@@ -8,6 +8,7 @@
   # desktopManager.xfce.enableWaylandSession = true;
   #  desktopManager.budgie.enable = true;
    desktopManager.cinnamon.enable = true;
+   desktopManager.lxqt.enable = true;
   
   };
   services = {
