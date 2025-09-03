@@ -16,7 +16,6 @@
     gtk-engine-murrine
     gdk-pixbuf
     sassc
-    qtscrcpy
     localsend
     kdePackages.polkit-kde-agent-1
     pcloud
@@ -33,7 +32,6 @@
     flow-control
     typora
     cudatext-gtk
-    notepadqq
     lite-xl 
     helix
     zee
@@ -45,7 +43,6 @@
     mako
     eza
     dconf-editor
-    gsettings-qt
     pkgs.unstable.super-productivity
     xdg-desktop-portal-gtk
     flameshot
@@ -55,6 +52,7 @@
     czkawka-full
     pkgs.unstable.better-control
     wgnord
+    flavours
 
 
     # coding
@@ -177,8 +175,6 @@
     nordzy-icon-theme
     graphite-cursors
 
-
-    # theming
-    kdePackages.qtstyleplugin-kvantum    
+    # theming 
   ];
 }
