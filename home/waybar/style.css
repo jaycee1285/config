@@ -112,3 +112,7 @@
   font-size: 18px;  /* optional, to increase visibility */
   font-family: la-regular-400;
 }
+ #custom-wg {
+        font-family: "Material Design Icons","Font Awesome 6 Free","Symbols Nerd Font",emoji,monospace;
+        padding: 0 6px;
+      }

@@ -12,11 +12,11 @@ default values.
   </core>
   <!-- <font><theme> can be defined without an attribute to set all places -->
   <theme>
-    <name>ayu-light-OB</name>
+    <name>kanagawa-dragon-dark-OB</name>
     <cornerRadius>10</cornerRadius>
     <keepBorder>yes</keepBorder>
     <font>
-      <name>kanagawa-dragon-light-OB</name>
+      <name>Zed Mono</name>
       <size>16</size>
       <slant>normal</slant>
     </font>
@@ -40,6 +40,9 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="A-Tab">
       <action name="NextWindow"/>
+    </keybind>
+    <keybind key="A-Return">
+      <action name="Close"/>
     </keybind>
     <keybind key="W-Return">
       <action name="Execute" command="kitty"/>
@@ -91,12 +94,12 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="W-p">
       <action name="Execute">
-        <command>sh -c "superproductivity --force-x11"</command>
+        <command>sh -c "appimage-run ~/Downloads/superProductivity.AppImage --ozone-platform=x11"</command>
       </action>
     </keybind>
     <keybind key="W-c">
       <action name="Execute">
-        <command>sh -c "GDK_BACKEND=x11 labwcchanger"</command>
+        <command>labwcchanger --ozone-platform=x11"</command>
       </action>
     </keybind>
     <keybind key="F10">

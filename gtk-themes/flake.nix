@@ -229,7 +229,7 @@
         src = nordfox-theme;
         style = "fausto";
         themeFolder = "Nordfox-gtk-theme";
-        installFlags = "-s compact --tweaks outline nord";
+        installFlags = "-s compact --tweaks outline nordfox";
         nativeBuildInputs = [ pkgs.gtk3 pkgs.sassc ];
         propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
         meta = with pkgs.lib; {

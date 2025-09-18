@@ -18,4 +18,6 @@ services.tlp.settings = {
   START_CHARGE_THRESH_BAT0 = 50;
   STOP_CHARGE_THRESH_BAT0 = 80;
 };
+services.resolved.enable = false;
+  networking.resolvconf.enable = true;   # provide a working /sbin/resolvconf
 }

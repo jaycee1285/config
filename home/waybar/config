@@ -8,7 +8,7 @@
         "modules-center": ["wlr/taskbar","network#vpn"],
 
 
-        "modules-right": ["tray", "network", "pulseaudio", "battery", "custom/clock"],
+        "modules-right": ["custom/wg","tray", "network", "pulseaudio", "battery", "custom/clock", "custom/power"],
 
         "custom/clock": {
         "exec": "~/.config/waybar/scripts/clock.sh",
@@ -118,8 +118,27 @@
   "format-disconnected": "",
   "tooltip-format": "VPN Connected: {ipaddr}"
 },
+"custom/power": {
+        "format" : "⏻ ",
+		    "tooltip": false,
+		    "menu": "on-click",
+		    "menu-file": "$HOME/.config/waybar/power_menu.xml",
+		    "menu-actions": {
+			      "shutdown": "shutdown",
+			      "reboot": "reboot",
+			      "suspend": "systemctl suspend",
+			      "hibernate": "systemctl hibernate"
+		    }
+      },
 "app_ids-mapping": {
       "codium": "vscodium"
-  }
+  },
+"custom/wg": {
+  "exec": "/home/john/.local/bin/wg-icon wgnord",
+  "interval": 2,
+  "return-type": "text",
+  "tooltip": false,
+  "on-click": "sh -lc '/home/john/.local/bin/wgnord-launcher >>/tmp/wgclick.log 2>&1'"
 }
+    }
 

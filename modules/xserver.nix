@@ -20,4 +20,13 @@
   security.soteria.enable = true;
   xdg.portal.wlr.enable = true;
   console.keyMap = "us";
+  security.sudo.enable = true;
+  security.sudo.extraRules = [{
+    users = [ "john" ];
+    commands = [
+      { command = "/run/current-system/sw/bin/wgnord"; options = [ "NOPASSWD" ]; }
+      { command = "${pkgs.wireguard-tools}/bin/wg";   options = [ "NOPASSWD" ]; }
+    ];
+  }];
+
 }
