@@ -134,11 +134,11 @@
       "codium": "vscodium"
   },
 "custom/wg": {
-  "exec": "/home/john/.local/bin/wg-icon wgnord",
+  "exec": "/home/john/repos/config/home/waybar/scripts/wg-icon wgnord",
   "interval": 2,
   "return-type": "text",
   "tooltip": false,
-  "on-click": "sh -lc '/home/john/.local/bin/wgnord-launcher >>/tmp/wgclick.log 2>&1'"
+  "on-click": "sh -lc '/home/john/repos/config/home/waybar/scripts/wgnord-launcher'"
 }
     }
 

@@ -12,7 +12,7 @@ default values.
   </core>
   <!-- <font><theme> can be defined without an attribute to set all places -->
   <theme>
-    <name>kanagawa-dragon-dark-OB</name>
+    <name>Juno-Mirage-OB</name>
     <cornerRadius>10</cornerRadius>
     <keepBorder>yes</keepBorder>
     <font>
@@ -54,7 +54,7 @@ windows and WM_CLASS for XWayland clients.
       <action name="Execute" command="librewolf --private-window"/>
     </keybind>
     <keybind key="W-space">
-      <action name="Execute" command="fuzzel"/>
+      <action name="Execute" command="codium"/>
     </keybind>
     <keybind key="W-f">
       <action name="Execute" command="thunar"/>
@@ -99,7 +99,7 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="W-c">
       <action name="Execute">
-        <command>labwcchanger --ozone-platform=x11"</command>
+        <command>"labwcchanger"</command>
       </action>
     </keybind>
     <keybind key="F10">
@@ -109,7 +109,7 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="Print">
       <action name="Execute">
-        <command>"flameshot gui"</command>
+        <command>"flameshot"</command>
       </action>
     </keybind>
     <keybind key="A-k">

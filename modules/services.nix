@@ -15,7 +15,7 @@
   services.dbus.enable = true;
   services.tlp.enable = true;
 services.tlp.settings = {
-  START_CHARGE_THRESH_BAT0 = 50;
+  START_CHARGE_THRESH_BAT0 = 75;
   STOP_CHARGE_THRESH_BAT0 = 80;
 };
 services.resolved.enable = false;

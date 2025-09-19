@@ -2,17 +2,17 @@
 <openbox_menu>
   <menu id="root-menu" label="root-menu">
     <title label="Main Menu"></title>
-    <item label="Librewolf" icon="steam">
+    <item label="Librewolf">
       <action name="Execute">
         <command>librewolf</command>
       </action>
     </item>
-    <item label="Chromium" icon="lutris">
+    <item label="Chromium">
       <action name="Execute">
         <command>chromium</command>
       </action>
     </item>
-        <item label="Obsidian" icon="lutris">
+        <item label="Obsidian">
       <action name="Execute">
         <command>obsidian</command>
       </action>

@@ -199,6 +199,7 @@
     flavours
     matugen
     wpgtk
+    graphite-gtk-theme
 
     # (none)
     # extra items that didn’t fit above can be collected here intentionally

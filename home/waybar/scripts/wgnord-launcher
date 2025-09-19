@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Click helper: ask for the rest of the command after "sudo wgnord "
+rest="$(printf '' | fuzzel --dmenu --prompt 'wgnord> ')" || exit 0
+[ -z "$rest" ] && exit 0
+# run it; show a transient notify on success/fail
+if sudo wgnord $rest; then
+  notify-send -a wgnord "wgnord $rest" "OK"
+else
+  notify-send -a wgnord "wgnord $rest" "FAILED"
+fi

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+IFACE="${1:-wgnord}"
+if ip -4 addr show dev "$IFACE" | grep -q 'inet '; then
+  printf '\U000F0341'   # locked
+else
+  printf '\U000F0340'   # unlocked
+fi
