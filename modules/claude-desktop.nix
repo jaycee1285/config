@@ -2,6 +2,6 @@
 
 {
   environment.systemPackages = [
-    claude-desktop.packages.x86_64-linux.claude-desktop
+    claude-desktop
   ];
 }

@@ -60,7 +60,7 @@
             }
           ];
           specialArgs = {
-            inherit pkgs gtk-themes nixpkgs-unstable;
+            inherit pkgs gtk-themes nixpkgs-unstable claude-desktop zen-browser;
             ob-themes = obThemesPkg;
             # Remove labwcchanger from here since it's now in the overlay
           };
