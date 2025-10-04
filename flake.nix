@@ -8,9 +8,11 @@
     ob-themes.url = "path:./ob-themes";
     home-manager.url = "github:nix-community/home-manager";
     labwcchanger.url = "github:jaycee1285/labwcchanger";
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
+    claude-desktop.url = "github:k3d3/claude-desktop-linux-flake";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, labwcchanger, ... }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, labwcchanger, zen-browser, claude-desktop, ... }:
     let
       system = "x86_64-linux";
 

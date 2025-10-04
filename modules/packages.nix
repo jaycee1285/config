@@ -1,4 +1,4 @@
-{ config, pkgs, unstable, ... }:
+{ config, pkgs, unstable, zen-browser, claude-desktop, ... }:
 
 {
   nixpkgs.config.allowUnfree = true;
@@ -48,6 +48,8 @@
     qbittorrent
     chawan
     localsend
+    zen-browser
+    claude-desktop
     # pkgs.unstable.onedrivegui
     # pkgs.unstable.onedrive
 
@@ -73,6 +75,7 @@
     flutter
     gearlever
     gtk3
+    pkgs.unstable.obsidian
 
     # ─────────────── wayland desktop & UX ───────────────
     pkgs.unstable.labwc
@@ -163,6 +166,7 @@
     # ───────────── office & reading ─────────────
     pencil
     koreader
+    readest
 
     # ───────────── app compatibility ─────────────
     appimage-run
@@ -200,6 +204,8 @@
     matugen
     wpgtk
     graphite-gtk-theme
+    stilo-themes
+    materia-theme
 
     # (none)
     # extra items that didn’t fit above can be collected here intentionally

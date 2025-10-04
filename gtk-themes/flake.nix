@@ -326,10 +326,10 @@
       # Juno Mirage only!
       juno-mirage-gtk-theme = pkgs.stdenvNoCC.mkDerivation rec {
         pname = "juno-mirage-gtk-theme";
-        version = "0.0.2";
+        version = "0.0.3";
         src = pkgs.fetchurl {
           url = "https://github.com/gvolpe/Juno/releases/download/${version}/Juno-mirage-standard-buttons.tar.xz";
-          sha256 = "EQmIOJeooOYrc74UfTq0z/51FHd6/QzN5+Ga56j3l6M="; # <-- FIX ME after first build!
+          sha256 = "303cdc0623c9188cbe6502309beff3f244e2155abe352ea474e581ef1c148c5b"; # <-- FIX ME after first build!
         };
         propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
         unpackPhase = ''

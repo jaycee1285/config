@@ -124,6 +124,7 @@
 		    "menu": "on-click",
 		    "menu-file": "$HOME/.config/waybar/power_menu.xml",
 		    "menu-actions": {
+            "logout": "labwc -e",
 			      "shutdown": "shutdown",
 			      "reboot": "reboot",
 			      "suspend": "systemctl suspend",

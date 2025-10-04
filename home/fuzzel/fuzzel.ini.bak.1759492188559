@@ -10,13 +10,13 @@ width=35
 horizontal-pad=25
 inner-pad=5
 [colors]
-    background = FAF4EDFF
-    text = 191724DE
+    background = FFFBEFFF
+    text = 272E33DE
     match = 1E66F5FF
-    selection = 56507CFF
-    border = 191724DE
-    selection = 56507CFF
-    selection = 56507CFF
+    selection = 56635FFF
+    border = 272E33DE
+    selection = 56635FFF
+    selection = 56635FFF
 [border]
 radius=15
 width=3
