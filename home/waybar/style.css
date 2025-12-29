@@ -11,22 +11,22 @@
   }
 
   .modules-left {
-  background: @theme_base_color;
+  background: @theme_tooltip_base_color;
   color: @theme_text_color;
   border-radius: 15px;
   border: 2px solid @accent_color;}
 
   .modules-center {
-  background: @theme_base_color;
+  background: @theme_tooltip_base_color;
   color: @theme_text_color;
   border-radius: 15px;
   border: 2px solid @accent_color;}
 
 .modules-right {
-  color: @theme_text_color;
-  background: @theme_base_color;
+  color: @theme_fg_color;
+  background: @theme_tooltip_base_color;
   border-radius: 15px;
-  border: 2px solid @accent_color;
+  border: 2px solid @theme_fg_color;
   padding: 0 6px;
   min-width: 24px
 }

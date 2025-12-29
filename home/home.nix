@@ -3,7 +3,7 @@
 {
   home.username      = "john";
   home.homeDirectory = "/home/john";
-  home.stateVersion  = "25.05";
+  home.stateVersion  = "25.11";
 
   programs.home-manager.enable = true;
 
@@ -14,7 +14,8 @@
   };
 
   imports = [
-    ./firefox.nix
+    ./fonts.nix
+  #  ./firefox.nix
     ./flutter.nix
     ./fuzzel.nix
     ./gtk.nix

@@ -17,14 +17,14 @@
 
 MOZ_ENABLE_WAYLAND=1
 
-ELECTRON_OZONE_PLATFORM_HINT=wayland
+ELECTRON_OZONE_PLATFORM_HINT=auto
 
 NIXOS_OZONE_WL=1
 
 
-QT_QPA_PLATFORM=wayland;xcb
-QT_QPA_PLATFORMTHEME=kvantum
-export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
+QT_QPA_PLATFORM=wayland
+QT_QPA_PLATFORMTHEME=qt6ct
+export QT_WAYLAND_DISABLE_WINDOWDECORATION="0"
 
 ## Set cursor theme and size. Find system icons themes with:
 ## `find /usr/share/icons/ -type d -name "cursors"`

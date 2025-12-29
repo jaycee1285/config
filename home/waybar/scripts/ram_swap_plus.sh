@@ -5,7 +5,7 @@ get_icon() {
   if   [ "$perc" -lt 50 ]; then
     echo -ne "\uf067"    # plus
   elif [ "$perc" -lt 75 ]; then
-    echo -ne "\uf055"    # plus-circle
+    echo -ne "󰍛"    # plus-circle
   else
     echo -ne "\uf0fe"    # plus-square
   fi

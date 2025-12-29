@@ -6,10 +6,10 @@ if [ "$swap" -lt 50 ]; then
   icon=""
   class="swap_low"
 elif [ "$swap" -lt 75 ]; then
-  icon=""
+  icon="󰍛"
   class="swap_medium"
 else
-  icon=""
+  icon="󰍛"
   class="swap_high"
 fi
 

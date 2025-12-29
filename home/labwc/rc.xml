@@ -12,7 +12,7 @@ default values.
   </core>
   <!-- <font><theme> can be defined without an attribute to set all places -->
   <theme>
-    <name>rose-pine-dawn-ob</name>
+    <name>ayu-light-OB</name>
     <cornerRadius>10</cornerRadius>
     <keepBorder>yes</keepBorder>
     <font>
@@ -94,7 +94,7 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="W-p">
       <action name="Execute">
-        <command>sh -c "appimage-run ~/Downloads/superProductivity.AppImage --ozone-platform=x11"</command>
+        <command>"ELECTRON_OZONE_PLATFORM_HINT=wayland super-productivity --disable-gpu-sandbox --in-process-gpu --enable-features=WaylandWindowDecorations"</command>
       </action>
     </keybind>
     <keybind key="W-c">
@@ -114,12 +114,12 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="A-k">
       <action name="Execute">
-        <command>"pkill -f waybar"</command>
+        <command>pkill waybar</command>
       </action>
     </keybind>
-    <keybind key="A-s">
+    <keybind key="A-b">
       <action name="Execute">
-        <command>"nohup waybar >/dev/null 2>&amp;1 &amp;"</command>
+        <command>"waybar"</command>
       </action>
     </keybind>
     <keybind key="W-Left">

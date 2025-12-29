@@ -1,0 +1,22 @@
+[main]
+font=Spline Sans:size=14
+fields=name,generic,comment,categories,filename,keywords
+terminal=kitty
+prompt=' ➜  '
+icon-theme=Colloid
+layer=top
+lines=10
+width=35
+horizontal-pad=25
+inner-pad=5
+[colors]
+    background = 002B36FF
+    text = EDE7D3FF
+    match = 1E66F5FF
+    selection = 268BD3FF
+    border = EDE7D3FF
+    selection = 268BD3FF
+    selection = 268BD3FF
+[border]
+radius=15
+width=3

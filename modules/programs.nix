@@ -3,6 +3,8 @@
     programs.labwc.enable = true;
     programs.wayfire.enable = true;
     programs.niri.enable = true;
+    programs.fuse.enable = true;
+    programs.fuse.userAllowOther = true;
     programs.thunar.enable = true; # File manager
     programs.xfconf.enable = true; # Xfce configuration to allow storing preferences
     programs.nix-ld.enable = true;

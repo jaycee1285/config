@@ -7,5 +7,5 @@ in
 {
   # Example: Use as pkgs.unstable.foo in other modules if you want
   # (add more system-wide or pkgs logic here)
-  system.stateVersion = "25.05";
+  system.stateVersion = "25.11";
 }

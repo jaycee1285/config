@@ -10,9 +10,10 @@
     labwcchanger.url = "github:jaycee1285/labwcchanger";
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
     claude-desktop.url = "github:k3d3/claude-desktop-linux-flake";
+    helium-nix.url = "git+https://codeberg.org/MachsteNix/helium-nix";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, labwcchanger, zen-browser, claude-desktop, ... }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, labwcchanger, zen-browser, claude-desktop, helium-nix, ... }:
     let
       system = "x86_64-linux";
 
@@ -60,7 +61,7 @@
             }
           ];
           specialArgs = {
-            inherit pkgs gtk-themes nixpkgs-unstable claude-desktop zen-browser;
+            inherit pkgs gtk-themes nixpkgs-unstable claude-desktop zen-browser helium-nix;
             ob-themes = obThemesPkg;
             # Remove labwcchanger from here since it's now in the overlay
           };

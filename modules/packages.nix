@@ -1,4 +1,4 @@
-{ config, pkgs, unstable, zen-browser, claude-desktop, ... }:
+{ config, pkgs, unstable, zen-browser, claude-desktop, helium-nix, ... }:
 
 {
   nixpkgs.config.allowUnfree = true;
@@ -33,6 +33,15 @@
     libgnome-keyring
     jq
     kdePackages.kdialog
+    fuse3
+    fuse
+    kdePackages.qtstyleplugin-kvantum
+    themechanger
+    nh
+    nix-alien 
+    nix-init 
+    television
+
 
     # ─────────────── terminal & CLI tools ───────────────
     fish
@@ -48,8 +57,9 @@
     qbittorrent
     chawan
     localsend
-    zen-browser
-    claude-desktop
+   (zen-browser.packages.${pkgs.system}.default)
+    (claude-desktop.packages.${pkgs.system}.default)
+    (helium-nix.packages.${pkgs.system}.default)
     # pkgs.unstable.onedrivegui
     # pkgs.unstable.onedrive
 
@@ -57,9 +67,7 @@
     # NOTE: multiple editors here on purpose so you can eyeball redundancies
     helix
     lapce
-    lite-xl
-    cudatext-gtk
-    pragtical
+    zed-editor
     zee
     micro
     micro-with-wl-clipboard   # potential overlap with 'micro'
@@ -76,6 +84,13 @@
     gearlever
     gtk3
     pkgs.unstable.obsidian
+    codex
+    pkgs.unstable.opencode
+    fjo
+    codeberg-cli
+    kdePackages.ghostwriter
+    orbiton
+    devtoolbox
 
     # ─────────────── wayland desktop & UX ───────────────
     pkgs.unstable.labwc
@@ -83,10 +98,14 @@
     pkgs.unstable.labwc-menu-generator
     pkgs.unstable.waybar
     pkgs.unstable.sfwbar
+    pkgs.unstable.mangowc
     kdePackages.polkit-kde-agent-1
-    lxqt.lxqt-wayland-session
     labwcchanger
     gowall
+    nwg-panel
+    wayfirePlugins.wf-shell
+    wlr-layout-ui
+    pkgs.unstable.dms-shell
 
     # Launchers & finders
     rofi
@@ -98,6 +117,7 @@
     mako
     libnotify
     espanso-wayland
+    harper
 
     # Wallpaper & visuals
     swww
@@ -109,6 +129,8 @@
     slurp
     swappy
     kooha
+    vokoscreen-ng
+    wayscriber
 
     # Locks & idle
     swaylock-effects
@@ -132,7 +154,8 @@
 
     # ─────────────────── phone integration ───────────────────
     android-tools
-    scrcpy
+    qtscrcpy
+    kdePackages.kdeconnect-kde
 
     # ─────────────────── sync & backup ───────────────────
     pcloud
@@ -142,6 +165,7 @@
     syncthingtray
     kopia-ui
     celeste                   # rclone wrapper (moved from gaming)
+    rustdesk-server
 
     # ─────────────────── media & graphics ───────────────────
     vlc
@@ -149,6 +173,15 @@
     fontfinder
     gnome-characters
     gucharmap
+    gowall
+    conjure
+    monophony
+    xnconvert
+    converseen
+    gnome-frog
+    cbmp
+    normcap
+    lunacy
 
     # ───────────── files & storage (maintenance/utilities) ─────────────
     xfce.thunar-volman
@@ -158,6 +191,11 @@
     czkawka-full
     fclones-gui
     gparted
+    hifile
+    peazip
+    resources
+    bleachbit
+    collector
 
     # ───────────── imaging & boot media ─────────────
     usbimager
@@ -167,6 +205,8 @@
     pencil
     koreader
     readest
+    flowtime
+    flow-state
 
     # ───────────── app compatibility ─────────────
     appimage-run
@@ -176,6 +216,7 @@
     steam-run
     pkgs.unstable.better-control
     mupen64plus
+    kdePackages.minuet
 
     # ───────────── VPN & networking ─────────────
     wgnord
@@ -187,14 +228,18 @@
     # ───────────── typing & learning ─────────────
     gtypist
     amphetype
-    neothesia
 
     # ───────────── AI & LLM tools ─────────────
     cherry-studio
     lmstudio
+    chatbox
 
     # ───────────── writing & grammar ─────────────
     eloquent
+    harper
+    typesetter
+    pkgs.unstable.super-productivity
+    basalt
 
     # ───────────── theming (engines & tools) ─────────────
     themix-gui
@@ -206,6 +251,9 @@
     graphite-gtk-theme
     stilo-themes
     materia-theme
+    zuki-themes
+    solarc-gtk-theme
+    rewaita
 
     # (none)
     # extra items that didn’t fit above can be collected here intentionally

@@ -7,17 +7,17 @@
   #  desktopManager.xfce.enable = true;
   # desktopManager.xfce.enableWaylandSession = true;
   #  desktopManager.budgie.enable = true;
-   desktopManager.cinnamon.enable = true;
+  # desktopManager.cinnamon.enable = true;
    desktopManager.lxqt.enable = true;
-  
+   desktopManager.lxqt.extraPackages = [ pkgs.lxqt.lxqt-wayland-session ];
   };
   services = {
   libinput.enable = true;
   displayManager.ly.enable = true;
-  
-  
-  };
-  security.soteria.enable = true;
+  desktopManager.cosmic.enable = true;
+  desktopManager.cosmic.xwayland.enable = true;
+};
+security.soteria.enable = true;
   xdg.portal.wlr.enable = true;
   console.keyMap = "us";
   security.sudo.enable = true;
@@ -30,3 +30,4 @@
   }];
 
 }
+
