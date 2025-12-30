@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
-
-home.packages = with pkgs; [
-graphite-cursors
-
-]
+{ pkgs, ... }:
+{
+  home.packages = with pkgs; [
+    graphite-cursors
+  ];
+}

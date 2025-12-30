@@ -99,9 +99,6 @@
     pkgs.unstable.sfwbar
     pkgs.unstable.mangowc
     kdePackages.polkit-kde-agent-1
-    kdePackages.qtbase
-    kdePackages.kwayland
-    kdePackages.qtwayland
     labwcchanger
     gowall
     wayfirePlugins.wf-shell
@@ -112,8 +109,7 @@
     # Launchers & finders
     rofi
     fuzzel
-    bemenu
-    albert                    # keyboard launcher
+    bemenu               # keyboard launcher
 
     # Notifications & text expansion
     mako
