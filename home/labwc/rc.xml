@@ -12,7 +12,7 @@ default values.
   </core>
   <!-- <font><theme> can be defined without an attribute to set all places -->
   <theme>
-    <name>ayu-light-OB</name>
+    <name>flexoki-light-OB</name>
     <cornerRadius>10</cornerRadius>
     <keepBorder>yes</keepBorder>
     <font>
@@ -36,7 +36,7 @@ windows and WM_CLASS for XWayland clients.
       <action name="Execute" command="kitty"/>
     </keybind>
     <keybind key="Alt_R" onRelease="yes">
-      <action name="Execute" command="kitty"/>
+      <action name="Execute" command="makoctl dismiss -a"/>
     </keybind>
     <keybind key="A-Tab">
       <action name="NextWindow"/>
@@ -120,6 +120,11 @@ windows and WM_CLASS for XWayland clients.
     <keybind key="A-b">
       <action name="Execute">
         <command>"waybar"</command>
+      </action>
+    </keybind>
+    <keybind key="A-\">
+      <action name="Execute">
+        <command>"makoctl dismiss -a"</command>
       </action>
     </keybind>
     <keybind key="W-Left">

@@ -25,5 +25,6 @@
    # ./steam.nix
     ./vscodium.nix
     ./waybar.nix
+    ./theming.nix
   ];
 }

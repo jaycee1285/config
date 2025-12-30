@@ -3,33 +3,49 @@
     font-size: 24px;
   }
 
-  window#waybar {
+window#waybar {
   background: transparent;
   border-radius: 10px;
-  border-color: @theme_fg_color;           /* Or @theme_fg_color for a subtler look */
+
+  /* border color fallback: use window_bg_color, prefer text_color if valid */
+  border-color: @theme_bg_color;
+
   border-width: 5px;
-  }
+}
 
-  .modules-left {
-  background: @theme_tooltip_base_color;
-  color: @theme_text_color;
-  border-radius: 15px;
-  border: 2px solid @accent_color;}
+.modules-left {
+  /* text fallback: use accent_color, prefer text_color if valid */
+  color: @theme_bg_color;
 
-  .modules-center {
-  background: @theme_tooltip_base_color;
-  color: @theme_text_color;
   border-radius: 15px;
-  border: 2px solid @accent_color;}
+
+  /* border fallback: use window_bg_color, prefer text_color if valid */
+  border: 2px solid @theme_bg_color;
+}
+
+.modules-center {
+  /* text fallback: use accent_color, prefer text_color if valid */
+
+  border-radius: 15px;
+
+  /* border fallback: use window_bg_color, prefer text_color if valid */
+  border: 2px solid @theme_bg_color;
+
+}
 
 .modules-right {
-  color: @theme_fg_color;
-  background: @theme_tooltip_base_color;
+  /* text fallback: use window_bg_color, prefer text_color if valid */
+  color: @theme_bg_color;
+
   border-radius: 15px;
-  border: 2px solid @theme_fg_color;
+
+  /* border fallback: use window_bg_color, prefer text_color if valid */
+  border: 2px solid @theme_bg_color;
+
   padding: 0 6px;
-  min-width: 24px
+  min-width: 24px;
 }
+
   
 
   #network{
@@ -74,7 +90,7 @@
   background-color: @theme_selected_bg_color;
   color: @theme_selected_fg_color;
   border-radius: 15px;
-  border: 2px solid @theme_fg_color; /* Or @accent_color, or @theme_selected_bg_color */
+  border: 1px solid @text_color; /* Or @accent_color, or @theme_selected_bg_color */
 }
 #taskbar button.hover {
     border: 2px solid @theme_selected_bg_color;

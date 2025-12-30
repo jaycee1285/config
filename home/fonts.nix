@@ -15,8 +15,6 @@
     hanken-grotesk
     aleo-fonts
     hubot-sans
-    manrope
-    fragment-mono
     victor-mono
     camingo-code
     league-mono

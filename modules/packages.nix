@@ -38,7 +38,6 @@
     kdePackages.qtstyleplugin-kvantum
     themechanger
     nh
-    nix-alien 
     nix-init 
     television
 
@@ -100,12 +99,15 @@
     pkgs.unstable.sfwbar
     pkgs.unstable.mangowc
     kdePackages.polkit-kde-agent-1
+    kdePackages.qtbase
+    kdePackages.kwayland
+    kdePackages.qtwayland
     labwcchanger
     gowall
-    nwg-panel
     wayfirePlugins.wf-shell
     wlr-layout-ui
     pkgs.unstable.dms-shell
+    wlopm
 
     # Launchers & finders
     rofi
@@ -151,6 +153,8 @@
     brightnessctl             # Brightness control
     networkmanagerapplet      # Network connections
     wdisplays
+    wlr-randr
+    wl-gammactl
 
     # ─────────────────── phone integration ───────────────────
     android-tools
@@ -182,6 +186,7 @@
     cbmp
     normcap
     lunacy
+    penpot-desktop
 
     # ───────────── files & storage (maintenance/utilities) ─────────────
     xfce.thunar-volman

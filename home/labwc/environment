@@ -23,7 +23,7 @@ NIXOS_OZONE_WL=1
 
 
 QT_QPA_PLATFORM=wayland
-QT_QPA_PLATFORMTHEME=qt6ct
+QT_QPA_PLATFORMTHEME=kvantum
 export QT_WAYLAND_DISABLE_WINDOWDECORATION="0"
 
 ## Set cursor theme and size. Find system icons themes with:

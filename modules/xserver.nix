@@ -13,9 +13,14 @@
   };
   services = {
   libinput.enable = true;
-  displayManager.ly.enable = true;
   desktopManager.cosmic.enable = true;
   desktopManager.cosmic.xwayland.enable = true;
+};
+services.displayManager.ly = {
+  enable = true;
+  settings = {
+    waylandsessions = "/run/current-system/sw/share/wayland-sessions/";
+  };
 };
 security.soteria.enable = true;
   xdg.portal.wlr.enable = true;

@@ -1,0 +1,13 @@
+## Flexoki Light theme
+## by Kepano
+
+[colors]
+    background = FBF1C7FF
+    text = 1D2021DE
+    match = 1E66F5FF
+    selection = C35E0AFF
+    selection = C35E0AFF
+    selection = C35E0AFF
+    border = 1D2021DE
+    selection-match = 1E66F5FF
+    selection-text = 1D2021DE
