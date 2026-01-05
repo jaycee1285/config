@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 IFACE="${1:-wgnord}"
-if ip -4 addr show dev "$IFACE" | grep -q 'inet '; then
-  printf '\U000F0341'   # locked
+
+# If iface is missing or down, treat as disconnected (and don't error).
+if ip -4 addr show dev "$IFACE" 2>/dev/null | grep -q 'inet '; then
+  icon=$'\U000F0341'   # locked
+  state="connected"
 else
-  printf '\U000F0340'   # unlocked
+  icon=$'\U000F0340'   # unlocked
+  state="disconnected"
 fi
+
+printf '{"text":"%s","class":"%s"}\n' "$icon" "$state"

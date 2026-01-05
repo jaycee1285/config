@@ -1,134 +1,140 @@
-* {
-    font-family: line-awesome, material-design-icons, Spline Sans Mono, sans-serif;
-    font-size: 24px;
-  }
+/* Waybar: theme-token-first (GTK symbolic colors)
+   Modules in your config:
+   left:  custom/ram_icon, custom/swap_icon
+   center: wlr/taskbar
+   right: custom/wg, tray, network, pulseaudio, battery, custom/clock, custom/power
+*/
 
+* {
+  font-family: material-design-icons, Spline Sans Mono, sans-serif;
+  font-size: 24px;
+  color: @theme_text_color;
+}
+
+@define-color success_color #a3be8c;
+@define-color warning_color #facc15;
+@define-color error_color #f87171;
 window#waybar {
   background: transparent;
   border-radius: 10px;
-
-  /* border color fallback: use window_bg_color, prefer text_color if valid */
-  border-color: @theme_bg_color;
-
-  border-width: 5px;
 }
 
-.modules-left {
-  /* text fallback: use accent_color, prefer text_color if valid */
-  color: @theme_bg_color;
-
-  border-radius: 15px;
-
-  /* border fallback: use window_bg_color, prefer text_color if valid */
-  border: 2px solid @theme_bg_color;
-}
-
-.modules-center {
-  /* text fallback: use accent_color, prefer text_color if valid */
-
-  border-radius: 15px;
-
-  /* border fallback: use window_bg_color, prefer text_color if valid */
-  border: 2px solid @theme_bg_color;
-
-}
-
+/* --- Group containers (left/center/right) --- */
+.modules-left,
+.modules-center,
 .modules-right {
-  /* text fallback: use window_bg_color, prefer text_color if valid */
-  color: @theme_bg_color;
-
   border-radius: 15px;
-
-  /* border fallback: use window_bg_color, prefer text_color if valid */
-  border: 2px solid @theme_bg_color;
-
-  padding: 0 6px;
-  min-width: 24px;
+/*  border: 2px solid alpha(@theme_fg_color, 0.35); */
+  background: transparent;
+  margin: 2px 2px;
+  padding: 1px 1px;
+  color: @theme_selected_bg_color;
 }
 
-  
-
-  #network{
-    margin-right: 10px;
-    margin-left: 10px;
-  }
-
-  #pulseaudio{
-
+/* --- Shared module pill look --- */
+#tray,
+#network,
+#pulseaudio,
+#battery,
+#custom-clock,
+#custom-power,
+#custom-wg,
+#custom-ram_icon,
+#custom-swap_icon {
   margin: 3px;
   padding: 5px;
   padding-top: 1px;
   padding-bottom: 1px;
-  font-size: 20px;
-  margin-right: 5px; 
-  }
-  #tray{
 
-  margin: 3px;
-  padding: 5px;
-  padding-top: 1px;
-  padding-bottom: 1px;
+  border-radius: 12px;
+}
+
+/* Make tray icons a touch bigger like you had */
+#tray {
   font-size: 28px;
-  margin-right: 5px; 
-
-  }
-  #custom-clock{
-  margin: 3px;
-  padding: 5px;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  font-size: 20px;
-  margin-right: 5px; 
+  margin-right: 5px;
 }
 
-  #battery {
-    font-size: 20px;
-    margin-left: 10px;
-  }
+/* --- Taskbar (wlr/taskbar renders as #taskbar) --- */
+#taskbar {
+  background: transparent;
+  font-size: 32px;
+}
+
+#taskbar button {
+  border-radius: 10px;
+  font-size: 32px;
+  background: transparent;
+  color: @theme_text_color;
+}
+
+/* Your file used .hover; GTK uses :hover */
+#taskbar button:hover {
+  background: alpha(@theme_selected_fg_color, 0.55);
+  border-color: alpha(@theme_selected_fg_color, 0.55);
+}
 
 #taskbar button.active {
-  background-color: @theme_selected_bg_color;
-  color: @theme_selected_fg_color;
-  border-radius: 15px;
-  border: 1px solid @text_color; /* Or @accent_color, or @theme_selected_bg_color */
-}
-#taskbar button.hover {
-    border: 2px solid @theme_selected_bg_color;
+  background: transparent;
+  border: 2px solid alpha(@theme_selected_bg_color, 0.80);
+  color: @theme_selected_bg_color;
 }
 
-.modules-center:hover {
-  border: 2px solid @theme_selected_fg_color;
-  box-shadow: 0 0 8px 2px @accent_color;
-}
-
-#custom-ram_icon.low {
-  color: #a3be8c;
-}
-#custom-ram_icon.medium {
-  color: #facc15;
-}
-#custom-ram_icon.high {
-  color: #f87171;
-}
-
-#custom-swap_icon.swap_low {
-  color: #a3be8c;
-}
-#custom-swap_icon.swap_medium {
-  color: #facc15;
-}
-#custom-swap_icon.swap_high {
-  color: #f87171;
-}
-
+/* --- Custom: RAM/SWAP icons --- */
 #custom-ram_icon,
 #custom-swap_icon {
   padding: 0 6px;
-  min-width: 24px; /* ensures breathing room */
-  font-size: 18px;  /* optional, to increase visibility */
+  min-width: 24px;
+  font-size: 24px;
   font-family: la-regular-400;
+  background: transparent;
+  border: none;
 }
- #custom-wg {
-        font-family: "Material Design Icons","Font Awesome 6 Free","Symbols Nerd Font",emoji,monospace;
-        padding: 0 6px;
-      }
+
+/* Prefer theme semantic colors when available */
+#custom-ram_icon.low   { color: @success_color; }
+#custom-ram_icon.medium{ color: @warning_color; }
+#custom-ram_icon.high  { color: @error_color; }
+
+#custom-swap_icon.swap_low    { color: @success_color; }
+#custom-swap_icon.swap_medium { color: @warning_color; }
+#custom-swap_icon.swap_high   { color: @error_color; }
+
+/* --- Custom: WireGuard indicator --- */
+#custom-wg {
+  font-family: "Material Design Icons","Font Awesome 6 Free","Symbols Nerd Font",emoji,monospace;
+  padding: 0 6px;
+  background: transparent;
+  border: none;
+}
+
+#custom-wg.connected { color: @success_color; }
+#custom-wg.disconnected { color: @error_color; }
+
+/* --- Battery semantic states (Waybar adds classes) --- */
+#battery.charging,
+#battery.plugged {
+  color: alpha(@success_color, 0.95);
+}
+
+#battery.warning {
+  background: alpha(@warning_color, 0.20);
+  border: 2px solid alpha(@warning_color, 0.45);
+}
+
+#battery.critical {
+  background: alpha(@error_color, 0.20);
+  border: 2px solidalpha(@error_color, 0.45);
+}
+
+/* --- Tooltip --- */
+tooltip {
+  background: @theme_text_color;
+  color: @theme_base_color;
+  border: 2px solid alpha(@theme_fg_color, 0.35);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+tooltip label {
+  color: @theme_base_color;
+}

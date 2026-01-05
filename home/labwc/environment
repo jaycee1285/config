@@ -21,6 +21,7 @@ ELECTRON_OZONE_PLATFORM_HINT=auto
 
 NIXOS_OZONE_WL=1
 
+gtk_application_prefer_dark_theme=0
 
 QT_QPA_PLATFORM=wayland
 QT_QPA_PLATFORMTHEME=kvantum
@@ -34,6 +35,6 @@ export QT_WAYLAND_DISABLE_WINDOWDECORATION="0"
 
 
 XDG_CURRENT_DESKTOP=wlroots
-XCURSOR_THEME=phinger-cursors-light
+XCURSOR_THEME=graphite-light-nord
 XCURSOR_SIZE=24
 XKB_DEFAULT_LAYOUT=us

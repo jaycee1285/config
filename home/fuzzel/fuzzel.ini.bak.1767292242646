@@ -1,0 +1,11 @@
+## Dawnfox theme
+## by EdenEast
+
+[colors]
+background=d0d8d8f2
+text=575279ff
+match=286983ff
+selection=9893a5ff
+selection-text=575279ff
+selection-match=286983ff
+border=286983ff

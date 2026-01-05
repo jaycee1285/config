@@ -99,7 +99,7 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="W-c">
       <action name="Execute">
-        <command>"labwcchanger"</command>
+        <command>sh -lc 'exec kitty --title labwcchanger-tui -e "$HOME/repos/labwcchanger-tui/result/bin/labwcchanger-tui"'</command>
       </action>
     </keybind>
     <keybind key="F10">

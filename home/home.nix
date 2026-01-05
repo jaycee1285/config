@@ -14,6 +14,7 @@
   };
 
   imports = [
+    ./apps.nix
     ./fonts.nix
   #  ./firefox.nix
     ./flutter.nix

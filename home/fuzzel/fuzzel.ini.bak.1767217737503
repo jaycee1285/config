@@ -1,0 +1,11 @@
+## Ayu Light theme
+## by unknown
+
+[colors]
+background=f0ede4f2
+text=5b6673ff
+match=41a6d9ff
+selection=323232ff
+selection-text=fafafaff
+selection-match=41a6d9ff
+border=41a6d9ff

@@ -52,7 +52,6 @@
 
     # ───────────────── internet / browsers ────────────────
     pkgs.unstable.librewolf
-    pkgs.unstable.chromium
     qbittorrent
     chawan
     localsend
@@ -65,31 +64,35 @@
     # ───────────── coding (editors, IDEs, toolchains) ─────────────
     # NOTE: multiple editors here on purpose so you can eyeball redundancies
     helix
-    lapce
     zed-editor
-    zee
-    micro
     micro-with-wl-clipboard   # potential overlap with 'micro'
-    marker
-    typora
-    ox
-    flow-control              # text editor (programming-focused)
-    featherpad               # lightweight GUI editor
     github-desktop
     gh
     nodejs-slim
     pkgs.unstable.bun
     flutter
-    gearlever
     gtk3
-    pkgs.unstable.obsidian
     codex
     pkgs.unstable.opencode
     fjo
     codeberg-cli
-    kdePackages.ghostwriter
-    orbiton
     devtoolbox
+    n8n
+    love
+    cargo
+
+
+    # ─────────────── productivity ───────────────
+    kdePackages.calligra
+    pkgs.unstable.obsidian
+    marker
+    kdePackages.ghostwriter
+    eloquent
+    harper
+    typesetter
+    basalt
+    kdePackages.kate
+    abiword
 
     # ─────────────── wayland desktop & UX ───────────────
     pkgs.unstable.labwc
@@ -99,12 +102,12 @@
     pkgs.unstable.sfwbar
     pkgs.unstable.mangowc
     kdePackages.polkit-kde-agent-1
-    labwcchanger
     gowall
     wayfirePlugins.wf-shell
     wlr-layout-ui
     pkgs.unstable.dms-shell
     wlopm
+    labwc-menu-generator
 
     # Launchers & finders
     rofi
@@ -116,6 +119,7 @@
     libnotify
     espanso-wayland
     harper
+    swaynotificationcenter
 
     # Wallpaper & visuals
     swww
@@ -164,7 +168,6 @@
     syncthing
     syncthingtray
     kopia-ui
-    celeste                   # rclone wrapper (moved from gaming)
     rustdesk-server
 
     # ─────────────────── media & graphics ───────────────────
@@ -177,7 +180,6 @@
     conjure
     monophony
     xnconvert
-    converseen
     gnome-frog
     cbmp
     normcap
@@ -194,9 +196,9 @@
     gparted
     hifile
     peazip
-    resources
     bleachbit
     collector
+    bazaar
 
     # ───────────── imaging & boot media ─────────────
     usbimager
@@ -215,7 +217,6 @@
 
     # ───────────── gaming ─────────────
     steam-run
-    pkgs.unstable.better-control
     mupen64plus
     kdePackages.minuet
 
@@ -234,13 +235,6 @@
     cherry-studio
     lmstudio
     chatbox
-
-    # ───────────── writing & grammar ─────────────
-    eloquent
-    harper
-    typesetter
-    pkgs.unstable.super-productivity
-    basalt
 
     # ───────────── theming (engines & tools) ─────────────
     themix-gui

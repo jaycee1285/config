@@ -4,18 +4,11 @@
     enable = true;
     xkb.layout = "us";
     xkb.options = "eurosign:e";
-  #  desktopManager.xfce.enable = true;
-  # desktopManager.xfce.enableWaylandSession = true;
-  #  desktopManager.budgie.enable = true;
-  # desktopManager.cinnamon.enable = true;
-   desktopManager.lxqt.enable = true;
-   desktopManager.lxqt.extraPackages = [ pkgs.lxqt.lxqt-wayland-session ];
+    desktopManager.xfce.enable = true;
+    desktopManager.xfce.enableWaylandSession = true;
+    desktopManager.lxqt.enable = true;
+    desktopManager.lxqt.extraPackages = [ pkgs.lxqt.lxqt-wayland-session ];
   };
-  services = {
-  libinput.enable = true;
-  desktopManager.cosmic.enable = true;
-  desktopManager.cosmic.xwayland.enable = true;
-};
 services.displayManager.ly = {
   enable = true;
   settings = {

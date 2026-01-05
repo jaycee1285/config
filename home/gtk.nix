@@ -6,7 +6,8 @@
       gtk-theme = "Orchis-Orange-Light-Compact";
       icon-theme = "Colloid";
       font-name = "Iosevka Aile";
-      cursor-theme = "Phinger-Cursors-Light";
+      cursor-theme = "Graphite-Cursors_light";
+      color-scheme = "light";
     };
     "org/gnome/desktop/wm/preferences" = {
       titlebar-font = "Iosevka Aile 12";

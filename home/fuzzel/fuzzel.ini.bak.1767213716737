@@ -1,0 +1,11 @@
+## Modus Vivendi Tinted theme
+## by Protesilaos Stavrou
+
+[colors]
+background=2b3046f2
+text=ffffffff
+match=2fafffff
+selection=969696ff
+selection-text=ffffffff
+selection-match=2fafffff
+border=2fafffff

@@ -1,0 +1,11 @@
+## Solarized Light theme
+## by Ethan Schoonover
+
+[colors]
+background=93a1a1f2
+text=657b83ff
+match=268bd2ff
+selection=fdf6e3ff
+selection-text=586e75ff
+selection-match=268bd2ff
+border=268bd2ff

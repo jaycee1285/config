@@ -11,9 +11,11 @@
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
     claude-desktop.url = "github:k3d3/claude-desktop-linux-flake";
     helium-nix.url = "git+https://codeberg.org/MachsteNix/helium-nix";
+    labwcchanger-tui.url = "github:jaycee1285/labwcchanger-tui";
+    labwcchanger-tui.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, labwcchanger, zen-browser, claude-desktop, helium-nix, ... }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, labwcchanger, zen-browser, claude-desktop, helium-nix, labwcchanger-tui, ... }:
     let
       system = "x86_64-linux";
 
@@ -24,10 +26,6 @@
             inherit system;
             config.allowUnfree = true;
           };
-        })
-        # Add labwcchanger overlay
-        (final: prev: {
-          labwcchanger = labwcchanger.packages.${system}.default;
         })
       ];
 
@@ -55,7 +53,7 @@
               home-manager.users.john = import ./home/home.nix;
 
               home-manager.extraSpecialArgs = {
-                inherit pkgs gtk-themes nixpkgs-unstable;
+                inherit pkgs gtk-themes nixpkgs-unstable labwcchanger-tui;
                 ob-themes = obThemesPkg;
               };
             }
