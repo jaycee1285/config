@@ -6,7 +6,6 @@
     ./modules/audio.nix
     ./modules/bootloader.nix
     ./modules/flatpak.nix
-  #  ./modules/fonts.nix
     ./modules/gtk-themes.nix
     ./modules/hardware.nix
     ./modules/localization.nix
@@ -18,7 +17,6 @@
     ./modules/system.nix
     ./modules/users.nix
     ./modules/xserver.nix
-  #  ./modules/super-productivity.nix
     ./modules/ob-themes.nix
     ./modules/zen-browser.nix
     ./modules/claude-desktop.nix

@@ -12,7 +12,7 @@ default values.
   </core>
   <!-- <font><theme> can be defined without an attribute to set all places -->
   <theme>
-    <name>flexoki-light-OB</name>
+    <name>everforest-light-OB</name>
     <cornerRadius>10</cornerRadius>
     <keepBorder>yes</keepBorder>
     <font>
@@ -94,22 +94,22 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="W-p">
       <action name="Execute">
-        <command>"ELECTRON_OZONE_PLATFORM_HINT=wayland super-productivity --disable-gpu-sandbox --in-process-gpu --enable-features=WaylandWindowDecorations"</command>
+        <command>&quot;ELECTRON_OZONE_PLATFORM_HINT=wayland super-productivity --disable-gpu-sandbox --in-process-gpu --enable-features=WaylandWindowDecorations&quot;</command>
       </action>
     </keybind>
     <keybind key="W-c">
       <action name="Execute">
-        <command>sh -lc 'exec kitty --title labwcchanger-tui -e "$HOME/repos/labwcchanger-tui/result/bin/labwcchanger-tui"'</command>
+        <command>sh -lc &apos;exec kitty -e &quot;labwcchanger-tui&quot;&apos;</command>
       </action>
     </keybind>
     <keybind key="F10">
       <action name="Execute">
-        <command>"~/bin/fuzzelfi.sh"</command>
+        <command>&quot;~/bin/fuzzelfi.sh&quot;</command>
       </action>
     </keybind>
     <keybind key="Print">
       <action name="Execute">
-        <command>"flameshot"</command>
+        <command>&quot;flameshot&quot;</command>
       </action>
     </keybind>
     <keybind key="A-k">
@@ -119,12 +119,12 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="A-b">
       <action name="Execute">
-        <command>"waybar"</command>
+        <command>&quot;waybar&quot;</command>
       </action>
     </keybind>
     <keybind key="A-\">
       <action name="Execute">
-        <command>"makoctl dismiss -a"</command>
+        <command>&quot;makoctl dismiss -a&quot;</command>
       </action>
     </keybind>
     <keybind key="W-Left">
@@ -138,6 +138,11 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="W-Down">
       <action name="ToggleSnapToEdge" direction="down"/>
+    </keybind>
+    <keybind key="W-S-BackSpace">
+      <action name="Execute">
+        <command>wlopm --on \*</command>
+      </action>
     </keybind>
   </keyboard>
   <libinput>

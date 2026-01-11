@@ -40,6 +40,7 @@
     nh
     nix-init 
     television
+    pkgs.unstable.keychron-udev-rules
 
 
     # ─────────────── terminal & CLI tools ───────────────
@@ -60,12 +61,11 @@
     (helium-nix.packages.${pkgs.system}.default)
     # pkgs.unstable.onedrivegui
     # pkgs.unstable.onedrive
+    zoom-us
 
     # ───────────── coding (editors, IDEs, toolchains) ─────────────
     # NOTE: multiple editors here on purpose so you can eyeball redundancies
     helix
-    zed-editor
-    micro-with-wl-clipboard   # potential overlap with 'micro'
     github-desktop
     gh
     nodejs-slim
@@ -77,16 +77,15 @@
     fjo
     codeberg-cli
     devtoolbox
-    n8n
+    pkgs.unstable.n8n
     love
     cargo
+    pkgs.unstable.fresh-editor
 
 
     # ─────────────── productivity ───────────────
-    kdePackages.calligra
     pkgs.unstable.obsidian
     marker
-    kdePackages.ghostwriter
     eloquent
     harper
     typesetter
@@ -125,13 +124,7 @@
     swww
 
     # Screenshots & capture (grouped to reveal overlaps)
-    wayshot
     flameshot                # moved here with other screenshot tools
-    grim
-    slurp
-    swappy
-    kooha
-    vokoscreen-ng
     wayscriber
 
     # Locks & idle
@@ -162,14 +155,13 @@
     kdePackages.kdeconnect-kde
 
     # ─────────────────── sync & backup ───────────────────
-    pcloud
+    pkgs.unstable.pcloud
     duplicati
     pika-backup
     syncthing
     syncthingtray
     kopia-ui
-    rustdesk-server
-
+    
     # ─────────────────── media & graphics ───────────────────
     vlc
     inkscape-with-extensions

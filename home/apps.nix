@@ -1,6 +1,11 @@
-{ pkgs, inputs, ... }:
+{ config, pkgs, unstable, labwcchanger-tui, ... }:
 {
   home.packages = [
-    inputs.labwcchanger-tui.packages.${pkgs.system}.default
+    labwcchanger-tui.packages.${pkgs.system}.default
+    pkgs.rustdesk-flutter
+    pkgs.rustdesk-server
+    pkgs.heroic
+    pkgs.rclone-ui
+    pkgs.unstable.pixieditor
   ];
 }

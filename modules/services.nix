@@ -1,23 +1,42 @@
 { config, pkgs, ... }:
 
 {
-  services.printing.enable = true;
+  #### Desktop / UX helpers
   services.tumbler.enable = true;
   services.gvfs.enable = true;
   services.gnome.gnome-keyring.enable = true;
-  services.onedrive.enable = false;
-  services.power-profiles-daemon.enable = false;
+
+  #### Printing
+  services.printing.enable = true;
+  services.system-config-printer.enable = true;
+
+  #### Flatpak + portals (LabWC / wlroots)
   services.flatpak.enable = true;
   xdg.portal.wlr.enable = true;
-  services.system-config-printer.enable = true;
+
+  #### Sync / networking
   services.syncthing.enable = true;
+  services.onedrive.enable = false;
+
+  #### Bluetooth
   services.blueman.enable = true;
-  services.dbus.enable = true;
-  services.tlp.enable = true;
-services.tlp.settings = {
-  START_CHARGE_THRESH_BAT0 = 75;
-  STOP_CHARGE_THRESH_BAT0 = 80;
-};
-services.resolved.enable = false;
-  networking.resolvconf.enable = true;   # provide a working /sbin/resolvconf
+
+  #### Power management
+  services.power-profiles-daemon.enable = false;
+  services.tlp = {
+    enable = true;
+    settings = {
+      START_CHARGE_THRESH_BAT0 = 75;
+      STOP_CHARGE_THRESH_BAT0  = 80;
+    };
+  };
+
+  #### DNS / resolver
+  services.resolved.enable = false;
+  networking.resolvconf.enable = true;
+
+  # NOTE:
+  # You almost never need this explicitly; NixOS enables dbus when needed.
+  # If you want to keep it, it's harmless:
+  # services.dbus.enable = true;
 }

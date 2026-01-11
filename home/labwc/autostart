@@ -26,12 +26,11 @@ pcloud 2>&1 &
 
 syncthing 2>&1 &
 # Deploy swww wallpapers
-swww img $HOME/Pictures/elephant-nord-light.png 2>&1 &
+swww img $HOME/Pictures/elephant-flexoki.png 2>&1 &
 
 # Define custom programs to start
 exec swayidle -w \
   timeout 600 'swaylock --screenshots --effect-pixelate 40' \
-  timeout 600 "wlopm --off '*'" \
-  resume "wlopm --on '*'" \
+  timeout 1200 'wlopm --off \*' \
+  resume 'wlopm --on \*' \
   before-sleep 'swaylock --screenshots --effect-pixelate 40'
-

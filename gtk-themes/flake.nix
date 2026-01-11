@@ -328,8 +328,8 @@
         pname = "juno-mirage-gtk-theme";
         version = "0.0.3";
         src = pkgs.fetchurl {
-          url = "https://github.com/gvolpe/Juno/releases/download/${version}/Juno-mirage-standard-buttons.tar.xz";
-          sha256 = "303cdc0623c9188cbe6502309beff3f244e2155abe352ea474e581ef1c148c5b"; # <-- FIX ME after first build!
+          url = "https://github.com/jaycee1285/Juno/releases/download/1-8/Juno-mirage-standard-buttons.tar.gz";
+          sha256 = "44fe5037293c4dabe7e107f7183eacab71a08d453986bffd0dcebb0e7a379d48"; # <-- FIX ME after first build!
         };
         propagatedUserEnvPkgs = [ pkgs.gtk-engine-murrine ];
         unpackPhase = ''
