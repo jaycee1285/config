@@ -12,7 +12,7 @@ default values.
   </core>
   <!-- <font><theme> can be defined without an attribute to set all places -->
   <theme>
-    <name>everforest-light-OB</name>
+    <name>flexoki-light-OB</name>
     <cornerRadius>10</cornerRadius>
     <keepBorder>yes</keepBorder>
     <font>

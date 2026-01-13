@@ -20,6 +20,7 @@
     ./modules/ob-themes.nix
     ./modules/zen-browser.nix
     ./modules/claude-desktop.nix
+    ./modules/rclone-service.nix
   ];
 
   # You can also set global overrides here, or import other .nix files
