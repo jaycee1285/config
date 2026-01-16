@@ -179,14 +179,13 @@
     penpot-desktop
 
     # ───────────── files & storage (maintenance/utilities) ─────────────
-    xfce.thunar-volman
-    xfce.thunar-archive-plugin
+    thunar-volman
+    thunar-archive-plugin
     xarchiver
     qdirstat
     czkawka-full
     fclones-gui
     gparted
-    hifile
     peazip
     bleachbit
     collector

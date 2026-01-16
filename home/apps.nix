@@ -6,5 +6,7 @@
     pkgs.rclone-ui
     pkgs.unstable.pixieditor
     pkgs.rclone
+    pkgs.keychron-udev-rules
+    pkgs.material-design-icons
   ];
 }

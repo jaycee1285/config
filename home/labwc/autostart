@@ -19,10 +19,8 @@ mako >/dev/null 2>&1 &
 
 #nm-applet >/dev/null 2>&1 &
 
-# Start the Thunar daemon for better startup
-thunar --daemon 2>&1 &
 
-pcloud 2>&1 &
+#pcloud 2>&1 &
 
 syncthing 2>&1 &
 # Deploy swww wallpapers

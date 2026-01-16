@@ -9,6 +9,7 @@
     ./modules/gtk-themes.nix
     ./modules/hardware.nix
     ./modules/localization.nix
+    ./modules/nemo.nix
     ./modules/networking.nix
     ./modules/nix-features.nix
     ./modules/packages.nix

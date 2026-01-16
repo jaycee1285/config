@@ -12,6 +12,14 @@
     android_sdk.accept_license = true;   # let HM build the Android SDK
     allowUnfree                = true;   # needed by flutter → chromium, etc.
   };
+  {
+  xdg.mimeApps.enable = true;
+  xdg.mimeApps.defaultApplications = {
+    "inode/directory" = [ "nemo.desktop" ];
+    "application/x-gnome-saved-search" = [ "nemo.desktop" ];
+  };
+}
+
 
   imports = [
     ./apps.nix
