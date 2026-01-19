@@ -12,14 +12,12 @@
     android_sdk.accept_license = true;   # let HM build the Android SDK
     allowUnfree                = true;   # needed by flutter → chromium, etc.
   };
-  {
+
   xdg.mimeApps.enable = true;
   xdg.mimeApps.defaultApplications = {
-    "inode/directory" = [ "nemo.desktop" ];
-    "application/x-gnome-saved-search" = [ "nemo.desktop" ];
+    "inode/directory" = [ "org.kde.dolphin.desktop" ];
+    "application/x-gnome-saved-search" = [ "org.kde.dolphin.desktop" ];
   };
-}
-
 
   imports = [
     ./apps.nix
@@ -30,6 +28,7 @@
     ./gtk.nix
    ./kanshi.nix
     ./labwc.nix
+    ./lid.nix
     ./scripts.nix
    # ./steam.nix
     ./vscodium.nix

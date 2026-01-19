@@ -39,4 +39,8 @@
   # You almost never need this explicitly; NixOS enables dbus when needed.
   # If you want to keep it, it's harmless:
   # services.dbus.enable = true;
+  
+    qt.enable = true;
+  qt.platformTheme = "gnome";   # uses qgnomeplatform
+  qt.style = "adwaita-dark";    # or "adwaita"
 }

@@ -81,7 +81,7 @@
     love
     cargo
     pkgs.unstable.fresh-editor
-
+    pkgs.unstable.claude-code
 
     # ─────────────── productivity ───────────────
     pkgs.unstable.obsidian
@@ -240,6 +240,8 @@
     zuki-themes
     solarc-gtk-theme
     rewaita
+    pkgs.kdePackages.qt6gtk2
+    kdePackages.qtstyleplugin-kvantum
 
     # (none)
     # extra items that didn’t fit above can be collected here intentionally

@@ -3,13 +3,13 @@
 mem=$(free | awk '/Mem:/ {print int($3/$2 * 100)}')
 
 if [ "$mem" -lt 50 ]; then
-  icon="󱲦"
+  icon="󰾆"
   class="low"
 elif [ "$mem" -lt 75 ]; then
-  icon="󰍛"
+  icon="󰾅"
   class="medium"
 else
-  icon="󰍛"
+  icon="󰓅"
   class="high"
 fi
 

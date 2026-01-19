@@ -8,5 +8,8 @@
     pkgs.rclone
     pkgs.keychron-udev-rules
     pkgs.material-design-icons
+    pkgs.kdePackages.dolphin
+    pkgs.kdePackages.kio
+    pkgs.kdePackages.kio-extras
   ];
 }

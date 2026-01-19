@@ -12,13 +12,14 @@ default values.
   </core>
   <!-- <font><theme> can be defined without an attribute to set all places -->
   <theme>
-    <name>ayu-light-OB</name>
+    <name>flexoki-light-OB</name>
     <cornerRadius>10</cornerRadius>
     <keepBorder>yes</keepBorder>
     <font>
-      <name>Zed Mono</name>
+      <name>IosevkaTermSlab Propo</name>
       <size>16</size>
       <slant>normal</slant>
+      <weight>book</weight>
     </font>
   </theme>
   <!--
@@ -57,7 +58,9 @@ windows and WM_CLASS for XWayland clients.
       <action name="Execute" command="codium"/>
     </keybind>
     <keybind key="W-f">
-      <action name="Execute" command="thunar"/>
+      <action name="Execute">
+        <command>dolphin</command>
+      </action>
     </keybind>
     <keybind key="W-o">
       <action name="Execute" command="obsidian"/>

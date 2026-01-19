@@ -13,9 +13,10 @@
     helium-nix.url = "git+https://codeberg.org/MachsteNix/helium-nix";
     labwcchanger-tui.url = "github:jaycee1285/labwcchanger-tui";
     labwcchanger-tui.inputs.nixpkgs.follows = "nixpkgs";
+    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, labwcchanger, zen-browser, claude-desktop, helium-nix, labwcchanger-tui, ... }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, labwcchanger, zen-browser, claude-desktop, helium-nix, labwcchanger-tui, nix-vscode-extensions, ... }:
     let
       system = "x86_64-linux";
 
@@ -53,7 +54,7 @@
               home-manager.users.john = import ./home/home.nix;
 
               home-manager.extraSpecialArgs = {
-                inherit pkgs gtk-themes nixpkgs-unstable labwcchanger-tui;
+                inherit pkgs gtk-themes nixpkgs-unstable labwcchanger-tui nix-vscode-extensions;
                 ob-themes = obThemesPkg;
               };
             }

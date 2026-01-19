@@ -1,30 +1,10 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nix-vscode-extensions, ... }:
 
 
 let
-opencode = pkgs.vscode-utils.buildVscodeExtension {
-  pname = "opencode";
-  version = "0.0.12";
-  vscodeExtPublisher = "sst-dev";
-  vscodeExtName = "opencode";
-  vscodeExtUniqueId = "sst-dev.opencode";
-  src = pkgs.fetchurl {
-    url = "https://open-vsx.org/api/sst-dev/opencode/0.0.12/file/sst-dev.opencode-0.0.12.vsix";
-    sha256 = "sha256-0Bql5AWQKw2937sfjm22mi675kAyh8v447b+IjkGKjU=";
-  };
-};
 
-oneHunter = pkgs.vscode-utils.buildVscodeExtension {
-  pname = "one-hunter";
-  version = "1.4.0";
-  vscodeExtPublisher = "RaillyHugo";
-  vscodeExtName = "one-hunter";
-  vscodeExtUniqueId = "RaillyHugo.one-hunter";
-  src = pkgs.fetchurl {
-    url = "https://open-vsx.org/api/RaillyHugo/one-hunter/1.4.0/file/RaillyHugo.one-hunter-1.4.0.vsix";
-    sha256 = "sha256-9gZwLmUpwfYf9DtwPxRFpe81IyXUEXk2dSt/15sIc/I=";
-  };
-};
+  exts = nix-vscode-extensions.extensions.${pkgs.system};
+  ovsx = exts.open-vsx-release; # or open-vsx-release-universal
 
 in
 
@@ -60,10 +40,12 @@ in
       elijah-potter.harper
       antfu.icons-carbon
       yzhang.markdown-all-in-one
+      golang.go
     ]
      ++ [
-        opencode
-        oneHunter
+        ovsx."sst-dev".opencode
+        ovsx.raillyhugo."one-hunter"
+        ovsx.selemondev."vscode-shadcn-svelte"
       ];
   };
 }

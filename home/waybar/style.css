@@ -41,7 +41,7 @@ window#waybar {
 #custom-ram_icon,
 #custom-swap_icon {
   margin: 3px;
-  padding: 5px;
+  padding: 3px;
 
   border-radius: 12px;
 }
