@@ -5,22 +5,20 @@ let
   lidStateFile = "/proc/acpi/button/lid/LID/state";
 
   # Optional: set to your external output name (e.g., "DP-1") if you want to keep it on when lid closes.
-  externalOutput = DP-1;
+  externalOutput = "DP-1";
 
-  lidScript = pkgs.writeShellScript "lid-wlopm-onchange" ''
-    set -eu
-    f="${lidStateFile}"
-    state="$(tr -d ' ' < "$f" | cut -d: -f2)"
+lidScript = pkgs.writeShellScript "lid-wlopm-onchange" ''
+  set -eu
+  f="${lidStateFile}"
+  state="$(${pkgs.coreutils}/bin/tr -d ' ' < "$f" | ${pkgs.coreutils}/bin/cut -d: -f2)"
 
-    if [ "$state" = "closed" ]; then
-      ${pkgs.wlopm}/bin/wlopm --off "*"
-      ${lib.optionalString (externalOutput != null) ''
-        ${pkgs.wlopm}/bin/wlopm --on "${externalOutput}" || true
-      ''}
-    else
-      ${pkgs.wlopm}/bin/wlopm --on "*"
-    fi
-  '';
+  if [ "$state" = "closed" ]; then
+    ${pkgs.wlopm}/bin/wlopm --off "*"
+  else
+    ${pkgs.wlopm}/bin/wlopm --on "*"
+  fi
+'';
+
 in
 {
   home.packages = [ pkgs.wlopm ];

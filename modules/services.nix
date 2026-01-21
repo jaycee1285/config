@@ -30,7 +30,13 @@
       STOP_CHARGE_THRESH_BAT0  = 80;
     };
   };
+services.tailscale.enable = true;
 
+networking.firewall = {
+  enable = true;
+  trustedInterfaces = [ "tailscale0" ];
+  allowedUDPPorts = [ config.services.tailscale.port ];
+};
   #### DNS / resolver
   services.resolved.enable = false;
   networking.resolvconf.enable = true;

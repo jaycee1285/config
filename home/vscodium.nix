@@ -41,11 +41,13 @@ in
       antfu.icons-carbon
       yzhang.markdown-all-in-one
       golang.go
+      anthropic.claude-code
     ]
      ++ [
         ovsx."sst-dev".opencode
         ovsx.raillyhugo."one-hunter"
         ovsx.selemondev."vscode-shadcn-svelte"
+        ovsx.breaking-brake."cc-wf-studio"
       ];
   };
 }

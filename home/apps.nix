@@ -11,5 +11,9 @@
     pkgs.kdePackages.dolphin
     pkgs.kdePackages.kio
     pkgs.kdePackages.kio-extras
+    pkgs.qalculate-gtk
+    pkgs.embellish
+    pkgs.rustc
+    pkgs.webkitgtk_6_0
   ];
 }
