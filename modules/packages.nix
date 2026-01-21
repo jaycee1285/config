@@ -52,7 +52,6 @@
     nnn
 
     # ───────────────── internet / browsers ────────────────
-    pkgs.unstable.librewolf
     qbittorrent
     chawan
     localsend
