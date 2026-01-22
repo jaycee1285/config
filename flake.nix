@@ -42,10 +42,11 @@
 
     in {
       nixosConfigurations = {
-        john = nixpkgs.lib.nixosSystem {
+        # Host: Sed
+        Sed = nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
-            ./configuration.nix
+            ./hosts/Sed
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
@@ -62,7 +63,30 @@
           specialArgs = {
             inherit pkgs gtk-themes nixpkgs-unstable claude-desktop zen-browser helium-nix;
             ob-themes = obThemesPkg;
-            # Remove labwcchanger from here since it's now in the overlay
+          };
+        };
+
+        # Host: Zed
+        Zed = nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = [
+            ./hosts/Zed
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = ".bakbuk";
+              home-manager.users.john = import ./home/home.nix;
+
+              home-manager.extraSpecialArgs = {
+                inherit pkgs gtk-themes nixpkgs-unstable labwcchanger-tui nix-vscode-extensions;
+                ob-themes = obThemesPkg;
+              };
+            }
+          ];
+          specialArgs = {
+            inherit pkgs gtk-themes nixpkgs-unstable claude-desktop zen-browser helium-nix;
+            ob-themes = obThemesPkg;
           };
         };
       };

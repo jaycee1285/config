@@ -1,8 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   networking = {
-    hostName = "x13";
+    hostName = lib.mkDefault "x13";
     networkmanager.enable = true;
     # wireless.enable = true; # Enable networking
   };
