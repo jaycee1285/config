@@ -146,7 +146,7 @@ Copy to `hosts/NewHost/hardware-configuration.nix`.
 
 Add a new entry under `nixosConfigurations`:
 
-```nix
+```nix 
 # Host: NewHost
 NewHost = nixpkgs.lib.nixosSystem {
   inherit system;
