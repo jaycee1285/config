@@ -14,6 +14,7 @@
     labwcchanger-tui.url = "github:jaycee1285/labwcchanger-tui";
     labwcchanger-tui.inputs.nixpkgs.follows = "nixpkgs";
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
+    inputs.walls.url = "github:jaycee1285/walls";
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, labwcchanger, zen-browser, claude-desktop, helium-nix, labwcchanger-tui, nix-vscode-extensions, ... }:
@@ -61,7 +62,7 @@
             }
           ];
           specialArgs = {
-            inherit pkgs gtk-themes nixpkgs-unstable claude-desktop zen-browser helium-nix;
+            inherit pkgs gtk-themes nixpkgs-unstable claude-desktop zen-browser helium-nix walls;
             ob-themes = obThemesPkg;
           };
         };
@@ -79,7 +80,7 @@
               home-manager.users.john = import ./home/home.nix;
 
               home-manager.extraSpecialArgs = {
-                inherit pkgs gtk-themes nixpkgs-unstable labwcchanger-tui nix-vscode-extensions;
+                inherit pkgs gtk-themes nixpkgs-unstable labwcchanger-tui nix-vscode-extensions walls;
                 ob-themes = obThemesPkg;
               };
             }

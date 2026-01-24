@@ -15,5 +15,6 @@
     pkgs.embellish
     pkgs.rustc
     pkgs.webkitgtk_6_0
+    pkgs.wayvnc
   ];
 }

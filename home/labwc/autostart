@@ -32,5 +32,6 @@ exec swayidle -w \
   resume      'sh -lc "/run/current-system/sw/bin/wlopm --on  \"*\""' \
   before-sleep 'swaylock -f --screenshots --effect-pixelate 40'
 
+sh -lc 'sleep 2; wayvnc 100.92.108.119 5900' &
 
 

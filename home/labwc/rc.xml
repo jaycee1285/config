@@ -49,7 +49,7 @@ windows and WM_CLASS for XWayland clients.
       <action name="Execute" command="kitty"/>
     </keybind>
     <keybind key="W-w">
-      <action name="Execute" command="librewolf"/>
+      <action name="Execute" command="sh -lc &apos;flatpak run io.gitlab.librewolf-community --profile &quot;$HOME/.librewolf/mmfqe1ap.default&quot;&apos;"/>
     </keybind>
     <keybind key="W-S-w">
       <action name="Execute" command="librewolf --private-window"/>
