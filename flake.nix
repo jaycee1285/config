@@ -50,6 +50,7 @@
           inherit system;
           modules = [
             ./hosts/Sed
+            { nixpkgs.overlays = overlays; }
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
@@ -74,6 +75,7 @@
           inherit system;
           modules = [
             ./hosts/Zed
+            { nixpkgs.overlays = overlays; }
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;

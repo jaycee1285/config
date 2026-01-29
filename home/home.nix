@@ -22,7 +22,7 @@
   imports = [
     ./apps.nix
     ./fonts.nix
-    ./firefox.nix
+    # ./firefox.nix
     ./flutter.nix
     ./fuzzel.nix
     ./gtk.nix
@@ -38,6 +38,5 @@
     ./waybar.nix
     ./theming.nix
     ./walls.nix
-    ./ferrite.nix
   ];
 }
