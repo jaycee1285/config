@@ -1,7 +1,6 @@
 { config, pkgs, ... }:
 {
     programs.labwc.enable = true;
-    programs.wayfire.enable = true;
     programs.niri.enable = true;
     programs.fuse.enable = true;
     programs.fuse.userAllowOther = true;

@@ -6,17 +6,34 @@ This document identifies redundancies, duplicates, and opportunities for simplif
 
 ---
 
+## Progress Tracker
+
+*Last updated: 2026-01-27*
+
+### Completed
+- [x] `modules/nemo.nix` deleted (unstaged - run `git add -u` to stage)
+- [x] `harper` duplicate removed (only 1 occurrence now)
+- [x] Host files unified (`hosts/Sed/default.nix` and `hosts/Zed/default.nix` are identical except hostname)
+
+### In Progress / Remaining
+- [ ] **CRITICAL:** Fix `flake.nix` argument mismatch between Sed and Zed (see Section 9)
+- [ ] Remove 4 remaining duplicate packages
+- [ ] Delete orphaned files (`autohidpi*`, `home/firefox.nix`)
+- [ ] Remove redundant `swaylock-fancy`
+
+---
+
 ## 1. Duplicate Packages (System Level)
 
 These packages appear multiple times in `modules/packages.nix`:
 
-| Package | Occurrences | Lines | Action |
+| Package | Occurrences | Lines | Status |
 |---------|-------------|-------|--------|
-| `labwc-menu-generator` | 2 | 98, 108 | Remove one |
-| `harper` | 2 | 89, 119 | Remove one |
-| `gowall` | 2 | 103, 170 | Remove one |
-| `jq` | 2 | 34, 217 | Remove one |
-| `kdePackages.qtstyleplugin-kvantum` | 2 | 38, 243 | Remove one |
+| `labwc-menu-generator` | 2 | 93, 101 | **Still duplicated** |
+| `harper` | ~~2~~ 1 | 86 | **Fixed** |
+| `gowall` | 2 | 97, 154 | **Still duplicated** |
+| `jq` | 2 | 34, 201 | **Still duplicated** |
+| `kdePackages.qtstyleplugin-kvantum` | 2 | 38, 225 | **Still duplicated** |
 
 ---
 
@@ -82,12 +99,12 @@ These services are enabled in multiple modules:
 
 ### 3.5 Lock Screens
 
-| App | Interface | RAM Usage | Features | Recommendation |
-|-----|-----------|-----------|----------|----------------|
-| **swaylock-effects** | GUI | ~20MB | Blur, effects | **Keep one** |
-| **swaylock-fancy** | GUI | ~20MB | Screenshot blur | Remove (redundant) |
+| App | Interface | RAM Usage | Features | Status |
+|-----|-----------|-----------|----------|--------|
+| **swaylock-effects** | GUI | ~20MB | Blur, effects | **Keep** |
+| **swaylock-fancy** | GUI | ~20MB | Screenshot blur | **Still installed** (line 119) - remove |
 
-**Suggested consolidation:** Keep only `swaylock-effects`.
+**Suggested consolidation:** Keep only `swaylock-effects`. Remove `swaylock-fancy` from line 119 of `modules/packages.nix`.
 
 ### 3.6 Notification Daemons
 
@@ -164,11 +181,11 @@ Only one polkit agent detected - no duplication here.
 
 | Path | Status | Description | Action |
 |------|--------|-------------|--------|
-| `autohidpi/` | Untracked | Firefox extension source (full git repo) | Delete or add to .gitignore |
-| `autohidpi.xpi` | Untracked | Packaged extension | Delete |
-| `autohidpi.tar.gz` | Untracked | Archive | Delete |
-| `home/firefox.nix` | Disabled | 294 lines, commented out in home.nix | Delete if not returning to Firefox |
-| `modules/nemo.nix` | Disabled | Commented out in configuration.nix | Delete (services already in services.nix) |
+| `autohidpi/` | Staged (A) | Firefox extension source (full git repo) | Delete or add to .gitignore |
+| `autohidpi.xpi` | Staged (A) | Packaged extension | Delete |
+| `autohidpi.tar.gz` | Staged (A) | Archive | Delete |
+| `home/firefox.nix` | Modified | 294 lines, commented out in home.nix | Delete if not returning to Firefox |
+| `modules/nemo.nix` | **Deleted** | Was commented out in configuration.nix | **Done** (unstaged, run `git add -u`) |
 | `home/steam.nix` | Referenced but missing | Commented import in home.nix | Remove import line |
 
 ---
@@ -245,18 +262,18 @@ qbittorrent, localsend, chawan
 
 ### Services to Deduplicate
 
-| Action | Files |
-|--------|-------|
-| Remove flatpak enable | `modules/services.nix` (keep in flatpak.nix) |
-| Delete | `modules/nemo.nix` |
+| Action | Files | Status |
+|--------|-------|--------|
+| Remove flatpak enable | `modules/services.nix` (keep in flatpak.nix) | Pending |
+| Delete | `modules/nemo.nix` | **Done** |
 
 ### Files to Delete
 
-| File | Reason |
-|------|--------|
-| `autohidpi/`, `autohidpi.xpi`, `autohidpi.tar.gz` | Unused |
-| `home/firefox.nix` | Disabled, using LibreWolf |
-| `modules/nemo.nix` | Disabled, redundant |
+| File | Reason | Status |
+|------|--------|--------|
+| `autohidpi/`, `autohidpi.xpi`, `autohidpi.tar.gz` | Unused | Pending |
+| `home/firefox.nix` | Disabled, using LibreWolf | Pending |
+| `modules/nemo.nix` | Disabled, redundant | **Deleted** |
 
 ### Estimated RAM Savings
 
@@ -292,17 +309,22 @@ For maximum RAM efficiency, consider this TUI-focused workflow:
 
 ### 8.1 Host Deduplication
 
-Both `hosts/Sed/default.nix` and `hosts/Zed/default.nix` are nearly identical. Consider:
+**Status: Host files are now unified!**
 
+Both `hosts/Sed/default.nix` and `hosts/Zed/default.nix` are now identical (only `networking.hostName` differs). However, **the real duplication is in `flake.nix`** where each host has its own config block with slightly different arguments.
+
+**See Section 9 for the critical flake.nix fix and mkHost refactor.**
+
+Example mkHost pattern:
 ```nix
 # In flake.nix, use a function:
 mkHost = hostname: nixpkgs.lib.nixosSystem {
-  # shared config
+  # shared config - single source of truth
   modules = [
-    ./configuration.nix
-    ./hosts/${hostname}/hardware-configuration.nix
-    { networking.hostName = hostname; }
+    ./hosts/${hostname}
+    # ... home-manager config
   ];
+  specialArgs = { /* same for all hosts */ };
 };
 ```
 
@@ -318,13 +340,94 @@ This makes it easier to toggle entire categories.
 
 ---
 
+## 9. CRITICAL: Sed/Zed Flake Configuration Mismatch
+
+**Problem:** While `hosts/Sed/default.nix` and `hosts/Zed/default.nix` are now identical (good!), **`flake.nix` passes different arguments** to each host. This will cause Zed to fail if any module references the missing inputs.
+
+### Current State in `flake.nix`
+
+| Argument Location | Sed | Zed | Issue |
+|-------------------|-----|-----|-------|
+| `extraSpecialArgs.walls` | Yes | Yes | OK |
+| `extraSpecialArgs.spredux` | Yes | **Missing** | Zed build will fail if referenced |
+| `specialArgs.walls` | Yes | **Missing** | Zed build will fail if referenced |
+
+### Fix Option 1: Add Missing Args to Zed (Quick Fix)
+
+In `flake.nix`, update Zed's configuration (around lines 83-91):
+
+```nix
+# Zed - extraSpecialArgs (line ~84)
+home-manager.extraSpecialArgs = {
+  inherit pkgs gtk-themes nixpkgs-unstable labwcchanger-tui nix-vscode-extensions walls spredux;  # Add spredux
+  ob-themes = obThemesPkg;
+};
+
+# Zed - specialArgs (line ~90)
+specialArgs = {
+  inherit pkgs nixpkgs-unstable claude-desktop zen-browser helium-nix walls;  # Add walls
+  ob-themes = obThemesPkg;
+};
+```
+
+### Fix Option 2: Use mkHost Function (Recommended - Prevents Future Drift)
+
+Replace the entire `nixosConfigurations` block with:
+
+```nix
+let
+  mkHost = hostname: nixpkgs.lib.nixosSystem {
+    inherit system;
+    modules = [
+      ./hosts/${hostname}
+      home-manager.nixosModules.home-manager
+      {
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.backupFileExtension = ".bakbuk";
+        home-manager.users.john = import ./home/home.nix;
+        home-manager.extraSpecialArgs = {
+          inherit pkgs gtk-themes nixpkgs-unstable labwcchanger-tui nix-vscode-extensions walls spredux;
+          ob-themes = obThemesPkg;
+        };
+      }
+    ];
+    specialArgs = {
+      inherit pkgs nixpkgs-unstable claude-desktop zen-browser helium-nix walls;
+      ob-themes = obThemesPkg;
+    };
+  };
+in {
+  nixosConfigurations = {
+    Sed = mkHost "Sed";
+    Zed = mkHost "Zed";
+  };
+}
+```
+
+**Benefits of mkHost:**
+- Single source of truth for host configuration
+- Adding a new host = one line (`NewHost = mkHost "NewHost";`)
+- No more argument drift between hosts
+- Zed becomes a true backup of Sed
+
+---
+
 ## Appendix: Quick Reference - What to Do
 
+### CRITICAL (Do First)
+- [ ] **Fix flake.nix Sed/Zed mismatch** - Add `spredux` and `walls` to Zed's args OR implement `mkHost` function (see Section 9)
+
 ### Immediate Actions (Low Effort)
-- [ ] Remove 5 duplicate packages from `modules/packages.nix`
-- [ ] Delete `autohidpi/` directory and related files
-- [ ] Remove `services.flatpak.enable` from `modules/services.nix`
-- [ ] Delete or archive `home/firefox.nix` and `modules/nemo.nix`
+- [ ] Remove 4 duplicate packages from `modules/packages.nix`:
+  - Line 101: `labwc-menu-generator` (keep line 93)
+  - Line 154: `gowall` (keep line 97)
+  - Line 201: `jq` (keep line 34)
+  - Line 225: `kdePackages.qtstyleplugin-kvantum` (keep line 38)
+- [ ] Remove `swaylock-fancy` (line 119) - redundant with `swaylock-effects`
+- [ ] Delete `autohidpi/` directory and related files (unstage first: `git reset autohidpi*`)
+- [ ] Delete or archive `home/firefox.nix`
+- [x] ~~Delete `modules/nemo.nix`~~ **Done** (stage with `git add -u`)
 
 ### Short-term Actions (Medium Effort)
 - [ ] Remove redundant apps (choose one per category from tables above)
@@ -332,6 +435,22 @@ This makes it easier to toggle entire categories.
 - [ ] Add home-manager configs for: fish, helix, kitty, mako, swaylock
 
 ### Long-term Actions (Higher Effort)
-- [ ] Refactor host configs to reduce duplication
+- [ ] Refactor to `mkHost` function for zero-drift host configs (see Section 9)
 - [ ] Split packages.nix into categorized files
 - [ ] Full home-manager migration for cross-distro support
+
+---
+
+## Verification: Test Zed Build
+
+After fixing the flake.nix mismatch, verify Zed can build:
+
+```bash
+# Dry-run build (no actual switch)
+nixos-rebuild build --flake .#Zed
+
+# Or just evaluate
+nix eval .#nixosConfigurations.Zed.config.system.build.toplevel
+```
+
+If both Sed and Zed build successfully with identical configs, Zed is ready to serve as your backup.

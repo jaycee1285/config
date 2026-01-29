@@ -10,8 +10,6 @@
   services.printing.enable = true;
   services.system-config-printer.enable = true;
 
-  #### Flatpak + portals (LabWC / wlroots)
-  services.flatpak.enable = true;
   xdg.portal.wlr.enable = true;
 
   #### Sync / networking

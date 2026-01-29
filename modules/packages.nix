@@ -64,7 +64,6 @@
 
     # ───────────── coding (editors, IDEs, toolchains) ─────────────
     # NOTE: multiple editors here on purpose so you can eyeball redundancies
-    helix
     github-desktop
     gh
     nodejs-slim
@@ -84,12 +83,8 @@
 
     # ─────────────── productivity ───────────────
     pkgs.unstable.obsidian
-    marker
-    eloquent
     harper
-    typesetter
     basalt
-    kdePackages.kate
     abiword
 
     # ─────────────── wayland desktop & UX ───────────────
@@ -97,33 +92,26 @@
     pkgs.unstable.labwc-tweaks-gtk
     pkgs.unstable.labwc-menu-generator
     pkgs.unstable.waybar
-    pkgs.unstable.sfwbar
     pkgs.unstable.mangowc
     kdePackages.polkit-kde-agent-1
     gowall
-    wayfirePlugins.wf-shell
     wlr-layout-ui
     pkgs.unstable.dms-shell
     wlopm
     labwc-menu-generator
 
     # Launchers & finders
-    rofi
     fuzzel
-    bemenu               # keyboard launcher
 
     # Notifications & text expansion
     mako
     libnotify
     espanso-wayland
-    harper
-    swaynotificationcenter
 
     # Wallpaper & visuals
     swww
 
     # Screenshots & capture (grouped to reveal overlaps)
-    flameshot                # moved here with other screenshot tools
     wayscriber
 
     # Locks & idle
@@ -155,17 +143,13 @@
 
     # ─────────────────── sync & backup ───────────────────
     pkgs.unstable.pcloud
-    duplicati
-    pika-backup
     syncthing
-    syncthingtray
     kopia-ui
     
     # ─────────────────── media & graphics ───────────────────
     vlc
     inkscape-with-extensions
     fontfinder
-    gnome-characters
     gucharmap
     gowall
     conjure
@@ -222,9 +206,7 @@
     amphetype
 
     # ───────────── AI & LLM tools ─────────────
-    cherry-studio
     lmstudio
-    chatbox
 
     # ───────────── theming (engines & tools) ─────────────
     themix-gui

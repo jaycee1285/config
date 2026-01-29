@@ -15,10 +15,11 @@
     labwcchanger-tui.inputs.nixpkgs.follows = "nixpkgs";
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     walls.url = "github:jaycee1285/walls";
-    spredux.url = "github:jaycee1285/spredux";
+    spredux.url = "git+file:///home/john/repos/SPRedux";
+    coverpro.url = "git+file:///home/john/repos/coverpro";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, labwcchanger, zen-browser, claude-desktop, helium-nix, labwcchanger-tui, nix-vscode-extensions, walls, spredux,... }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, labwcchanger, zen-browser, claude-desktop, helium-nix, labwcchanger-tui, nix-vscode-extensions, walls, spredux, coverpro, ... }:
     let
       system = "x86_64-linux";
 
@@ -57,7 +58,7 @@
               home-manager.users.john = import ./home/home.nix;
 
               home-manager.extraSpecialArgs = {
-                inherit pkgs gtk-themes nixpkgs-unstable labwcchanger-tui nix-vscode-extensions walls spredux;
+                inherit pkgs gtk-themes nixpkgs-unstable labwcchanger-tui nix-vscode-extensions walls spredux coverpro;
                 ob-themes = obThemesPkg;
               };
             }
@@ -81,7 +82,7 @@
               home-manager.users.john = import ./home/home.nix;
 
               home-manager.extraSpecialArgs = {
-                inherit pkgs gtk-themes nixpkgs-unstable labwcchanger-tui nix-vscode-extensions walls;
+                inherit pkgs gtk-themes nixpkgs-unstable labwcchanger-tui nix-vscode-extensions walls coverpro;
                 ob-themes = obThemesPkg;
               };
             }
@@ -89,6 +90,16 @@
           specialArgs = {
             inherit pkgs nixpkgs-unstable claude-desktop zen-browser helium-nix;
             ob-themes = obThemesPkg;
+          };
+        };
+
+        # Emergency ISO with LabWC environment
+        # Build with: nix build .#nixosConfigurations.iso.config.system.build.isoImage
+        iso = nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = [ ./iso.nix ];
+          specialArgs = {
+            inherit helium-nix spredux;
           };
         };
       };

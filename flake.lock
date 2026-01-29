@@ -672,17 +672,16 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1769487028,
-        "narHash": "sha256-qb3o9sQv/MR+JC58bH0t5vu6j5BrP3E+WyZ9wYDIJDQ=",
-        "owner": "jaycee1285",
-        "repo": "spredux",
-        "rev": "e920c19b651a2655eb3f0a6de688fbc636ed10d5",
-        "type": "github"
+        "dirtyRev": "0bb1c15cf26f4549051aafb5fc570e4a4930514f-dirty",
+        "dirtyShortRev": "0bb1c15-dirty",
+        "lastModified": 1769531239,
+        "narHash": "sha256-nzilcM6kqAW6XSwUOm9rtyMsPJ6l9lZQNa+yPU3hXSE=",
+        "type": "git",
+        "url": "file:///home/john/repos/SPRedux"
       },
       "original": {
-        "owner": "jaycee1285",
-        "repo": "spredux",
-        "type": "github"
+        "type": "git",
+        "url": "file:///home/john/repos/SPRedux"
       }
     },
     "systems": {
