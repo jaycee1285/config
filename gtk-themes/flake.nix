@@ -28,11 +28,17 @@
       url = "github:jaycee1285/Rose-Pine-GTK-Theme";
       flake = false;  # Treat as source, not a flake to avoid circular import
     };
+
+    # Flexoki
+    flexoki-theme = {
+      url = "github:jaycee1285/flexoki";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, catppuccin-theme, gruvbox-theme, everforest-theme, 
-              tokyonight-theme, osaka-theme, kanagawa-theme, nordfox-theme, 
-              orchis-theme, nordic-polar-theme, rose-pine-theme, ... }: 
+  outputs = { self, nixpkgs, catppuccin-theme, gruvbox-theme, everforest-theme,
+              tokyonight-theme, osaka-theme, kanagawa-theme, nordfox-theme,
+              orchis-theme, nordic-polar-theme, rose-pine-theme, flexoki-theme, ... }: 
   let 
     system = "x86_64-linux"; 
     pkgs = import nixpkgs { inherit system; };
@@ -346,6 +352,25 @@
           description = "Juno Mirage GTK theme (standard buttons, official)";
           homepage = "https://github.com/gvolpe/Juno";
           license = licenses.gpl3Only;
+          platforms = platforms.linux;
+        };
+      };
+
+      # Flexoki
+      flexoki-gtk-theme = pkgs.stdenvNoCC.mkDerivation {
+        pname = "flexoki-gtk-theme";
+        version = "unstable-latest";
+        src = flexoki-theme;
+        installPhase = ''
+          runHook preInstall
+          mkdir -p $out/share/themes/Flexoki
+          cp -a gtk/* $out/share/themes/Flexoki/
+          runHook postInstall
+        '';
+        meta = with pkgs.lib; {
+          description = "Flexoki GTK theme";
+          homepage = "https://github.com/jaycee1285/flexoki";
+          license = licenses.mit;
           platforms = platforms.linux;
         };
       };

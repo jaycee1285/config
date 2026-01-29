@@ -1,4 +1,4 @@
-{ config, pkgs, gtk-themes, ob-themes, zen-browser, claude-desktop, ... }:
+{ config, pkgs, ob-themes, zen-browser, claude-desktop, ... }:
 
 {
   imports = [
@@ -6,7 +6,6 @@
     ./modules/audio.nix
     ./modules/bootloader.nix
     ./modules/flatpak.nix
-    ./modules/gtk-themes.nix
     ./modules/hardware.nix
     ./modules/localization.nix
 #    ./modules/nemo.nix

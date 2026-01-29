@@ -22,15 +22,17 @@
   imports = [
     ./apps.nix
     ./fonts.nix
-    ./firefox.nix
+  # ./firefox.nix
     ./flutter.nix
     ./fuzzel.nix
     ./gtk.nix
+    ./gtk-themes.nix
    ./kanshi.nix
     ./labwc.nix
     ./lid.nix
     ./scripts.nix
    # ./steam.nix
+    ./spredux.nix
     ./vscodium.nix
     ./waybar.nix
     ./theming.nix

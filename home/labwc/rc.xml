@@ -127,7 +127,7 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="A-\">
       <action name="Execute">
-        <command>&quot;makoctl dismiss -a&quot;</command>
+        <command>"makoctl dismiss -a"</command>
       </action>
     </keybind>
     <keybind key="W-Left">
@@ -145,6 +145,10 @@ windows and WM_CLASS for XWayland clients.
     <keybind key="W-S-BackSpace">
       <action name="Execute">
         <command>wlopm --on \*</command>
+      </action>
+    </keybind>
+    <keybind key="W-S-Right">
+      <action name="SendToDesktop" to="right">
       </action>
     </keybind>
   </keyboard>

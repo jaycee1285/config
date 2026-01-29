@@ -1,0 +1,224 @@
+{
+  "nodes": {
+    "catppuccin-theme": {
+      "locked": {
+        "lastModified": 1761406789,
+        "narHash": "sha256-RWkitQAjmiZaIQ0x0IFrFnEXossMiNf1xzdJfAWJb1Y=",
+        "owner": "jaycee1285",
+        "repo": "Catppuccin-GTK-Theme",
+        "rev": "93b05e6ac14386535da0b657d1fd7a625254d896",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jaycee1285",
+        "repo": "Catppuccin-GTK-Theme",
+        "type": "github"
+      }
+    },
+    "everforest-theme": {
+      "locked": {
+        "lastModified": 1761406803,
+        "narHash": "sha256-1VMvIPTEfKA8bZsA4bdM6IyT1Wzmmue6FX8rwiGUR84=",
+        "owner": "jaycee1285",
+        "repo": "Everforest-GTK-Theme",
+        "rev": "9fe6e000282d457ffd93e2084376e1b90a2c84f1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jaycee1285",
+        "repo": "Everforest-GTK-Theme",
+        "type": "github"
+      }
+    },
+    "flexoki-theme": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1768506299,
+        "narHash": "sha256-JJDEDnLNDlAldnZFGnxeXjjs287izaJxDBrGa5b3aII=",
+        "owner": "jaycee1285",
+        "repo": "flexoki",
+        "rev": "c4d870970ee534cb71f7e25af44dccc7c1af9ca0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jaycee1285",
+        "repo": "flexoki",
+        "type": "github"
+      }
+    },
+    "gruvbox-theme": {
+      "locked": {
+        "lastModified": 1761406817,
+        "narHash": "sha256-JlIlyZIsdvsG39kBiUTA4TJmqbAqH7PF1DI/X0QV6S0=",
+        "owner": "jaycee1285",
+        "repo": "Gruvbox-GTK-Theme",
+        "rev": "5b70db536429c46fbcfb5d4df506734c97860ed5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jaycee1285",
+        "repo": "Gruvbox-GTK-Theme",
+        "type": "github"
+      }
+    },
+    "kanagawa-theme": {
+      "locked": {
+        "lastModified": 1761406838,
+        "narHash": "sha256-A539tr3ZYunp4yeUvENlaRnAWBSgmrlksf/pstGO4Xg=",
+        "owner": "jaycee1285",
+        "repo": "Kanagawa-GTK-Theme",
+        "rev": "90dcc9fd98092d2d0cafe76381a25fc588c7c2aa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jaycee1285",
+        "repo": "Kanagawa-GTK-Theme",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1769018530,
+        "narHash": "sha256-MJ27Cy2NtBEV5tsK+YraYr2g851f3Fl1LpNHDzDX15c=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "88d3861acdd3d2f0e361767018218e51810df8a1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1769018530,
+        "narHash": "sha256-MJ27Cy2NtBEV5tsK+YraYr2g851f3Fl1LpNHDzDX15c=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "88d3861acdd3d2f0e361767018218e51810df8a1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nordfox-theme": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1761406851,
+        "narHash": "sha256-W895a9j6J2DS5jf3rcdgU/Mi5BG3g3nyQI191lGqaiE=",
+        "owner": "jaycee1285",
+        "repo": "Nightfox-GTK-Theme",
+        "rev": "490abe49710e44caa2c222df68a57264d558bbff",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jaycee1285",
+        "repo": "Nightfox-GTK-Theme",
+        "type": "github"
+      }
+    },
+    "nordic-polar-theme": {
+      "locked": {
+        "lastModified": 1762011083,
+        "narHash": "sha256-YwhbtzDHaxzoayeOmtBYDib7gmf5OWVE517LUO5qJeQ=",
+        "owner": "jaycee1285",
+        "repo": "Nordic-Polar",
+        "rev": "5d4382e077e0d93f06cd577b6515b1dd009e25eb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jaycee1285",
+        "repo": "Nordic-Polar",
+        "type": "github"
+      }
+    },
+    "orchis-theme": {
+      "locked": {
+        "lastModified": 1763835386,
+        "narHash": "sha256-ujU40IFT7oSv1EfJ2T5NSsg5GT0+ConWkq5pQNADyI8=",
+        "owner": "jaycee1285",
+        "repo": "Orchis-theme",
+        "rev": "e6aa538ea1b6699931317f2ca7a69a29af5330ff",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jaycee1285",
+        "repo": "Orchis-theme",
+        "type": "github"
+      }
+    },
+    "osaka-theme": {
+      "locked": {
+        "lastModified": 1761406869,
+        "narHash": "sha256-j/GXI9LOKa1W9BqCy4Tg2U29WIU8ADYvzRNgG+Q1dB4=",
+        "owner": "jaycee1285",
+        "repo": "Osaka-GTK-Theme",
+        "rev": "a6b65680146a7472fd9a20e15390b1e3b3503505",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jaycee1285",
+        "repo": "Osaka-GTK-Theme",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "catppuccin-theme": "catppuccin-theme",
+        "everforest-theme": "everforest-theme",
+        "flexoki-theme": "flexoki-theme",
+        "gruvbox-theme": "gruvbox-theme",
+        "kanagawa-theme": "kanagawa-theme",
+        "nixpkgs": "nixpkgs",
+        "nordfox-theme": "nordfox-theme",
+        "nordic-polar-theme": "nordic-polar-theme",
+        "orchis-theme": "orchis-theme",
+        "osaka-theme": "osaka-theme",
+        "rose-pine-theme": "rose-pine-theme",
+        "tokyonight-theme": "tokyonight-theme"
+      }
+    },
+    "rose-pine-theme": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1761406908,
+        "narHash": "sha256-7DqTRn6O9NE2ojJjbmmhxftEzyXCL5RP/KPnL6QjGzo=",
+        "owner": "jaycee1285",
+        "repo": "Rose-Pine-GTK-Theme",
+        "rev": "3c158d5a60ea5b72d84c632fc5af848f6ce6e019",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jaycee1285",
+        "repo": "Rose-Pine-GTK-Theme",
+        "type": "github"
+      }
+    },
+    "tokyonight-theme": {
+      "locked": {
+        "lastModified": 1761406922,
+        "narHash": "sha256-+r9qnCMdE1glnytZNSBKrVfcA6BcY9B32lGeOJvsQA0=",
+        "owner": "jaycee1285",
+        "repo": "Tokyonight-GTK-Theme",
+        "rev": "6f1f95282555a9c0c1b4db59c235341661dd7c52",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jaycee1285",
+        "repo": "Tokyonight-GTK-Theme",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
