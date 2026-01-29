@@ -332,11 +332,11 @@
         "nixpkgs": "nixpkgs_8"
       },
       "locked": {
-        "lastModified": 1769566661,
-        "narHash": "sha256-HSltp3PUxtBpcpzy4ANZlhq3CkDR47pmsM2dZ763ZWU=",
+        "lastModified": 1769654391,
+        "narHash": "sha256-eaILIVg3v5b2/zOVfS8BYpDKXz/IVzi6TnH3ycGsewY=",
         "owner": "nix-community",
         "repo": "nix-vscode-extensions",
-        "rev": "7afc8df707497dbb304e680ba156b4bab98df496",
+        "rev": "0bdb779be3b039a5f65e67b258f1eb6ce6afaae9",
         "type": "github"
       },
       "original": {
@@ -729,11 +729,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1769651241,
-        "narHash": "sha256-H026+Xi0VinHwZiwax/Yx2eUR20YFMYNfl/bIsbP1cI=",
+        "lastModified": 1769659833,
+        "narHash": "sha256-FmpP8XJ2cNxksEC+TXrFbOWDnPX0+qgSobiJj4ctZqw=",
         "ref": "refs/heads/main",
-        "rev": "cbd4144c72a11567043b6045c14d47dce51d7b4a",
-        "revCount": 7,
+        "rev": "bed7358fc0520c0091a569e3ee2f00d0e71e3aab",
+        "revCount": 8,
         "type": "git",
         "url": "file:///home/john/repos/SPRedux"
       },
