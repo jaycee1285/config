@@ -2,6 +2,9 @@
 
 {
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [
+    "librewolf-bin-147.0.1-3"
+  ];
 
   nixpkgs.overlays = [
     (final: prev: {

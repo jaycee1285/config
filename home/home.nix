@@ -22,7 +22,7 @@
   imports = [
     ./apps.nix
     ./fonts.nix
-    # ./firefox.nix
+   ./firefox.nix
     ./flutter.nix
     ./fuzzel.nix
     ./gtk.nix
