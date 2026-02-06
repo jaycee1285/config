@@ -56,7 +56,8 @@ let
     postFixup = ''
       wrapProgram $out/bin/${pname} \
         --set GIO_MODULE_DIR "${pkgs.glib-networking}/lib/gio/modules" \
-        --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+        --set WEBKIT_DISABLE_COMPOSITING_MODE 1 \
+        --prefix XDG_DATA_DIRS : "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}"
     '';
   };
 
@@ -111,7 +112,7 @@ in
     pname = "coverpro";
     version = "0.1.0";
     url = "https://github.com/jaycee1285/coverpro/releases/download/v0.1.0/coverpro-v0.1.0-linux-x86_64.tar.xz";
-    hash = "sha256:3e938ae13c86a9c74a292e041e0d9689aeb048560f8375c705979f851259755f";
+    hash = "sha256:26096b163a9fad8ca812d7c215b2649153cf48543c419a49ce70e7deb9df668c";
   };
 
   spredux = mkTauriApp {

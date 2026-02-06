@@ -9,4 +9,4 @@ q="${q#"${q%%[![:space:]]*}"}"
 q="${q%"${q##*[![:space:]]}"}"
 [[ -z "$q" ]] && exit 0
 
-librewolf --search "$q" >/dev/null 2>&1 &
+zen --search "$q" >/dev/null 2>&1 &
