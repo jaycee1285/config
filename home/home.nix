@@ -15,14 +15,14 @@
 
   xdg.mimeApps.enable = true;
   xdg.mimeApps.defaultApplications = {
-    "inode/directory" = [ "org.kde.dolphin.desktop" ];
-    "application/x-gnome-saved-search" = [ "org.kde.dolphin.desktop" ];
+    "inode/directory" = [ "thunar.desktop" ];
+    "application/x-gnome-saved-search" = [ "thunar.desktop" ];
   };
 
   imports = [
     ./apps.nix
     ./fonts.nix
-   ./firefox.nix
+   # ./firefox.nix
     ./flutter.nix
     ./fuzzel.nix
     ./gtk.nix
@@ -32,8 +32,7 @@
     ./lid.nix
     ./scripts.nix
    # ./steam.nix
-    ./spredux.nix
-    ./coverpro.nix
+    ./tauri.nix
     ./vscodium.nix
     ./waybar.nix
     ./theming.nix

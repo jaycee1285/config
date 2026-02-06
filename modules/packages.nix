@@ -72,7 +72,6 @@
     nodejs-slim
     pkgs.unstable.bun
     flutter
-    gtk3
     codex
     pkgs.unstable.opencode
     fjo
@@ -101,10 +100,13 @@
     wlr-layout-ui
     pkgs.unstable.dms-shell
     wlopm
-    labwc-menu-generator
 
     # Launchers & finders
     fuzzel
+    cliphist
+    wl-clipboard
+    ripgrep
+    sqlite
 
     # Notifications & text expansion
     mako
@@ -119,7 +121,6 @@
 
     # Locks & idle
     swaylock-effects
-    swaylock-fancy
     swayidle
     wlogout
 
@@ -154,7 +155,6 @@
     inkscape-with-extensions
     fontfinder
     gucharmap
-    gowall
     conjure
     monophony
     xnconvert
@@ -201,7 +201,6 @@
     wgnord
     wireguard-tools
     openresolv
-    jq
     curl
 
     # ───────────── typing & learning ─────────────
@@ -225,7 +224,6 @@
     solarc-gtk-theme
     rewaita
     pkgs.kdePackages.qt6gtk2
-    kdePackages.qtstyleplugin-kvantum
 
     # (none)
     # extra items that didn’t fit above can be collected here intentionally

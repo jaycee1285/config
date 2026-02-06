@@ -1,222 +1,81 @@
 # Tauri Binary Releases
 
-Skip the Nix-sandbox Rust/Tauri build pain. Build binaries in the dev shell, tar them up, and have the config flake unpack them straight into the path.
+Skip the Nix-sandbox Rust/Tauri build pain. Build binaries in the dev shell, release to GitHub, and have the config flake fetch them.
 
 ---
 
-## Building Release Binaries
+## Architecture
+
+```
+GitHub Releases (tar.xz)
+        │
+        ▼
+  tauri.nix (root)         ← mkTauriApp + fetchurl derivations
+   ├── home/tauri.nix      ← HM module: both apps in home.packages
+   └── iso.nix             ← system module: spredux in environment.systemPackages
+```
+
+One shared `tauri.nix` at the repo root defines `mkTauriApp` and both derivations. Home Manager and the ISO import from it.
+
+---
+
+## Release URLs
+
+| App | URL |
+|-----|-----|
+| CoverPro | `https://github.com/jaycee1285/coverpro/releases/download/v0.1.0/coverpro-v0.1.0-linux-x86_64.tar.xz` |
+| SPRedux | `https://github.com/jaycee1285/SPRedux/releases/download/v0.1.0/spredux-v0.1.0-linux-x86_64.tar.xz` |
+
+Pattern: `https://github.com/jaycee1285/<repo>/releases/download/v<version>/<pname>-v<version>-linux-x86_64.tar.xz`
+
+---
+
+## Building + Releasing
+
+Both repos have a `release.sh` that builds, tars, and uploads to GitHub Releases.
+
+### CoverPro
+
+```bash
+cd ~/repos/coverpro
+./release.sh
+# Builds via `bun run tauri build --no-bundle`, tars the binary, uploads to GH release
+```
 
 ### SPRedux
 
 ```bash
 cd ~/repos/SPRedux
-nix develop
-
-# install frontend deps + build frontend + build tauri binary
-bun install
-cargo tauri build --no-bundle
-
-# binary lands here
-ls src-tauri/target/release/spredux
-
-# package it
-tar czf ~/spredux.tar.gz -C src-tauri/target/release spredux
+./release.sh
+# Same pattern
 ```
 
-### CoverPro
-
-```bash
-cd ~/repos/coverpro/app
-nix develop
-
-# install frontend deps + build frontend + build tauri binary
-bun install
-cargo tauri build --no-bundle
-
-# binary lands here
-ls src-tauri/target/release/coverpro
-
-# package it
-tar czf ~/coverpro.tar.gz -C src-tauri/target/release coverpro
-```
+`release.sh` auto-enters the Nix dev shell if `PKG_CONFIG_PATH` is missing.
 
 ---
 
 ## Updating the Config Flake
 
-### 1. Drop the flake inputs
+After uploading a new release:
 
-In `flake.nix`, remove the `spredux` and `coverpro` inputs and all references to them in `outputs`, `specialArgs`, and `extraSpecialArgs`.
+1. Get the new hash:
+   ```bash
+   nix-prefetch-url --type sha256 https://github.com/jaycee1285/coverpro/releases/download/v0.2.0/coverpro-v0.2.0-linux-x86_64.tar.xz
+   ```
 
-Remove these lines from `inputs`:
+2. Update `tauri.nix` at the repo root — change the `version`, `url`, and `hash` for the relevant app.
 
-```nix
-spredux.url = "git+file:///home/john/repos/SPRedux";
-coverpro.url = "git+file:///home/john/repos/coverpro";
-```
-
-Remove `spredux` and `coverpro` from the `outputs` function arguments and from every `specialArgs` / `extraSpecialArgs` block.
-
-### 2. Add binary package derivations
-
-Create `home/spredux.nix`:
-
-```nix
-{ pkgs, ... }:
-
-let
-  spredux = pkgs.stdenv.mkDerivation {
-    pname = "spredux";
-    version = "0.1.0";
-
-    src = /home/john/spredux.tar.gz;
-
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-
-    unpackPhase = ''
-      mkdir -p $out/bin
-      tar xzf $src -C $out/bin
-    '';
-
-    dontBuild = true;
-    dontInstall = true;
-
-    postFixup = ''
-      wrapProgram $out/bin/spredux \
-        --prefix LD_LIBRARY_PATH : "${pkgs.lib.makeLibraryPath (with pkgs; [
-          webkitgtk_4_1
-          gtk3
-          glib
-          glib-networking
-          libsoup_3
-          cairo
-          pango
-          gdk-pixbuf
-          openssl
-          dbus
-          wayland
-          libxkbcommon
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXrandr
-          xorg.libXi
-        ])}" \
-        --set GIO_MODULE_DIR "${pkgs.glib-networking}/lib/gio/modules" \
-        --set WEBKIT_DISABLE_COMPOSITING_MODE 1
-    '';
-  };
-in
-{
-  home.packages = [ spredux ];
-}
-```
-
-Create `home/coverpro.nix`:
-
-```nix
-{ pkgs, ... }:
-
-let
-  coverpro = pkgs.stdenv.mkDerivation {
-    pname = "coverpro";
-    version = "0.1.0";
-
-    src = /home/john/coverpro.tar.gz;
-
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-
-    unpackPhase = ''
-      mkdir -p $out/bin
-      tar xzf $src -C $out/bin
-    '';
-
-    dontBuild = true;
-    dontInstall = true;
-
-    postFixup = ''
-      wrapProgram $out/bin/coverpro \
-        --prefix LD_LIBRARY_PATH : "${pkgs.lib.makeLibraryPath (with pkgs; [
-          webkitgtk_4_1
-          gtk3
-          glib
-          glib-networking
-          libsoup_3
-          cairo
-          pango
-          gdk-pixbuf
-          openssl
-          dbus
-          wayland
-          libxkbcommon
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXrandr
-          xorg.libXi
-        ])}" \
-        --set GIO_MODULE_DIR "${pkgs.glib-networking}/lib/gio/modules" \
-        --set WEBKIT_DISABLE_COMPOSITING_MODE 1
-    '';
-  };
-in
-{
-  home.packages = [ coverpro ];
-}
-```
-
-### 3. Clean up flake.nix
-
-The `home/home.nix` imports already exist for both files. The only changes needed are in `flake.nix` itself.
-
-**Before** (current `flake.nix`):
-
-```nix
-inputs = {
-  # ...
-  spredux.url = "git+file:///home/john/repos/SPRedux";
-  coverpro.url = "git+file:///home/john/repos/coverpro";
-};
-
-outputs = { ..., spredux, coverpro, ... }:
-```
-
-**After**:
-
-```nix
-inputs = {
-  # ... (spredux and coverpro removed)
-};
-
-outputs = { ..., ... }:  # spredux and coverpro removed
-```
-
-Also remove `spredux` and `coverpro` from every `extraSpecialArgs` and `specialArgs` block (Sed, Zed, and iso).
-
----
-
-## Rebuild Workflow
-
-Whenever you change either app:
-
-```bash
-# 1. Build the binary in the app's dev shell
-cd ~/repos/SPRedux   # or ~/repos/coverpro/app
-nix develop
-bun install
-cargo tauri build --no-bundle
-
-# 2. Re-tar it
-tar czf ~/spredux.tar.gz -C src-tauri/target/release spredux
-
-# 3. Rebuild NixOS (the derivation picks up the new tarball)
-cd ~/repos/config
-sudo nixos-rebuild switch --flake .#Sed
-```
+3. Rebuild:
+   ```bash
+   cd ~/repos/config
+   sudo nixos-rebuild switch --flake .#Sed
+   ```
 
 ---
 
 ## Notes
 
-- The tarballs live at `~/spredux.tar.gz` and `~/coverpro.tar.gz`. Move them wherever you want, just update the `src` path in the nix files.
-- The runtime libs list matches what both apps' flakes already declare. If either app adds new native deps, add them to the `makeLibraryPath` list.
+- The `wrapProgram` call in `tauri.nix` handles all GTK/WebKit/Wayland runtime deps so the binary works outside the dev shell.
 - `cargo tauri build --no-bundle` builds the binary with the frontend embedded but skips creating deb/rpm packages.
-- The `wrapProgram` call handles all the GTK/WebKit/Wayland runtime deps so the binary works outside the dev shell.
+- If either app adds new native deps, add them to the `makeLibraryPath` list in `tauri.nix`.
+- The old approach (flake inputs pointing at local git repos) has been removed. No more `spredux` or `coverpro` in `flake.nix` inputs.

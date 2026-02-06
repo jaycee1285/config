@@ -15,11 +15,9 @@
     labwcchanger-tui.inputs.nixpkgs.follows = "nixpkgs";
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     walls.url = "github:jaycee1285/walls";
-    spredux.url = "git+file:///home/john/repos/SPRedux";
-    coverpro.url = "git+file:///home/john/repos/coverpro";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, labwcchanger, zen-browser, claude-desktop, helium-nix, labwcchanger-tui, nix-vscode-extensions, walls, spredux, coverpro, ... }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, labwcchanger, zen-browser, claude-desktop, helium-nix, labwcchanger-tui, nix-vscode-extensions, walls, ... }:
     let
       system = "x86_64-linux";
 
@@ -28,7 +26,12 @@
         (final: prev: {
           unstable = import nixpkgs-unstable {
             inherit system;
-            config.allowUnfree = true;
+            config = {
+              allowUnfree = true;
+              permittedInsecurePackages = [
+                "librewolf-bin-147.0.1-3"
+              ];
+            };
           };
         })
       ];
@@ -59,13 +62,13 @@
               home-manager.users.john = import ./home/home.nix;
 
               home-manager.extraSpecialArgs = {
-                inherit pkgs gtk-themes nixpkgs-unstable labwcchanger-tui nix-vscode-extensions walls spredux coverpro;
+                inherit pkgs gtk-themes nixpkgs-unstable labwcchanger-tui nix-vscode-extensions walls;
                 ob-themes = obThemesPkg;
               };
             }
           ];
           specialArgs = {
-            inherit pkgs nixpkgs-unstable claude-desktop zen-browser helium-nix walls;
+            inherit pkgs nixpkgs-unstable claude-desktop zen-browser helium-nix;
             ob-themes = obThemesPkg;
           };
         };
@@ -84,7 +87,7 @@
               home-manager.users.john = import ./home/home.nix;
 
               home-manager.extraSpecialArgs = {
-                inherit pkgs gtk-themes nixpkgs-unstable labwcchanger-tui nix-vscode-extensions walls coverpro;
+                inherit pkgs gtk-themes nixpkgs-unstable labwcchanger-tui nix-vscode-extensions walls;
                 ob-themes = obThemesPkg;
               };
             }
@@ -99,9 +102,12 @@
         # Build with: nix build .#nixosConfigurations.iso.config.system.build.isoImage
         iso = nixpkgs.lib.nixosSystem {
           inherit system;
-          modules = [ ./iso.nix ];
+          modules = [
+            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+            ./iso.nix
+          ];
           specialArgs = {
-            inherit helium-nix spredux;
+            inherit helium-nix;
           };
         };
       };

@@ -110,3 +110,9 @@ sudo nixos-rebuild switch --flake github:jaycee1285/config#Sed
 ## Note on LibreWolf
 
 The ISO doesn't include LibreWolf since it was using flatpak in your main config. To add the nixpkgs version, edit `iso.nix` and add `librewolf` to `environment.systemPackages`.
+
+---
+
+## Changes
+
+- Moved `installation-cd-minimal.nix` import from `iso.nix` to `flake.nix` to fix infinite recursion. Using `pkgs.path` inside `imports` caused a circular dependency since `pkgs` requires `config`, which requires evaluating `imports` first.

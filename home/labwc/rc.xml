@@ -12,7 +12,7 @@ default values.
   </core>
   <!-- <font><theme> can be defined without an attribute to set all places -->
   <theme>
-    <name>flexoki-light-OB</name>
+    <name>graphite-light-OB</name>
     <cornerRadius>10</cornerRadius>
     <keepBorder>yes</keepBorder>
     <font>
@@ -28,10 +28,10 @@ windows and WM_CLASS for XWayland clients.
 -->
   <keyboard>
     <keybind key="Super_L" onRelease="yes">
-      <action name="Execute" command="fuzzel"/>
+      <action name="Execute" command="fz"/>
     </keybind>
     <keybind key="Super_R" onRelease="yes">
-      <action name="Execute" command="fuzzel"/>
+      <action name="Execute" command="fz"/>
     </keybind>
     <keybind key="Alt_L" onRelease="yes">
       <action name="Execute" command="kitty"/>
@@ -59,7 +59,7 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="W-f">
       <action name="Execute">
-        <command>dolphin</command>
+        <command>thunar</command>
       </action>
     </keybind>
     <keybind key="W-o">
@@ -92,12 +92,12 @@ windows and WM_CLASS for XWayland clients.
     <keybind key="W-i">
       <action name="Iconify" direction="both"/>
     </keybind>
-    <keybind key="A-X">
-      <action name="Execute" command="wlogout"/>
+    <keybind key="A-l">
+      <action name="Execute" command="coverpro"/>
     </keybind>
     <keybind key="W-p">
       <action name="Execute">
-        <command>flatpak run com.super_productivity.SuperProductivity</command>
+        <command>spredux</command>
       </action>
     </keybind>
     <keybind key="W-c">
@@ -127,7 +127,7 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="A-\">
       <action name="Execute">
-        <command>"makoctl dismiss -a"</command>
+        <command>&quot;makoctl dismiss -a&quot;</command>
       </action>
     </keybind>
     <keybind key="W-Left">
@@ -148,8 +148,7 @@ windows and WM_CLASS for XWayland clients.
       </action>
     </keybind>
     <keybind key="W-S-Right">
-      <action name="SendToDesktop" to="right">
-      </action>
+      <action name="SendToDesktop" to="right"/>
     </keybind>
   </keyboard>
   <libinput>
@@ -159,7 +158,7 @@ windows and WM_CLASS for XWayland clients.
     <device category="non-touch">
       <!-- accelProfile can be “adaptive” (default) or “flat” (no accel) -->
       <!-- pointerSpeed: –1.0 (slowest) to 1.0 (fastest), 0.0 is default -->
-      <pointerSpeed>0.5</pointerSpeed>
+      <pointerSpeed>0.25</pointerSpeed>
     </device>
   </libinput>
   <windowSwitcher show="yes" preview="yes" outlines="yes" allWorkspaces="no">

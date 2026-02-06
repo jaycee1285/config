@@ -1,20 +1,19 @@
 { config, pkgs, unstable, labwcchanger-tui, ... }:
 {
-  home.packages = [
+  home.packages = with pkgs; [
+    embellish
+    heroic
+    keychron-udev-rules
     labwcchanger-tui.packages.${pkgs.system}.default
-    pkgs.heroic
-    pkgs.rclone-ui
-    pkgs.unstable.pixieditor
-    pkgs.rclone
-    pkgs.keychron-udev-rules
-    pkgs.material-design-icons
-    pkgs.kdePackages.dolphin
-    pkgs.kdePackages.kio
-    pkgs.kdePackages.kio-extras
-    pkgs.qalculate-gtk
-    pkgs.embellish
-    pkgs.rustc
-    pkgs.webkitgtk_6_0
-    pkgs.wayvnc
+    material-design-icons
+    qalculate-gtk
+    rclone
+    rclone-ui
+    rustc
+    pixieditor
+    wayvnc
+    webkitgtk_6_0
+    zoxide
+    television
   ];
 }

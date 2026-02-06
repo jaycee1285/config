@@ -6,7 +6,7 @@
 # This creates a bootable live environment with your LabWC/Waybar/Fuzzel setup,
 # pre-installed apps, and an install script to deploy your full config.
 
-{ config, pkgs, lib, helium-nix, spredux, ... }:
+{ config, pkgs, lib, helium-nix, ... }:
 
 let
   # Install script - placed on desktop and in /usr/local/bin
@@ -351,6 +351,8 @@ let
     }
   '';
 
+  tauriApps = import ./tauri.nix { inherit pkgs; };
+
   fuzzelIni = ''
     [colors]
     background=1e1e1edd
@@ -362,10 +364,6 @@ let
   '';
 
 in {
-  imports = [
-    "${pkgs.path}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
-  ];
-
   # ISO metadata
   isoImage.isoName = lib.mkForce "nixos-emergency-labwc-${config.system.nixos.label}-x86_64.iso";
   isoImage.volumeID = lib.mkForce "NIXOS_EMERGENCY";
@@ -420,7 +418,7 @@ in {
     vscodium
     obsidian
     (helium-nix.packages.${pkgs.system}.default)
-    (spredux.packages.${pkgs.system}.default)
+    tauriApps.spredux
 
     # Utilities
     thunar
