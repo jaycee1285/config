@@ -1,0 +1,184 @@
+# Raffi launcher configuration
+# Portable config for NixOS/Debian/Arch/Void
+# Single file - all scripts inlined
+
+# Power Menu
+lock:
+  binary: swaylock
+  args: ["-f"]
+  description: "Lock Screen"
+  icon: system-lock-screen
+
+logout:
+  binary: loginctl
+  args: ["terminate-user", "$USER"]
+  description: "Log Out"
+  icon: system-log-out
+
+suspend:
+  binary: systemctl
+  args: ["suspend"]
+  description: "Suspend"
+  icon: system-suspend
+
+reboot:
+  binary: systemctl
+  args: ["reboot"]
+  description: "Reboot"
+  icon: system-reboot
+
+shutdown:
+  binary: systemctl
+  args: ["poweroff"]
+  description: "Shutdown"
+  icon: system-shutdown
+
+# Clipboard
+clipboard:
+  script: |
+    choice="$(cliphist list | fuzzel --dmenu --prompt 'Clipboard: ' --width 90)" || exit 0
+    printf '%s' "$choice" | cliphist decode | wl-copy
+  description: "Clipboard History"
+  icon: edit-paste
+
+# Web Search
+search:
+  script: |
+    q="$(printf "" | fuzzel --dmenu --prompt 'Search: ' --width 70)" || exit 0
+    q="${q#"${q%%[![:space:]]*}"}"
+    q="${q%"${q##*[![:space:]]}"}"
+    [[ -z "$q" ]] && exit 0
+    zen --search "$q" >/dev/null 2>&1 &
+  description: "Web Search"
+  icon: web-browser
+
+# Browser Bookmarks
+bookmarks:
+  script: |
+    set -euo pipefail
+    PROFILE_DIR="${PROFILE_DIR:-$HOME/.librewolf}"
+    CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/fz-bookmarks.tsv"
+    TTL_SECONDS=300
+    PLACES_DB="${PLACES_DB:-$(find "$PROFILE_DIR" -maxdepth 2 -name places.sqlite -print -quit)}"
+    [ -n "${PLACES_DB:-}" ] || exit 0
+    refresh_cache() {
+      local tmp db_copy
+      tmp="$(mktemp)"
+      db_copy="$(mktemp)"
+      cp -f "$PLACES_DB" "$db_copy"
+      sqlite3 -readonly "$db_copy" <<'SQL' >"$tmp"
+    .mode tabs
+    .headers off
+    SELECT
+      REPLACE(IFNULL(b.title, p.title), char(9), ' ') AS title,
+      p.url AS url
+    FROM moz_bookmarks b
+    JOIN moz_places p ON b.fk = p.id
+    WHERE b.type = 1 AND p.url LIKE 'http%'
+    ORDER BY b.dateAdded DESC;
+    SQL
+      rm -f "$db_copy"
+      mv -f "$tmp" "$CACHE"
+    }
+    needs_refresh=true
+    if [[ -f "$CACHE" ]]; then
+      now="$(date +%s)"
+      mtime="$(stat -c %Y "$CACHE" 2>/dev/null || echo 0)"
+      (( now - mtime < TTL_SECONDS )) && needs_refresh=false
+    fi
+    $needs_refresh && refresh_cache
+    choice="$(
+      awk -F'\t' 'NF>=2 {printf "%s\t%s\n", $1, $2}' "$CACHE" \
+      | fuzzel --dmenu --prompt 'Bookmarks: ' --width 110
+    )" || exit 0
+    url="$(printf '%s' "$choice" | awk -F'\t' '{print $2}')"
+    [[ -n "${url:-}" ]] && librewolf "$url" >/dev/null 2>&1 &
+  description: "Browser Bookmarks"
+  icon: user-bookmarks
+
+# Find Files
+files:
+  script: |
+    set -euo pipefail
+    scope="$(
+      printf '%s\n' \
+        "$HOME" \
+        "$HOME/repos" \
+        "$HOME/Downloads" \
+        "$HOME/Documents" \
+      | fuzzel --dmenu --prompt 'Scope dir: ' --width 90
+    )" || exit 0
+    [[ "$scope" == "~"* ]] && scope="${scope/#\~/$HOME}"
+    [[ -d "$scope" ]] || exit 0
+    q="$(
+      printf "" | fuzzel --dmenu --prompt "Find in $(basename "$scope"): " --width 70
+    )" || exit 0
+    mapfile -t files < <(
+      rg --files "$scope" \
+        --hidden --follow \
+        -g '!.git/' \
+        -g '!node_modules/' \
+        -g '!.direnv/' \
+        -g '!result/' \
+        -g '!dist/' \
+        -g '!build/' \
+        -g '!target/' \
+      || true
+    )
+    if [[ -n "${q// /}" ]]; then
+      for w in $q; do
+        mapfile -t files < <(printf '%s\n' "${files[@]}" | grep -iF -- "$w" || true)
+      done
+    fi
+    file="$(
+      printf '%s\n' "${files[@]}" \
+      | fuzzel --dmenu --prompt "Files: " --width 110
+    )" || exit 0
+    [[ -n "$file" ]] || exit 0
+    if [[ -n "${EDITOR:-}" ]]; then
+      "$EDITOR" "$file" &
+    else
+      xdg-open "$file" >/dev/null 2>&1 &
+    fi
+  description: "Find Files"
+  icon: system-file-manager
+
+# Quick Launch Apps
+terminal:
+  binary: foot
+  description: "Terminal"
+  icon: utilities-terminal
+  ifexist: foot
+
+browser:
+  binary: librewolf
+  description: "LibreWolf Browser"
+  icon: librewolf
+  ifexist: librewolf
+
+zen:
+  binary: zen
+  description: "Zen Browser"
+  icon: zen-browser
+  ifexist: zen
+
+files-manager:
+  binary: nautilus
+  description: "File Manager"
+  icon: org.gnome.Nautilus
+  ifexist: nautilus
+
+# System Utilities
+waybar-restart:
+  script: |
+    pkill waybar || true
+    waybar >/dev/null 2>&1 &
+  description: "Restart Waybar"
+  icon: view-refresh
+
+# Addons
+addons:
+  calculator:
+    enabled: true
+  currency:
+    enabled: false

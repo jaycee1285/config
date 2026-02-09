@@ -37,5 +37,7 @@
     ./waybar.nix
     ./theming.nix
     ./walls.nix
+    ./raffi.nix
+    ./zen-autoconfig.nix
   ];
 }

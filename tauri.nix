@@ -112,14 +112,14 @@ in
     pname = "coverpro";
     version = "0.1.0";
     url = "https://github.com/jaycee1285/coverpro/releases/download/v0.1.0/coverpro-v0.1.0-linux-x86_64.tar.xz";
-    hash = "sha256:26096b163a9fad8ca812d7c215b2649153cf48543c419a49ce70e7deb9df668c";
+    hash = "sha256:a43a194aea29e22b7c244e7060d721b1b37639352822f1a1fa459062a0059234";
   };
 
   spredux = mkTauriApp {
     pname = "spredux";
     version = "0.1.0";
     url = "https://github.com/jaycee1285/SPRedux/releases/download/v0.1.0/spredux-v0.1.0-linux-x86_64.tar.xz";
-    hash = "sha256:23dfcc7c50ff7c3b934c8b47da427d060004596ee6b3e091bd9738498a1e5565";
+    hash = "sha256:e4ca0920f352bd236970cc6070133a7335dff4c8843adc7068a17bfa5be93903";
   };
 
   openswarm = mkGtkApp {

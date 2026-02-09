@@ -128,27 +128,44 @@ fi
 
 ---
 
-## Status Bar: Waybar
+## Wayland Configuration (Quick Setup)
+
+Clone the waylandconfig repo and symlink everything:
 
 ```bash
-xbps-install -S waybar
+# Clone the config repo
+git clone https://github.com/jaycee1285/waylandconfig.git ~/repos/waylandconfig
 
-# Copy config
-mkdir -p ~/.config/waybar
-cp -r ~/repos/config/home/waybar/* ~/.config/waybar/
+# Symlink all configs at once
+ln -s ~/repos/waylandconfig/labwc ~/.config/labwc
+ln -s ~/repos/waylandconfig/fuzzel ~/.config/fuzzel
+ln -s ~/repos/waylandconfig/waybar ~/.config/waybar
+ln -s ~/repos/waylandconfig/raffi ~/.config/raffi
 ```
 
 ---
 
-## Application Launcher: Fuzzel
+## Status Bar: Waybar
+
+```bash
+xbps-install -S waybar
+```
+
+---
+
+## Application Launcher: Fuzzel + Raffi
 
 ```bash
 xbps-install -S fuzzel
 
-# Copy config
-mkdir -p ~/.config/fuzzel
-cp -r ~/repos/config/home/fuzzel/* ~/.config/fuzzel/
+# Raffi (build from source)
+cargo install raffi
+
+# Dependencies for raffi scripts
+xbps-install -S cliphist wl-clipboard sqlite ripgrep
 ```
+
+Super key launches raffi. All launcher scripts (bookmarks, clipboard, files, power menu) are inlined in `~/.config/raffi/raffi.yaml`.
 
 ---
 
@@ -459,9 +476,11 @@ EOF
 
 ## labwc Configuration
 
+If not using the waylandconfig symlink approach:
+
 ```bash
 mkdir -p ~/.config/labwc
-cp ~/repos/config/home/labwc/* ~/.config/labwc/
+cp ~/repos/waylandconfig/labwc/* ~/.config/labwc/
 ```
 
 Create/update `~/.config/labwc/autostart`:
@@ -644,7 +663,7 @@ dkms autoinstall
 
 | Key | Action |
 |-----|--------|
-| Super (release) | Fuzzel launcher |
+| Super (release) | Raffi launcher |
 | Alt (release) | Kitty terminal |
 | Win+Return | Kitty terminal |
 | Win+W | LibreWolf browser |

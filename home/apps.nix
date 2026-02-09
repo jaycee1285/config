@@ -1,10 +1,17 @@
-{ config, pkgs, unstable, labwcchanger-tui, ... }:
+{ config, pkgs, unstable, crustdown, base16changer, ... }:
+let
+  mdphr = pkgs.runCommand "mdphr" {} ''
+    mkdir -p $out/bin
+    ln -s ${crustdown.packages.${pkgs.system}.default}/bin/crustdown $out/bin/mdphr
+  '';
+in
 {
   home.packages = with pkgs; [
+    mdphr
     embellish
     heroic
     keychron-udev-rules
-    labwcchanger-tui.packages.${pkgs.system}.default
+    base16changer.packages.${pkgs.system}.default
     material-design-icons
     qalculate-gtk
     rclone
@@ -15,5 +22,6 @@
     webkitgtk_6_0
     zoxide
     television
+    raffi
   ];
 }

@@ -43,7 +43,7 @@
       </action>
     </item>
         <item label="Theme Change">
-      <action name="Execute" command="labwcchanger"></action>
+      <action name="Execute" command="base16changer"></action>
     </item>
 <separator></separator>
     <item label="Reconfigure">

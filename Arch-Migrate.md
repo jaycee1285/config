@@ -405,48 +405,34 @@ sudo systemctl enable ly
 # Edit /etc/ly/config.ini as needed
 ```
 
-### Labwc Configuration
+### Wayland Configuration (Quick Setup)
 
-Copy configuration files to `~/.config/labwc/`:
+Clone the waylandconfig repo and symlink everything:
 
-- `rc.xml` - Window manager settings, keybindings
-- `autostart` - Startup applications
-- `environment` - Environment variables
-- `menu.xml` - Right-click menu
+```bash
+# Clone the config repo
+git clone https://github.com/jaycee1285/waylandconfig.git ~/repos/waylandconfig
 
-Key settings from current config:
-
-```xml
-<!-- Theme -->
-<theme>
-    <name>Flexoki-light-OB</name>
-    <cornerRadius>10</cornerRadius>
-    <font name="IosevkaTermSlab Propo" size="16"/>
-</theme>
-
-<!-- Core keybindings -->
-<keyboard>
-    <keybind key="W-Return"><action name="Execute"><command>kitty</command></action></keybind>
-    <keybind key="W-L"><action name="Execute"><command>fuzzel</command></action></keybind>
-    <keybind key="W-w"><action name="Execute"><command>librewolf</command></action></keybind>
-    <keybind key="W-Space"><action name="Execute"><command>codium</command></action></keybind>
-    <keybind key="W-f"><action name="Execute"><command>dolphin</command></action></keybind>
-    <keybind key="W-o"><action name="Execute"><command>obsidian</command></action></keybind>
-    <keybind key="A-x"><action name="Execute"><command>wlogout</command></action></keybind>
-    <!-- Volume/Brightness keys -->
-    <keybind key="XF86AudioRaiseVolume"><action name="Execute"><command>wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+</command></action></keybind>
-    <keybind key="XF86AudioLowerVolume"><action name="Execute"><command>wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-</command></action></keybind>
-    <keybind key="XF86MonBrightnessUp"><action name="Execute"><command>brightnessctl set +5%</command></action></keybind>
-    <keybind key="XF86MonBrightnessDown"><action name="Execute"><command>brightnessctl set 5%-</command></action></keybind>
-</keyboard>
+# Symlink all configs at once
+ln -s ~/repos/waylandconfig/labwc ~/.config/labwc
+ln -s ~/repos/waylandconfig/fuzzel ~/.config/fuzzel
+ln -s ~/repos/waylandconfig/waybar ~/.config/waybar
+ln -s ~/repos/waylandconfig/raffi ~/.config/raffi
 ```
 
-### Waybar Configuration
+### Raffi Launcher
 
-Copy to `~/.config/waybar/`:
+Raffi replaces fuzzel scripts (fz-*) with a single YAML config.
 
-- `config` - Bar layout and modules
-- `style.css` - Styling
+```bash
+# Install raffi
+yay -S raffi-bin
+
+# Dependencies for raffi scripts
+yay -S fuzzel cliphist wl-clipboard sqlite ripgrep
+```
+
+Super key launches raffi. All launcher scripts (bookmarks, clipboard, files, power menu) are inlined in `~/.config/raffi/raffi.yaml`.
 
 ### Kanshi (Display Profiles)
 
@@ -468,10 +454,6 @@ Enable as user service:
 ```bash
 # Create ~/.config/systemd/user/kanshi.service or run from labwc autostart
 ```
-
-### Fuzzel Configuration
-
-Copy to `~/.config/fuzzel/fuzzel.ini`
 
 ---
 

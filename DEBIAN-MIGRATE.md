@@ -90,27 +90,44 @@ sudo systemctl enable ly.service
 
 ---
 
-## Status Bar: Waybar
+## Wayland Configuration (Quick Setup)
+
+Clone the waylandconfig repo and symlink everything:
 
 ```bash
-sudo apt install -y waybar
+# Clone the config repo
+git clone https://github.com/jaycee1285/waylandconfig.git ~/repos/waylandconfig
 
-# Copy your waybar config
-mkdir -p ~/.config/waybar
-cp -r ~/repos/config/home/waybar/* ~/.config/waybar/
+# Symlink all configs at once
+ln -s ~/repos/waylandconfig/labwc ~/.config/labwc
+ln -s ~/repos/waylandconfig/fuzzel ~/.config/fuzzel
+ln -s ~/repos/waylandconfig/waybar ~/.config/waybar
+ln -s ~/repos/waylandconfig/raffi ~/.config/raffi
 ```
 
 ---
 
-## Application Launcher: Fuzzel
+## Status Bar: Waybar
+
+```bash
+sudo apt install -y waybar
+```
+
+---
+
+## Application Launcher: Fuzzel + Raffi
 
 ```bash
 sudo apt install -y fuzzel
 
-# Copy config
-mkdir -p ~/.config/fuzzel
-cp -r ~/repos/config/home/fuzzel/* ~/.config/fuzzel/
+# Raffi (build from source or cargo)
+cargo install raffi
+
+# Dependencies for raffi scripts
+sudo apt install -y cliphist wl-clipboard sqlite3 ripgrep
 ```
+
+Super key launches raffi. All launcher scripts (bookmarks, clipboard, files, power menu) are inlined in `~/.config/raffi/raffi.yaml`.
 
 ---
 
@@ -382,9 +399,11 @@ EOF
 
 ## labwc Configuration
 
+If not using the waylandconfig symlink approach:
+
 ```bash
 mkdir -p ~/.config/labwc
-cp ~/repos/config/home/labwc/* ~/.config/labwc/
+cp ~/repos/waylandconfig/labwc/* ~/.config/labwc/
 ```
 
 Ensure your `~/.config/labwc/autostart` contains:
@@ -474,7 +493,7 @@ mkdir -p ~/.steam/root/compatibilitytools.d/
 
 | Key | Action |
 |-----|--------|
-| Super (release) | Fuzzel launcher |
+| Super (release) | Raffi launcher |
 | Alt (release) | Kitty terminal |
 | Win+Return | Kitty terminal |
 | Win+W | LibreWolf browser |
