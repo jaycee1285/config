@@ -57,7 +57,9 @@ let
       wrapProgram $out/bin/${pname} \
         --set GIO_MODULE_DIR "${pkgs.glib-networking}/lib/gio/modules" \
         --set WEBKIT_DISABLE_COMPOSITING_MODE 1 \
-        --prefix XDG_DATA_DIRS : "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}"
+        --prefix XDG_DATA_DIRS : "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}" \
+        --prefix PATH : "${pkgs.typst}/bin" \
+        --run 'export TYPST_FONT_PATHS="/etc/profiles/per-user/$USER/share/fonts:$HOME/.local/share/fonts:/run/current-system/sw/share/fonts"'
     '';
   };
 
@@ -112,7 +114,7 @@ in
     pname = "coverpro";
     version = "0.1.0";
     url = "https://github.com/jaycee1285/coverpro/releases/download/v0.1.0/coverpro-v0.1.0-linux-x86_64.tar.xz";
-    hash = "sha256:a43a194aea29e22b7c244e7060d721b1b37639352822f1a1fa459062a0059234";
+    hash = "sha256:89c466aa2a7bd86e1e59f6a611e41e057476466de1eb6d6b6217f9b8bbc20eb7";
   };
 
   spredux = mkTauriApp {

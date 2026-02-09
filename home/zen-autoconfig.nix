@@ -17,20 +17,24 @@ in {
     CHROME_UTILS="$PROFILE/chrome/utils"
     CHROME_JS="$PROFILE/chrome/JS"
 
-    run mkdir -p "$CHROME_UTILS" "$CHROME_JS"
+    run mkdir -p "$CHROME_UTILS" "$CHROME_JS" "$PROFILE/chrome/CSS" "$PROFILE/chrome/resources"
 
-    # chrome.manifest
+    # chrome.manifest - must register all chrome:// URLs that fx-autoconfig expects
     run cat > "$CHROME_UTILS/chrome.manifest" << 'EOF'
 content userchromejs ./
+content userscripts ../JS/
+skin userstyles classic/1.0 ../CSS/
+content userchrome ../resources/
 EOF
 
-    # Copy fx-autoconfig utility files (fetched at build time)
-    run cp "${fxAutoconfig}/profile/chrome/utils/boot.sys.mjs" "$CHROME_UTILS/"
-    run cp "${fxAutoconfig}/profile/chrome/utils/fs.sys.mjs" "$CHROME_UTILS/"
-    run cp "${fxAutoconfig}/profile/chrome/utils/utils.sys.mjs" "$CHROME_UTILS/"
+    # Make existing files writable (they're read-only from nix store)
+    run chmod -R u+w "$CHROME_UTILS" "$CHROME_JS" 2>/dev/null || true
+
+    # Copy ALL fx-autoconfig utility files (fetched at build time)
+    run cp -f "${fxAutoconfig}"/profile/chrome/utils/*.mjs "$CHROME_UTILS/"
 
     # Copy sidebery integration script
-    run cp "${./zen-autoconfig/zen-sidebery-integration.uc.mjs}" "$CHROME_JS/zen-sidebery-integration.uc.mjs"
+    run cp -f "${./zen-autoconfig/zen-sidebery-integration.uc.mjs}" "$CHROME_JS/zen-sidebery-integration.uc.mjs"
 
     # Clear startup cache to force reload
     run rm -rf "$PROFILE/startupCache" 2>/dev/null || true

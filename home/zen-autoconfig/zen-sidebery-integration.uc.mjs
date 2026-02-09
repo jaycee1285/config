@@ -16,7 +16,8 @@ if (sidebery_policy) {
     sidebery_extension = sidebery_policy.extension;
     sidebery_url = sidebery_extension.manifest.sidebar_action.default_panel;
 
-    sidebery_policy.baseCSP = "script-src 'self' https://* http://localhost:* http://127.0.0.1:* moz-extension: chrome: blob: filesystem: 'unsafe-eval' 'wasm-unsafe-eval' 'unsafe-inline' chrome:;"
+    // baseCSP is read-only in newer Firefox, skip this
+    // sidebery_policy.baseCSP = "script-src 'self' https://* ..."
 
     console.log("1. Found Sidebery extension.");
 }
@@ -53,10 +54,10 @@ async function setupSideberyPanel(win) {
 
 
     //only seems to work as a promiseEvent, not a normal event handler
-    awaitFrameLoader = promiseEvent(win.sidebery_browser, "XULFrameLoaderCreated");
+    let awaitFrameLoader = promiseEvent(win.sidebery_browser, "XULFrameLoaderCreated");
 
     // time to insert, <browser> will be constructed
-    oldTabsContainer = win.document.querySelector("#TabsToolbar-customization-target");
+    let oldTabsContainer = win.document.querySelector("#TabsToolbar-customization-target");
     oldTabsContainer.insertAdjacentElement('afterend', win.sidebery_browser);
     console.log("2. Sidebery's browser frame element has been set up.");
     await awaitFrameLoader;
@@ -309,7 +310,7 @@ const zenStylesByDefault = // fixes bug #4
 `
 
 
-allStyleMods = [getZenCSSVariables(), fixNoGrabbingCursorOnDrag, transparentByDefault, fixInheritBadBrowserStyles, zenStylesByDefault, handleCompactMode]
+let allStyleMods = [getZenCSSVariables(), fixNoGrabbingCursorOnDrag, transparentByDefault, fixInheritBadBrowserStyles, zenStylesByDefault, handleCompactMode]
 
 function afterSideberyLoads(win) {
     console.log("5. Sidebery has loaded! Inserting scripts and styles.");
@@ -368,11 +369,12 @@ function afterSideberyLoads(win) {
     win.sidebery_browser.addEventListener("DOMWindowClose", event => { event.stopPropagation(); });
     alert("Sidebery Mod Complete!\nShowing side-by-side-preview.\nClick OK to remove original tabs.");
     console.log("6. Sidebery mod complete. Hiding original Zen Tabs...");
-    oldTabsContainer = win.document.querySelector("#TabsToolbar-customization-target");
+    let oldTabsContainer = win.document.querySelector("#TabsToolbar-customization-target");
     // Zen's bars are right next to Sidebery's, looks ugly with both - hide Zen's for now, buttons can be moved elsewhere
     //win.document.getElementById("zen-sidebar-bottom-buttons").style.display = "none";
     win.document.getElementById("zen-sidebar-top-buttons").style.display = "none";
     oldTabsContainer.style.display = "none";
+
 }
 
 function sideberyMissing(win) {

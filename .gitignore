@@ -1,0 +1,5 @@
+# Ignore all markdown files
+*.md
+
+# Except files ending in migrate
+!*migrate.md

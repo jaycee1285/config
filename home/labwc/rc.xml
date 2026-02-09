@@ -33,6 +33,12 @@ windows and WM_CLASS for XWayland clients.
     <keybind key="Super_R" onRelease="yes">
       <action name="Execute" command="rf"/>
     </keybind>
+    <keybind key="W-r">
+      <action name="Execute" command="rf-tools"/>
+    </keybind>
+    <keybind key="W-Escape">
+      <action name="Execute" command="rf-power"/>
+    </keybind>
     <keybind key="Alt_L" onRelease="yes">
       <action name="Execute" command="kitty"/>
     </keybind>

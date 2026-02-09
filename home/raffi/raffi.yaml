@@ -143,31 +143,6 @@ files:
   description: "Find Files"
   icon: system-file-manager
 
-# Quick Launch Apps
-terminal:
-  binary: foot
-  description: "Terminal"
-  icon: utilities-terminal
-  ifexist: foot
-
-browser:
-  binary: librewolf
-  description: "LibreWolf Browser"
-  icon: librewolf
-  ifexist: librewolf
-
-zen:
-  binary: zen
-  description: "Zen Browser"
-  icon: zen-browser
-  ifexist: zen
-
-files-manager:
-  binary: nautilus
-  description: "File Manager"
-  icon: org.gnome.Nautilus
-  ifexist: nautilus
-
 # System Utilities
 waybar-restart:
   script: |

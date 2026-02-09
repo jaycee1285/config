@@ -47,9 +47,15 @@ let
       mkdir -p $out/lib
       cp -rL ${zenBase}/lib/zen-* $out/lib/
 
+      # Make writable so we can add files
+      chmod -R u+w $out/lib
+
       # Find our lib directory
       ZEN_LIB=$(find $out/lib -maxdepth 1 -name "zen-*" -type d | head -1)
       ZEN_LIB_NAME=$(basename "$ZEN_LIB")
+
+      # Remove conflicting autoconfig.js (points to mozilla.cfg instead of config.js)
+      rm -f "$ZEN_LIB/defaults/pref/autoconfig.js"
 
       # Add config.js to the lib root
       cp ${configJs} "$ZEN_LIB/config.js"
