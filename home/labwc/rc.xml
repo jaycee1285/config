@@ -103,7 +103,7 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="W-p">
       <action name="Execute">
-        <command>spredux</command>
+        <command>~/repos/SPRedux/result/bin/spredux</command>
       </action>
     </keybind>
     <keybind key="W-c">

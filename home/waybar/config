@@ -39,7 +39,7 @@
 
 
     "network": {
-      "interface": "wlp0s20f3",
+      "interface": "wl*",
       "format-wifi": "",
       "format-ethernet": "{ipaddr}/{cidr} ",
       "tooltip-format": "{essid} via {gwaddr} ",
