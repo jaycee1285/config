@@ -5,10 +5,23 @@
 #
 # This creates a bootable live environment with your LabWC/Waybar/Fuzzel setup,
 # pre-installed apps, and an install script to deploy your full config.
+#
+# OPTIONAL PERSISTENCE:
+# If a partition labeled "PERSIST" exists (e.g., on microSD), /home/nixos
+# will be bind-mounted to it, surviving reboots.
+#
+# To set up persistence:
+#   sudo mkfs.btrfs -L PERSIST /dev/<sdX2>
+#
+# Without PERSIST, the ISO runs as a normal ephemeral live environment.
 
 { config, pkgs, lib, helium-nix, ... }:
 
 let
+  # Persistence settings
+  persistMount = "/persist";
+  persistUser = "nixos";
+
   # Install script - placed on desktop and in /usr/local/bin
   installScript = pkgs.writeShellScriptBin "install-nixos" ''
     #!/usr/bin/env bash
@@ -259,8 +272,14 @@ let
     # Notifications
     mako &
 
-    # Show welcome message
-    sleep 2 && notify-send "Welcome to NixOS Emergency ISO" "Press Super+I or right-click to install\n\nSuper = Fuzzel launcher\nSuper+Return = Terminal\nSuper+Space = VSCodium\nSuper+O = Obsidian\nSuper+F = Files" &
+    # Show welcome message with persistence status
+    sleep 2 && {
+      if mountpoint -q /persist 2>/dev/null; then
+        notify-send "Welcome to NixOS Emergency ISO" "PERSISTENT MODE - Changes saved to PERSIST partition\n\nSuper+I = Install\nSuper = Launcher\nSuper+Return = Terminal"
+      else
+        notify-send "Welcome to NixOS Emergency ISO" "EPHEMERAL MODE - Changes lost on reboot\n\nSuper+I = Install\nSuper = Launcher\nSuper+Return = Terminal"
+      fi
+    } &
   '';
 
   labwcEnvironment = ''
@@ -276,7 +295,7 @@ let
   waybarConfig = builtins.toJSON {
     layer = "top";
     position = "top";
-    modules-left = [ "custom/install" ];
+    modules-left = [ "custom/install" "custom/persist" ];
     modules-center = [ "wlr/taskbar" ];
     modules-right = [ "tray" "network" "pulseaudio" "battery" "clock" ];
 
@@ -284,6 +303,12 @@ let
       format = "  Install NixOS";
       on-click = "kitty -e install-nixos";
       tooltip = "Click to start NixOS installation";
+    };
+
+    "custom/persist" = {
+      exec = "if mountpoint -q /persist 2>/dev/null; then echo ' Persistent'; else echo ' Ephemeral'; fi";
+      interval = 30;
+      tooltip = "Home directory persistence status";
     };
 
     clock = {
@@ -340,6 +365,11 @@ let
     #custom-install:hover {
       background: #66BB6A;
     }
+    #custom-persist {
+      padding: 0 10px;
+      margin: 5px;
+      border-radius: 5px;
+    }
     #clock, #battery, #network, #pulseaudio, #tray {
       padding: 0 10px;
     }
@@ -365,7 +395,7 @@ let
 
 in {
   # ISO metadata
-  isoImage.isoName = lib.mkForce "nixos-emergency-labwc-${config.system.nixos.label}-x86_64.iso";
+  image.fileName = lib.mkForce "NixOS-LabWC.iso";
   isoImage.volumeID = lib.mkForce "NIXOS_EMERGENCY";
 
   # Allow unfree (for obsidian, vscode, etc)
@@ -399,6 +429,61 @@ in {
   # Bluetooth
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
+
+  # Btrfs support for persistence partition
+  boot.supportedFilesystems = [ "btrfs" ];
+
+  # Optional persistence: mount PERSIST partition and bind-mount home
+  systemd.services.persist-home = {
+    description = "Mount PERSIST partition and bind-mount persistent home";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "local-fs.target" ];
+    before = [ "display-manager.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
+      set -euo pipefail
+
+      # Only proceed if PERSIST partition exists
+      if [ ! -e /dev/disk/by-label/PERSIST ]; then
+        echo "No PERSIST partition found, running in ephemeral mode"
+        exit 0
+      fi
+
+      echo "PERSIST partition found, setting up persistent home..."
+
+      mkdir -p ${persistMount}
+
+      # Mount persistence partition with microSD-friendly options
+      if ! mountpoint -q ${persistMount}; then
+        mount -o noatime,compress=zstd:3 /dev/disk/by-label/PERSIST ${persistMount}
+      fi
+
+      # Create persistent home backing store
+      mkdir -p ${persistMount}/home-${persistUser}
+      mkdir -p ${persistMount}/home-${persistUser}/.config
+
+      # Seed configs on first boot (if persistent home is empty)
+      if [ ! -d ${persistMount}/home-${persistUser}/.config/labwc ]; then
+        echo "First boot: seeding configs into persistent home..."
+        cp -r /home/${persistUser}/.config/* ${persistMount}/home-${persistUser}/.config/ 2>/dev/null || true
+        cp -r /home/${persistUser}/Desktop ${persistMount}/home-${persistUser}/ 2>/dev/null || true
+      fi
+
+      # Bind mount persistent home over /home/nixos
+      if ! mountpoint -q /home/${persistUser}; then
+        mount --bind ${persistMount}/home-${persistUser} /home/${persistUser}
+      fi
+
+      # Fix ownership
+      chown -R ${persistUser}:users ${persistMount}/home-${persistUser} || true
+      chown -R ${persistUser}:users /home/${persistUser} || true
+
+      echo "Persistent home mounted successfully"
+    '';
+  };
 
   # System packages
   environment.systemPackages = with pkgs; [
@@ -506,6 +591,13 @@ EOF
 ===========================================
     NixOS Emergency ISO - Quick Start
 ===========================================
+
+PERSISTENCE (Optional):
+  This ISO supports persistent /home across reboots.
+  To enable, create a PERSIST partition on a microSD:
+    sudo mkfs.btrfs -L PERSIST /dev/sdX2
+
+  Check waybar for status: " Persistent" or " Ephemeral"
 
 KEYBOARD SHORTCUTS:
   Super (tap)     = Fuzzel launcher

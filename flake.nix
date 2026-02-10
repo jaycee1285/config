@@ -46,57 +46,35 @@
 
       obThemesPkg = ob-themes.packages.${system}.default;
 
+      # Shared host configuration - all hosts are identical except hostname/hardware
+      mkHost = hostname: nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          ./hosts/${hostname}
+          { nixpkgs.overlays = overlays; }
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = ".bakbuk";
+            home-manager.users.john = import ./home/home.nix;
+
+            home-manager.extraSpecialArgs = {
+              inherit pkgs gtk-themes nixpkgs-unstable crustdown nix-vscode-extensions walls base16changer;
+              ob-themes = obThemesPkg;
+            };
+          }
+        ];
+        specialArgs = {
+          inherit pkgs nixpkgs-unstable claude-desktop zen-browser helium-nix;
+          ob-themes = obThemesPkg;
+        };
+      };
+
     in {
       nixosConfigurations = {
-        # Host: Sed
-        Sed = nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules = [
-            ./hosts/Sed
-            { nixpkgs.overlays = overlays; }
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = ".bakbuk";
-              home-manager.users.john = import ./home/home.nix;
-
-              home-manager.extraSpecialArgs = {
-                inherit pkgs gtk-themes nixpkgs-unstable crustdown nix-vscode-extensions walls base16changer;
-                ob-themes = obThemesPkg;
-              };
-            }
-          ];
-          specialArgs = {
-            inherit pkgs nixpkgs-unstable claude-desktop zen-browser helium-nix;
-            ob-themes = obThemesPkg;
-          };
-        };
-
-        # Host: Zed
-        Zed = nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules = [
-            ./hosts/Zed
-            { nixpkgs.overlays = overlays; }
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = ".bakbuk";
-              home-manager.users.john = import ./home/home.nix;
-
-              home-manager.extraSpecialArgs = {
-                inherit pkgs gtk-themes nixpkgs-unstable crustdown nix-vscode-extensions walls base16changer;
-                ob-themes = obThemesPkg;
-              };
-            }
-          ];
-          specialArgs = {
-            inherit pkgs nixpkgs-unstable claude-desktop zen-browser helium-nix;
-            ob-themes = obThemesPkg;
-          };
-        };
+        Sed = mkHost "Sed";
+        Zed = mkHost "Zed";
 
         # Emergency ISO with LabWC environment
         # Build with: nix build .#nixosConfigurations.iso.config.system.build.isoImage
