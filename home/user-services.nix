@@ -21,27 +21,38 @@ let
   '';
 in
 {
-  environment.systemPackages = [ pkgs.rclone ];
+  home.packages = with pkgs; [
+    syncthing
+    pkgs.unstable.pcloud
+    rclone
+    rclone-ui
+  ];
 
   systemd.user.services.pcloud-bisync = {
-    description = "rclone bisync pCloud <-> /home/john/pCloud (every 2h)";
-    wants = [ "network-online.target" ];
-    after = [ "network-online.target" ];
-    serviceConfig = {
+    Unit = {
+      Description = "rclone bisync pCloud <-> /home/john/pCloud (every 2h)";
+      Wants = "network-online.target";
+      After = "network-online.target";
+    };
+    Service = {
       Type = "oneshot";
       ExecStart = "${pcloudBisync}";
     };
   };
 
   systemd.user.timers.pcloud-bisync = {
-    description = "Timer: rclone bisync pCloud every 2 hours";
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
+    Unit = {
+      Description = "Timer: rclone bisync pCloud every 2 hours";
+    };
+    Timer = {
       OnBootSec = "10m";
       OnUnitActiveSec = "2h";
       RandomizedDelaySec = "5m";
       Persistent = true;
       Unit = "pcloud-bisync.service";
+    };
+    Install = {
+      WantedBy = [ "timers.target" ];
     };
   };
 }

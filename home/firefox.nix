@@ -7,7 +7,7 @@ in
 {
   programs.firefox = {
     enable = true;
-    package = pkgs.unstable.librewolf-bin;
+    package = pkgs.unstable.librewolf;
 
     policies = {
       DisableTelemetry = true;

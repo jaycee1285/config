@@ -1,8 +1,9 @@
-{ config, pkgs, lib, zen-browser, ... }:
+{ config, pkgs, claude-desktop, zen-browser, helium-nix, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
 
+  # Zen browser with fx-autoconfig support
   # fx-autoconfig's config.js loader
   configJs = pkgs.writeText "config.js" ''
     // skip 1st line
@@ -83,8 +84,64 @@ let
     meta = zenBase.meta or {};
   };
 
-in {
-  environment.systemPackages = [
+in
+{
+  home.packages = [
+    # Browsers
     zenWithAutoconfig
+    pkgs.chawan
+
+    # Productivity
+    pkgs.unstable.obsidian
+    pkgs.harper
+    pkgs.basalt
+    pkgs.abiword
+    pkgs.pencil
+    pkgs.flowtime
+    pkgs.flow-state
+
+    # Media
+    pkgs.vlc
+    pkgs.monophony
+    pkgs.gnome-frog
+
+    # Graphics & design
+    pkgs.inkscape-with-extensions
+    pkgs.fontfinder
+    pkgs.xnconvert
+    pkgs.cbmp
+    pkgs.normcap
+    pkgs.lunacy
+    pkgs.penpot-desktop
+    pkgs.conjure
+
+    # Reading
+    pkgs.koreader
+    pkgs.readest
+
+    # Phone integration
+    pkgs.android-tools
+    pkgs.qtscrcpy
+    pkgs.kdePackages.kdeconnect-kde
+
+    # File sharing
+    pkgs.qbittorrent
+    pkgs.localsend
+
+    # Communication
+    pkgs.zoom-us
+
+    # Learning
+    pkgs.gtypist
+    pkgs.amphetype
+
+    # Gaming
+    pkgs.mupen64plus
+    pkgs.kdePackages.minuet
+
+    # AI & LLM tools
+    pkgs.lmstudio
+    (claude-desktop.packages.${system}.default)
+    (helium-nix.packages.${system}.default)
   ];
 }

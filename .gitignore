@@ -3,3 +3,21 @@
 
 # Except files ending in migrate
 !*migrate.md
+
+# Claude Code agent artifacts
+.claude/
+
+# Nix
+result
+result-*
+.direnv/
+
+# Release artifacts
+*.tar.xz
+*.tar.gz
+*.xpi
+
+# OS (cross-platform safety)
+.DS_Store
+Thumbs.db
+

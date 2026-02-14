@@ -9,12 +9,7 @@
     desktopManager.lxqt.enable = true;
     desktopManager.lxqt.extraPackages = [ pkgs.lxqt.lxqt-wayland-session ];
   };
-services.displayManager.ly = {
-  enable = true;
-  settings = {
-    waylandsessions = "/run/current-system/sw/share/wayland-sessions/";
-  };
-};
+services.displayManager.gdm.enable = true;
 security.soteria.enable = true;
   xdg.portal.wlr.enable = true;
   console.keyMap = "us";

@@ -29,6 +29,7 @@
     jost
     aporetic-bin
     mplus-outline-fonts.githubRelease
+    fira-sans
 
     nerd-fonts.iosevka-term-slab
     nerd-fonts.atkynson-mono

@@ -11,16 +11,13 @@
 #    ../../modules/nemo.nix
     ../../modules/networking.nix
     ../../modules/nix-features.nix
-    ../../modules/packages.nix
+    ../../modules/system-packages.nix
     ../../modules/programs.nix
     ../../modules/services.nix
     ../../modules/system.nix
     ../../modules/users.nix
     ../../modules/xserver.nix
     ../../modules/ob-themes.nix
-    ../../modules/zen-browser.nix
-    ../../modules/claude-desktop.nix
-    ../../modules/rclone-service.nix
   ];
 
   # Host-specific settings for Sed

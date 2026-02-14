@@ -26,11 +26,14 @@ nix flake update
 echo ":: Rebuilding NixOS for $host..."
 sudo nixos-rebuild switch --flake ".#$host"
 
-echo ":: Deleting old generations..."
-sudo nix-env --delete-generations old
+echo ":: Deleting old system generations..."
+sudo nix-env --profile /nix/var/nix/profiles/system --delete-generations old
+
+echo ":: Rebuilding GRUB from remaining generations..."
+sudo nixos-rebuild boot --flake ".#$host"
 
 echo ":: Collecting garbage..."
-sudo nix-collect-garbage
+sudo nix-collect-garbage -d
 
 echo ""
 echo "Reboot now? (y/n)"

@@ -16,10 +16,10 @@ let
     dbus
     wayland
     libxkbcommon
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXi
+    libX11
+    libXcursor
+    libXrandr
+    libXi
   ];
 
   mkTauriApp = { pname, version, url, hash }: pkgs.stdenv.mkDerivation {
@@ -114,14 +114,14 @@ in
     pname = "coverpro";
     version = "0.1.0";
     url = "https://github.com/jaycee1285/coverpro/releases/download/v0.1.0/coverpro-v0.1.0-linux-x86_64.tar.xz";
-    hash = "sha256:89c466aa2a7bd86e1e59f6a611e41e057476466de1eb6d6b6217f9b8bbc20eb7";
+    hash = "sha256:8d366e46b8b3fee3b571cc64947c8e1fe592b36a2c9065708e11f17a73633b99";
   };
 
   spredux = mkTauriApp {
     pname = "spredux";
     version = "0.1.0";
     url = "https://github.com/jaycee1285/SPRedux/releases/download/v0.1.0/spredux-v0.1.0-linux-x86_64.tar.xz";
-    hash = "sha256:e4ca0920f352bd236970cc6070133a7335dff4c8843adc7068a17bfa5be93903";
+    hash = "sha256:6d0e81ed94a4c194b7962255684c44f2e5d97ef6ca8c228164b966e15423138a";
   };
 
   openswarm = mkGtkApp {

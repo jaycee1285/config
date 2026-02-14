@@ -9,19 +9,16 @@ in
   home.packages = with pkgs; [
     mdphr
     embellish
+    rink
+    qalculate-gtk
     heroic
-    keychron-udev-rules
     base16changer.packages.${pkgs.system}.default
     material-design-icons
-    qalculate-gtk
-    rclone
-    rclone-ui
     rustc
     pixieditor
     wayvnc
     webkitgtk_6_0
-    zoxide
-    television
-    raffi
+    voxinput
+    filebrowser-quantum
   ];
 }

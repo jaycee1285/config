@@ -22,10 +22,10 @@ ELECTRON_OZONE_PLATFORM_HINT=auto
 NIXOS_OZONE_WL=1
 
 gtk_application_prefer_dark_theme=0
+GTK_THEME=Base16
 
 QT_QPA_PLATFORM=wayland
-QT_QPA_PLATFORMTHEME=kvantum
-QT_STYLE_OVERRIDE=Graphite
+QT_QPA_PLATFORMTHEME=gtk2
 export QT_WAYLAND_DISABLE_WINDOWDECORATION="0"
 
 ## Set cursor theme and size. Find system icons themes with:
@@ -39,3 +39,5 @@ XDG_CURRENT_DESKTOP=wlroots
 XCURSOR_THEME=graphite-light-nord
 XCURSOR_SIZE=16
 XKB_DEFAULT_LAYOUT=us
+
+PATH=$HOME/bin:$PATH

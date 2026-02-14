@@ -6,7 +6,8 @@ swww-daemon &
 /nix/store/$(ls -la /nix/store | grep polkit-kde-agent | grep '^d' | awk '{print $9}')/libexec/polkit-kde-authentication-agent-1 2>&1&
 
 # Launch a panel such as yambar or waybar.
-waybar >/dev/null 2>&1 &
+ferritebar >/dev/null 2>&1 &
+#waybar >/dev/null 2>&1 &
 #lxqt-panel >/dev/null 2>&1 &
 #xfce4-panel >/dev/null 2>&1 &
 #nwg-panel >/dev/null 2>&1 &

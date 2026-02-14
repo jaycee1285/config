@@ -22,7 +22,7 @@
   imports = [
     ./apps.nix
     ./fonts.nix
-   # ./firefox.nix
+    ./firefox.nix
     ./flutter.nix
     ./fuzzel.nix
     ./gtk.nix
@@ -34,10 +34,18 @@
    # ./steam.nix
     ./tauri.nix
     ./vscodium.nix
+    ./ferritebar.nix
     ./waybar.nix
     ./theming.nix
     ./walls.nix
     ./raffi.nix
     ./zen-autoconfig.nix
+
+    # User package categories
+    ./cli-tools.nix
+    ./dev-tools.nix
+    ./gui-apps.nix
+    ./system-utilities.nix
+    ./user-services.nix
   ];
 }

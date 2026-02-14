@@ -46,5 +46,5 @@ networking.firewall = {
   
     qt.enable = true;
   qt.platformTheme = "gnome";   # uses qgnomeplatform
-  qt.style = "adwaita-dark";    # or "adwaita"
+  qt.style = "adwaita";    # or "adwaita"
 }

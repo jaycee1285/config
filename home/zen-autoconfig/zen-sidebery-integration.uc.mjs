@@ -331,7 +331,9 @@ function afterSideberyLoads(win) {
     const zenStylesheets = [...win.document.styleSheets].map((styleSheet) => { return styleSheet.href; });
     const allStyleModsAsDataURLs = allStyleMods.map((css) => `data:text/css,${encodeURIComponent(css)}`);
 
-    let stylesheets = [...zenStylesheets, "chrome://browser/content/extension.css", ...allStyleModsAsDataURLs].filter(sheet => sheet); //discard nulls
+    // TESTING: removed zenStylesheets to see if Zen's styles are flattening the tree
+    // let stylesheets = [...zenStylesheets, "chrome://browser/content/extension.css", ...allStyleModsAsDataURLs].filter(sheet => sheet); //discard nulls
+    let stylesheets = ["chrome://browser/content/extension.css", ...allStyleModsAsDataURLs].filter(sheet => sheet);
     console.log(stylesheets);
     win.sidebery_browser.messageManager.sendAsyncMessage("Extension:InitBrowser", { stylesheets });
 

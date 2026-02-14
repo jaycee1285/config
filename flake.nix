@@ -15,9 +15,11 @@
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     walls.url = "github:jaycee1285/walls";
     base16changer.url = "github:jaycee1285/base16changer";
+    ferritebar.url = "github:jaycee1285/ferritebar";
+    ferritebar.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, zen-browser, claude-desktop, helium-nix, crustdown, nix-vscode-extensions, walls, base16changer, ... }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, gtk-themes, ob-themes, home-manager, zen-browser, claude-desktop, helium-nix, crustdown, nix-vscode-extensions, walls, base16changer, ferritebar, ... }:
     let
       system = "x86_64-linux";
 
@@ -60,7 +62,7 @@
             home-manager.users.john = import ./home/home.nix;
 
             home-manager.extraSpecialArgs = {
-              inherit pkgs gtk-themes nixpkgs-unstable crustdown nix-vscode-extensions walls base16changer;
+              inherit pkgs gtk-themes nixpkgs-unstable crustdown nix-vscode-extensions walls base16changer ferritebar zen-browser claude-desktop helium-nix;
               ob-themes = obThemesPkg;
             };
           }

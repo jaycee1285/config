@@ -103,9 +103,27 @@ let
     echo "Generated /mnt/etc/nixos/hardware-configuration.nix"
     echo ""
 
-    echo "=== STEP 4: Install NixOS ==="
+    echo "=== STEP 4: Clone Config & Patch Hardware ==="
     echo ""
-    echo "This will install NixOS with configuration: github:jaycee1285/config#$HOST"
+    NIXCONFIG="/tmp/nixconfig"
+    rm -rf "$NIXCONFIG"
+    echo "Cloning jaycee1285/config..."
+    git clone https://github.com/jaycee1285/config "$NIXCONFIG"
+    echo ""
+
+    echo "Patching hardware-configuration.nix for $HOST..."
+    cp /mnt/etc/nixos/hardware-configuration.nix "$NIXCONFIG/hosts/$HOST/hardware-configuration.nix"
+    echo "Copied this machine's hardware config into hosts/$HOST/"
+    echo ""
+
+    # Show what was detected
+    echo "Detected hardware summary:"
+    grep -E '(boot\.|fileSystems|swapDevices|hardware\.cpu)' /mnt/etc/nixos/hardware-configuration.nix | head -20
+    echo ""
+
+    echo "=== STEP 5: Install NixOS ==="
+    echo ""
+    echo "This will install NixOS with configuration: $HOST (with this machine's hardware)"
     echo ""
     read -p "Ready to install? [y/N] " -n 1 -r
     echo
@@ -118,10 +136,10 @@ let
     echo "Installing... (this may take a while)"
     echo ""
 
-    sudo nixos-install --flake "github:jaycee1285/config#$HOST" --no-root-passwd
+    sudo nixos-install --flake "$NIXCONFIG#$HOST" --no-root-passwd
 
     echo ""
-    echo "=== STEP 5: Post-Install ==="
+    echo "=== STEP 6: Post-Install ==="
     echo ""
     echo "Installation complete!"
     echo ""
