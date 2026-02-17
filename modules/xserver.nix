@@ -9,7 +9,12 @@
     desktopManager.lxqt.enable = true;
     desktopManager.lxqt.extraPackages = [ pkgs.lxqt.lxqt-wayland-session ];
   };
-services.displayManager.gdm.enable = true;
+services.displayManager.ly = {
+  enable = true;
+  settings = {
+    waylandsessions = "/run/current-system/sw/share/wayland-sessions/";
+  };
+};
 security.soteria.enable = true;
   xdg.portal.wlr.enable = true;
   console.keyMap = "us";
@@ -21,6 +26,4 @@ security.soteria.enable = true;
       { command = "${pkgs.wireguard-tools}/bin/wg";   options = [ "NOPASSWD" ]; }
     ];
   }];
-
 }
-

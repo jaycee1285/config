@@ -1,34 +1,42 @@
 [bar]
 position = "top"
-height = 44
+height = 28
 
 [theme]
-icon_theme = "plasma-monochrome-icons"
+icon_theme = "YAMIS"
 font = "Fira Sans"
-font_size = 36
+font_size = 28
 # Override colors (optional - auto-detected from GTK4 theme)
 # success_color = "#a3be8c"
 # warning_color = "#facc15"
 # error_color = "#f87171"
 
 [[modules.left]]
+type = "workspaces"
+format = "{index}"
+show_hidden = false
+scroll = true
+sync_command = "labwc-niri sync {index}"
+sync_only_active = true
+
+[[modules.left]]
 type = "memory"
 format = "{icon}"
 interval = 3
-bar_width = 8
-bar_height = 22
+bar_width = 9
+bar_height = 24
 
 [[modules.left]]
 type = "swap"
 format = "{icon}"
 interval = 5
-bar_width = 8
-bar_height = 22
+bar_width = 9
+bar_height = 28
 
 [[modules.center]]
 type = "taskbar"
 display = "icon"  # "icon", "title", or "both"
-icon_size = 42
+icon_size = 32
 max_title_length = 30
 
 [[modules.right]]
@@ -66,10 +74,10 @@ type = "clock"
 format = "%-I:%M %p"
 tooltip_format = "%A, %B %d, %Y"
 
-# [[modules.right]]
-# type = "power"
-# icon = "\u23FB"
-# lock_cmd = "swaylock"
-# suspend_cmd = "systemctl suspend"
-# reboot_cmd = "systemctl reboot"
-# shutdown_cmd = "systemctl poweroff"
+[[modules.right]]
+type = "power"
+hidden = true
+lock_cmd = "swaylock"
+suspend_cmd = "systemctl suspend"
+reboot_cmd = "systemctl reboot"
+shutdown_cmd = "systemctl poweroff"

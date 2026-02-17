@@ -10,6 +10,10 @@ default values.
     <adaptiveSync>yes</adaptiveSync>
     <reuseOutputMode>no</reuseOutputMode>
   </core>
+  <desktops number="1">
+    <names>
+    </names>
+  </desktops>
   <!-- <font><theme> can be defined without an attribute to set all places -->
   <theme>
     <name>Base16</name>
@@ -60,6 +64,25 @@ windows and WM_CLASS for XWayland clients.
     <keybind key="W-S-w">
       <action name="Execute" command="librewolf --private-window"/>
     </keybind>
+  <keybind key="A-w">
+    <action name="Execute">
+      <command>sh -lc &apos;/home/john/bin/labwc-niri ws add&apos;</command>
+    </action>
+  </keybind>
+
+  <keybind key="A-S-w">
+    <action name="Execute">
+      <command>sh -lc &apos;/home/john/bin/labwc-niri ws rm&apos;</command>
+    </action>
+  </keybind>
+
+  <keybind key="W-Tab">
+      <action name="GoToDesktop" to="right"/>
+    </keybind>
+    <keybind key="W-S-Tab">
+      <action name="GoToDesktop" to="left"/>
+    </keybind>
+
     <keybind key="W-space">
       <action name="Execute" command="codium"/>
     </keybind>
@@ -137,9 +160,29 @@ windows and WM_CLASS for XWayland clients.
         <command>ferritebar</command>
       </action>
     </keybind>
+    <keybind key="A-f">
+      <action name="Execute">
+        <command>sh -lc &apos;ferritebar msg taskbar-focus&apos;</command>
+      </action>
+    </keybind>
+    <keybind key="A-v">
+      <action name="Execute">
+        <command>sh -lc &apos;ferritebar msg wg&apos;</command>
+      </action>
+    </keybind>
+    <keybind key="A-n">
+      <action name="Execute">
+        <command>sh -lc &apos;ferritebar msg network&apos;</command>
+      </action>
+    </keybind>
+    <keybind key="A-p">
+      <action name="Execute">
+        <command>sh -lc &apos;ferritebar msg power&apos;</command>
+      </action>
+    </keybind>
     <keybind key="A-\">
       <action name="Execute">
-        <command>&quot;makoctl dismiss -a&quot;</command>
+        <command>sh -lc &apos;makoctl dismiss -a&apos;</command>
       </action>
     </keybind>
     <keybind key="W-Left">
@@ -162,7 +205,10 @@ windows and WM_CLASS for XWayland clients.
     <keybind key="W-S-Right">
       <action name="SendToDesktop" to="right"/>
     </keybind>
-  </keyboard>
+     <keybind key="W-S-Left">
+      <action name="SendToDesktop" to="left"/>
+    </keybind>
+    </keyboard>
   <libinput>
     <device>
       <naturalScroll>yes</naturalScroll>

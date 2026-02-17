@@ -1,508 +1,355 @@
-# Debian Migration Guide (SparkyOS)
+# Debian Migration Guide (systemd)
 
-Migration guide for recreating the Sed/Zed NixOS desktop setup on SparkyOS (Debian-based).
+Goal: reproduce the current NixOS desktop on Debian with systemd.
+This guide focuses on base system parity; user apps can be installed via Nix after boot.
 
-## Why SparkyOS?
+Target system highlights (from this repo):
+- Boot: UEFI + GRUB (Debian default)
+- Init: systemd
+- Desktop: Wayland + labwc + Ly display manager
+- Core services: NetworkManager, PipeWire, BlueZ/Blueman, CUPS, Syncthing, Tailscale, TLP
+- UX helpers: gvfs, tumbler, gnome-keyring, xdg-desktop-portal
+- Theming: Flexoki GTK, YAMIS icons, Graphite cursor, Iosevka Aile font
 
-SparkyOS is a lightweight Debian-based distribution with rolling and stable variants, extensive desktop options, and excellent hardware support. It provides a good balance between Debian stability and up-to-date packages.
+Assumptions (edit to match):
+- Disk: /dev/nvme0n1
+- EFI partition: 500M FAT32
+- Swap: 16G partition OR a swapfile on Btrfs for laptops
+- Root: Btrfs, ~2TB
+- Hostname: Sed (or Zed)
+- User: john
+- Timezone: America/New_York
+- Locale: en_US.UTF-8
 
 ---
 
-## Pre-Installation
+## 1) Install base Debian
 
-### Download SparkyOS
-- Get the **SparkyOS Rolling** ISO (Debian Testing base) for latest packages
-- Choose the "MinimalGUI" or "MinimalCLI" edition for a clean slate
-- Download: https://sparkylinux.org/download/
+- Use the Debian netinst or live ISO.
+- During install, pick:
+  - Desktop: none (minimal install)
+  - SSH: optional
+  - Standard system utilities: yes
 
-### Create Bootable USB
+After first boot, update and install essentials:
+
 ```bash
-# Using dd
-sudo dd if=sparkylinux-*.iso of=/dev/sdX bs=4M status=progress && sync
-
-# Or use usbimager/unetbootin
+sudo apt update
+sudo apt -y upgrade
+sudo apt -y install sudo git curl ca-certificates
 ```
 
----
+## 1.1) Partitioning notes (UEFI + Btrfs)
 
-## Base System Installation
+During the installer, choose **Manual** partitioning and create:
+- EFI System Partition: 500M, FAT32, mount at `/boot/efi`
+- Swap: 16G (or skip and use swapfile)
+- Root: Btrfs, rest of disk, mount at `/`
 
-1. Boot from USB and run the installer
-2. Select your preferred partitioning (recommend separate /home)
-3. Set hostname to `Sed` or `Zed` as appropriate
-4. Create user `john`
+If you want subvolumes (`@`, `@home`), do it from a rescue shell after install:
 
----
-
-## Post-Installation Setup
-
-### Update System
 ```bash
-sudo apt update && sudo apt full-upgrade -y
+sudo mount /dev/nvme0n1p3 /mnt
+sudo btrfs subvolume create /mnt/@
+sudo btrfs subvolume create /mnt/@home
+sudo umount /mnt
+
+sudo mount -o subvol=@ /dev/nvme0n1p3 /mnt
+sudo mkdir -p /mnt/home
+sudo mount -o subvol=@home /dev/nvme0n1p3 /mnt/home
 ```
 
-### Enable Non-Free Repositories
+## 2) Enable non-free-firmware (recommended)
+
+Debian packages for firmware and some hardware drivers live in non-free-firmware.
+Edit `/etc/apt/sources.list` like this (for bookworm):
+
 ```bash
-sudo apt-add-repository contrib non-free non-free-firmware
+sudo tee /etc/apt/sources.list << 'EOF'
+# Debian Bookworm
+# main + contrib + non-free + non-free-firmware
+
+deb http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware
+deb http://deb.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware
+deb http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware
+EOF
+
 sudo apt update
 ```
 
-### Install Core Build Tools
+## 3) Base desktop packages
+
 ```bash
-sudo apt install -y build-essential git curl wget pkg-config \
-    libssl-dev zlib1g-dev libglib2.0-dev libgtk-3-dev \
-    libgdk-pixbuf2.0-dev clang gcc meson ninja-build cmake
+sudo apt -y install \
+  labwc wayland-protocols xwayland wlroots \
+  seatd \
+  xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr \
+  ly \
+  pipewire pipewire-pulse wireplumber pavucontrol alsa-utils \
+  network-manager network-manager-gnome \
+  bluez blueman \
+  cups cups-filters \
+  gvfs tumbler gnome-keyring \
+  mako-notifier waybar fuzzel \
+  kitty fish zellij \
+  thunar thunar-volman thunar-archive-plugin \
+  swaylock swayidle wlogout \
+  swww \
+  brightnessctl grim slurp wl-clipboard wlr-randr
 ```
 
----
+If any package is missing, note it and install via Nix later.
 
-## Desktop Environment: labwc
+## 4) Users and groups
 
-### Install Wayland Base
 ```bash
-sudo apt install -y wayland-protocols libwayland-dev wlroots-dev \
-    xwayland seatd libseat-dev
+sudo usermod -aG sudo,video,audio,input,networkmanager,seat john
 ```
 
-### Install labwc
-```bash
-# From Debian repos (may be older)
-sudo apt install -y labwc
-
-# Or build from source for latest:
-git clone https://github.com/labwc/labwc.git
-cd labwc
-meson setup build -Dxwayland=enabled
-ninja -C build
-sudo ninja -C build install
-```
-
-### Install Display Manager (Ly)
-```bash
-# Build Ly from source
-sudo apt install -y libpam0g-dev libxcb-xkb-dev
-git clone --recurse-submodules https://github.com/fairyglade/ly
-cd ly
-make
-sudo make install installsystemd
-sudo systemctl enable ly.service
-```
-
----
-
-## Wayland Configuration (Quick Setup)
-
-Clone the waylandconfig repo and symlink everything:
+## 5) Enable services (systemd)
 
 ```bash
-# Clone the config repo
-git clone https://github.com/jaycee1285/waylandconfig.git ~/repos/waylandconfig
-
-# Symlink all configs at once
-ln -s ~/repos/waylandconfig/labwc ~/.config/labwc
-ln -s ~/repos/waylandconfig/fuzzel ~/.config/fuzzel
-ln -s ~/repos/waylandconfig/waybar ~/.config/waybar
-ln -s ~/repos/waylandconfig/raffi ~/.config/raffi
-```
-
----
-
-## Status Bar: Waybar
-
-```bash
-sudo apt install -y waybar
-```
-
----
-
-## Application Launcher: Fuzzel + Raffi
-
-```bash
-sudo apt install -y fuzzel
-
-# Raffi (build from source or cargo)
-cargo install raffi
-
-# Dependencies for raffi scripts
-sudo apt install -y cliphist wl-clipboard sqlite3 ripgrep
-```
-
-Super key launches raffi. All launcher scripts (bookmarks, clipboard, files, power menu) are inlined in `~/.config/raffi/raffi.yaml`.
-
----
-
-## Notifications: Mako
-
-```bash
-sudo apt install -y mako-notifier libnotify-bin
-```
-
----
-
-## Wallpaper: swww
-
-```bash
-# Build from source (requires Rust)
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-source ~/.cargo/env
-
-git clone https://github.com/LGFae/swww.git
-cd swww
-cargo build --release
-sudo cp target/release/swww /usr/local/bin/
-sudo cp target/release/swww-daemon /usr/local/bin/
-```
-
----
-
-## Lock Screen & Logout
-
-```bash
-# swaylock-effects
-sudo apt install -y swaylock
-
-# For swaylock-effects, build from source:
-git clone https://github.com/jirutka/swaylock-effects.git
-cd swaylock-effects
-meson build
-ninja -C build
-sudo ninja -C build install
-
-# wlogout
-sudo apt install -y wlogout
-```
-
----
-
-## Audio: PipeWire
-
-```bash
-# Remove PulseAudio if present
-sudo apt remove --purge pulseaudio
-
-# Install PipeWire
-sudo apt install -y pipewire pipewire-pulse pipewire-alsa \
-    pipewire-jack wireplumber pavucontrol
-
-# Enable services
-systemctl --user enable pipewire pipewire-pulse wireplumber
-systemctl --user start pipewire pipewire-pulse wireplumber
-```
-
----
-
-## Terminal & Shell
-
-### Kitty Terminal
-```bash
-sudo apt install -y kitty
-```
-
-### Fish Shell
-```bash
-sudo apt install -y fish
-chsh -s /usr/bin/fish
-
-# Install fisher (plugin manager)
-fish -c "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
-
-# Install zoxide
-sudo apt install -y zoxide
-echo "zoxide init fish | source" >> ~/.config/fish/config.fish
-```
-
-### Zellij
-```bash
-# Install from releases
-wget https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz
-tar xf zellij-*.tar.gz
-sudo mv zellij /usr/local/bin/
-```
-
----
-
-## File Managers
-
-```bash
-# Thunar
-sudo apt install -y thunar thunar-volman thunar-archive-plugin
-
-# Dolphin (KDE)
-sudo apt install -y dolphin
-```
-
----
-
-## Web Browsers
-
-### Zen Browser
-```bash
-# Download AppImage from https://zen-browser.app/
-chmod +x zen-browser-*.AppImage
-./zen-browser-*.AppImage --appimage-extract
-sudo mv squashfs-root /opt/zen-browser
-sudo ln -s /opt/zen-browser/zen /usr/local/bin/zen-browser
-```
-
-### LibreWolf (Flatpak)
-```bash
-sudo apt install -y flatpak
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak install flathub io.gitlab.librewolf-community
-```
-
----
-
-## Development Tools
-
-### VSCodium
-```bash
-wget -qO - https://gitlab.com/nickvergessen/vscodium-key.gpg.txt \
-    | gpg --dearmor | sudo tee /usr/share/keyrings/vscodium-archive-keyring.gpg > /dev/null
-echo 'deb [signed-by=/usr/share/keyrings/vscodium-archive-keyring.gpg] https://download.vscodium.com/debs vscodium main' \
-    | sudo tee /etc/apt/sources.list.d/vscodium.list
-sudo apt update && sudo apt install -y codium
-```
-
-### Node.js & Bun
-```bash
-# Node.js via NodeSource
-curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-sudo apt install -y nodejs
-
-# Bun
-curl -fsSL https://bun.sh/install | bash
-```
-
-### GitHub CLI
-```bash
-sudo apt install -y gh
-```
-
-### Flutter
-```bash
-sudo apt install -y clang cmake ninja-build libgtk-3-dev
-git clone https://github.com/flutter/flutter.git -b stable ~/flutter
-echo 'export PATH="$HOME/flutter/bin:$PATH"' >> ~/.bashrc
-```
-
----
-
-## Productivity Apps
-
-### Obsidian
-```bash
-# AppImage
-wget https://github.com/obsidianmd/obsidian-releases/releases/download/v1.5.3/Obsidian-1.5.3.AppImage
-chmod +x Obsidian-*.AppImage
-sudo mv Obsidian-*.AppImage /opt/obsidian.AppImage
-```
-
----
-
-## Services
-
-### Bluetooth
-```bash
-sudo apt install -y bluetooth blueman bluez
+sudo systemctl enable NetworkManager
 sudo systemctl enable bluetooth
-```
-
-### Syncthing
-```bash
-sudo apt install -y syncthing
-systemctl --user enable syncthing
-systemctl --user start syncthing
-```
-
-### TLP (Power Management)
-```bash
-sudo apt install -y tlp tlp-rdw
-sudo systemctl enable tlp
-
-# Configure thresholds (edit /etc/tlp.conf)
-sudo tee -a /etc/tlp.conf << 'EOF'
-START_CHARGE_THRESH_BAT0=75
-STOP_CHARGE_THRESH_BAT0=80
-EOF
-```
-
-### Tailscale
-```bash
-curl -fsSL https://tailscale.com/install.sh | sh
-sudo systemctl enable tailscaled
-sudo tailscale up
-```
-
-### Printing
-```bash
-sudo apt install -y cups system-config-printer
 sudo systemctl enable cups
+sudo systemctl enable seatd
+sudo systemctl enable ly
+
+# Optional but matches NixOS config
+sudo systemctl enable tlp
+sudo systemctl enable tailscaled
+sudo systemctl enable syncthing@john
+```
+
+PipeWire user services:
+
+```bash
+sudo -u john systemctl --user enable --now pipewire pipewire-pulse wireplumber
+```
+
+## 5.1) Swapfile alternative (laptops)
+
+If you prefer a swapfile on Btrfs instead of a swap partition:
+
+```bash
+sudo mkdir -p /swap
+sudo chattr +C /swap
+sudo fallocate -l 16G /swap/swapfile
+sudo chmod 600 /swap/swapfile
+sudo mkswap /swap/swapfile
+sudo swapon /swap/swapfile
+echo '/swap/swapfile none swap defaults 0 0' | sudo tee -a /etc/fstab
+```
+
+## 6) Theming (match NixOS look)
+
+```bash
+sudo apt -y install fonts-iosevka fonts-font-awesome
+
+# Flexoki + YAMIS + Graphite are not guaranteed in Debian repos.
+# Install via Nix or Git (after Nix is installed).
+```
+
+## 7) Configs from this repo
+
+```bash
+# Example: clone your config repo and link Wayland configs
+mkdir -p ~/repos
+cd ~/repos
+# git clone <your repo> config
+
+ln -s ~/repos/config/home/labwc ~/.config/labwc
+ln -s ~/repos/config/home/waybar ~/.config/waybar
+ln -s ~/repos/config/home/fuzzel ~/.config/fuzzel
+ln -s ~/repos/config/home/raffi ~/.config/raffi
+```
+
+## 8) Optional: install Nix for apps
+
+You said you will install Nix. After that, use your existing Nix configs
+or `nix profile install` for:
+- zen-browser, librewolf, vscodium
+- obsidian, inkscape, vlc, etc.
+
+---
+
+## Quick reference: systemd
+
+```bash
+systemctl status <service>
+systemctl enable --now <service>
+journalctl -u <service> -b
 ```
 
 ---
 
-## Theming
+## Package verification script
 
-### GTK Theme: Flexoki
+Run on the target system to check repo availability and get Nix fallback commands:
+
+
+
+If you want a custom list, edit .
+
+
+## References
+- Debian Installation Guide: https://www.debian.org/releases/stable/installmanual
+- Debian SourcesList (non-free-firmware): https://wiki.debian.org/SourcesList
+
+---
+
+## Full parity checklist (apps, services, configs)
+
+This section mirrors the rest of your Nix config. Install distro-native packages where possible; if a package is
+missing, use Nix.
+
+### Package search (Debian)
+
 ```bash
-git clone https://github.com/kepano/flexoki.git
-mkdir -p ~/.themes
-# Copy GTK theme variant to ~/.themes/Flexoki
+apt search <name>
 ```
 
-### Icon Theme: YAMIS
+### Apps and tools to install (distro-native where feasible)
+
+CLI + shells:
+- fish, fisher, zoxide, nnn, zellij, kitty
+
+Wayland + desktop utilities:
+- waybar, mako, ferritebar, fuzzel, raffi, kanshi, wl-clipboard, grim, slurp, wlr-randr, wdisplays, wl-gammactl, wlopm
+
+File management + disk tools:
+- thunar, thunar-volman, thunar-archive-plugin, gvfs, xarchiver, qdirstat, czkawka, fclones-gui, gparted
+
+Browsers + editors:
+- zen-browser, librewolf, vscodium
+
+Productivity + media:
+- obsidian, vlc, inkscape, fontfinder, xnconvert, normcap, penpot-desktop, lunacy, koreader, readest
+
+Dev tools:
+- nodejs, bun, rust/cargo, gh (GitHub CLI), github-desktop, codeberg-cli, devtoolbox, n8n, love
+
+System utilities:
+- network-manager-gnome, blueman, pavucontrol, brightnessctl, usbimager, unetbootin, bleachbit, peazip, kopia-ui
+
+Phone integration:
+- android-tools, qtscrcpy, kdeconnect
+
+Networking + sharing:
+- qbittorrent, localsend, tailscale
+
+Learning + misc:
+- gtypist, amphetype, mupen64plus, minuet
+
+AI + LLM tools:
+- lmstudio, claude-desktop, helium
+
+### Fonts + theming (minimum set)
+
+Install at least:
+- Iosevka + Nerd Font (Iosevka Term Slab), Font Awesome, Noto, Liberation
+- Flexoki GTK, YAMIS icons, Graphite cursor (use Git or Nix if missing)
+
+### User services parity
+
+#### pCloud bisync (rclone)
+
+Create script:
+
 ```bash
-git clone https://github.com/nicholasbien/yamis-icon-theme.git
-cp -r yamis-icon-theme/YAMIS ~/.icons/
-```
-
-### Cursor Theme: Graphite
-```bash
-git clone https://github.com/vinceliuice/Graphite-cursors.git
-cd Graphite-cursors
-./install.sh
-```
-
-### Fonts
-```bash
-# Core fonts
-sudo apt install -y fonts-font-awesome fonts-noto fonts-liberation
-
-# Iosevka (download from GitHub releases)
-wget https://github.com/be5invis/Iosevka/releases/download/v29.0.0/PkgTTC-IosevkaTermSlab-29.0.0.zip
-unzip PkgTTC-*.zip -d ~/.local/share/fonts/
-fc-cache -fv
-
-# Nerd Fonts
-mkdir -p ~/.local/share/fonts/NerdFonts
-cd ~/.local/share/fonts/NerdFonts
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/IosevkaTermSlab.zip
-unzip IosevkaTermSlab.zip
-fc-cache -fv
-```
-
-### Apply GTK Settings
-```bash
-mkdir -p ~/.config/gtk-3.0
-cat > ~/.config/gtk-3.0/settings.ini << 'EOF'
-[Settings]
-gtk-theme-name=Flexoki
-gtk-icon-theme-name=YAMIS
-gtk-font-name=Iosevka Aile 11
-gtk-cursor-theme-name=Graphite-Cursors_light
-gtk-application-prefer-dark-theme=0
+sudo tee /usr/local/bin/pcloud-bisync << 'EOF'
+#!/bin/sh
+set -euo pipefail
+mkdir -p "$HOME/pCloud" "$HOME/.cache/rclone-bisync/pcloud"
+exec rclone bisync pcloud: "$HOME/pCloud" \
+  --workdir "$HOME/.cache/rclone-bisync/pcloud" \
+  --size-only \
+  --create-empty-src-dirs \
+  --exclude "*.partial" \
+  --exclude ".Trash-1000/**" \
+  --exclude "**/.Trash-1000/**" \
+  --exclude "**/node_modules/**" \
+  --tpslimit 10 --tpslimit-burst 10 \
+  --checkers 32 --transfers 16 \
+  --fast-list \
+  --retries 10 --retries-sleep 30s --low-level-retries 50 \
+  --stats 30s -v
 EOF
+sudo chmod +x /usr/local/bin/pcloud-bisync
 ```
 
----
-
-## labwc Configuration
-
-If not using the waylandconfig symlink approach:
+Systemd user timer:
 
 ```bash
-mkdir -p ~/.config/labwc
-cp ~/repos/waylandconfig/labwc/* ~/.config/labwc/
+mkdir -p ~/.config/systemd/user
+cat > ~/.config/systemd/user/pcloud-bisync.service << 'EOF'
+[Unit]
+Description=rclone bisync pCloud <-> ~/pCloud
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/pcloud-bisync
+EOF
+
+cat > ~/.config/systemd/user/pcloud-bisync.timer << 'EOF'
+[Unit]
+Description=Timer: rclone bisync pCloud every 2 hours
+
+[Timer]
+OnBootSec=10m
+OnUnitActiveSec=2h
+RandomizedDelaySec=5m
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+EOF
+
+systemctl --user daemon-reload
+systemctl --user enable --now pcloud-bisync.timer
 ```
 
-Ensure your `~/.config/labwc/autostart` contains:
-```bash
-#!/bin/bash
-swww-daemon &
-waybar &
-mako &
-/usr/lib/polkit-kde-authentication-agent-1 &
-blueman-applet &
-nm-applet &
-```
+#### Lid close behavior (wlopm)
 
----
+If you want the lid-close behavior from Nix, install `wlopm` and use a udev/acpid or logind hook
+to trigger `wlopm --off "*"` on lid close and `wlopm --on "*"` on open.
 
-## XDG Portals
+### Config parity (from this repo)
 
-```bash
-sudo apt install -y xdg-desktop-portal xdg-desktop-portal-gtk \
-    xdg-desktop-portal-wlr
-```
+Ensure these are in place:
+- `~/.config/labwc` (labwc config)
+- `~/.config/waybar`
+- `~/.config/fuzzel`
+- `~/.config/raffi`
+- `~/.config/kanshi` (if you use monitor profiles)
+- `~/.zen` / autoconfig if you rely on Zen customizations
 
----
+## Package verification script
 
-## Additional Utilities
-
-```bash
-# System utilities
-sudo apt install -y brightnessctl grim slurp wl-clipboard \
-    wlr-randr qdirstat gparted bleachbit
-
-# Media
-sudo apt install -y vlc inkscape
-
-# Archives
-sudo apt install -y p7zip-full unrar-free xarchiver
-
-# VPN
-sudo apt install -y wireguard-tools
-```
-
----
-
-## Flatpak Apps
-
-```bash
-flatpak install flathub \
-    com.super_productivity.SuperProductivity \
-    md.obsidian.Obsidian \
-    com.github.tchx84.Flatseal
-```
-
----
-
-## Gaming (Optional)
+Run on the target system to check repo availability and get Nix fallback commands:
 
 ```bash
-# Steam
-sudo dpkg --add-architecture i386
-sudo apt update
-sudo apt install -y steam-installer
-
-# Proton-GE: Download from https://github.com/GloriousEggroll/proton-ge-custom
-mkdir -p ~/.steam/root/compatibilitytools.d/
+~/repos/config/scripts/migrate/verify-packages-debian.sh
 ```
 
----
+If you want a custom list, edit `scripts/migrate/package-list.txt`.
 
-## Troubleshooting
+## One-command verification + service setup
 
-### labwc won't start
-- Check `~/.local/state/labwc/labwc.log`
-- Ensure seatd is running: `sudo systemctl start seatd`
-- Add user to video group: `sudo usermod -aG video john`
+If you want the “clone, run, done” flow:
 
-### No sound
-- Check PipeWire status: `systemctl --user status pipewire`
-- Verify ALSA: `aplay -l`
+```bash
+~/repos/config/scripts/migrate/run.sh
+```
 
-### Bluetooth issues
-- Restart bluetooth: `sudo systemctl restart bluetooth`
-- Check rfkill: `rfkill list`
+This will:
+- check all packages against your distro repos
+- create a missing list + Nix fallback script
+- generate service scripts for your init
 
----
-
-## Quick Reference: Key Bindings
-
-| Key | Action |
-|-----|--------|
-| Super (release) | Raffi launcher |
-| Alt (release) | Kitty terminal |
-| Win+Return | Kitty terminal |
-| Win+W | LibreWolf browser |
-| Win+F | Dolphin file manager |
-| Win+O | Obsidian |
-| Win+Space | VSCodium |
-| Win+M | Maximize window |
-| Win+Left/Right | Snap to edge |
-| Alt+Tab | Window switcher |
-| Alt+Return | Close window |
-| Alt+X | wlogout |
-| F3 | Screenshot (grim) |
+Notes:
+- You can disable auto installs with `AUTO_INSTALL_NATIVE=0`, `AUTO_INSTALL_NIX=0`, `AUTO_INSTALL_FLATPAK=0`.
+- Flatpak fallbacks are listed in `scripts/migrate/flatpak-list.txt` and write to `/tmp/flatpak-missing.txt`.
+- Per-distro lists live in `scripts/migrate/lists/` (edit freely).

@@ -35,6 +35,7 @@
     ./tauri.nix
     ./vscodium.nix
     ./ferritebar.nix
+    ./rustvox.nix
     ./waybar.nix
     ./theming.nix
     ./walls.nix

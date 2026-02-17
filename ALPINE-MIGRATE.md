@@ -1,616 +1,355 @@
-# Alpine Linux Migration Guide
+# Alpine Linux Migration Guide (OpenRC)
 
-Migration guide for recreating the Sed/Zed NixOS desktop setup on Alpine Linux.
+Goal: reproduce the current NixOS desktop on Alpine Linux using OpenRC.
+This guide focuses on base system parity; user apps can be installed via Nix or Flatpak after boot.
 
-## Why Alpine?
+Target system highlights (from this repo):
+- Boot: UEFI + GRUB (default in Alpine installer)
+- Init: OpenRC
+- Desktop: Wayland + labwc + Ly display manager
+- Core services: NetworkManager, PipeWire, BlueZ/Blueman, CUPS, Syncthing, Tailscale, TLP
+- UX helpers: gvfs, tumbler, gnome-keyring, xdg-desktop-portal
+- Theming: Flexoki GTK, YAMIS icons, Graphite cursor, Iosevka Aile font
 
-Alpine Linux is an extremely lightweight, security-focused distribution using musl libc and busybox. It's excellent for minimalist setups, containers, and systems where resource efficiency matters. The tradeoff is that some software may need manual building due to musl/glibc differences.
+Assumptions (edit to match):
+- Disk: /dev/nvme0n1
+- EFI partition: 500M FAT32
+- Swap: 16G partition OR a swapfile on Btrfs for laptops
+- Root: Btrfs, ~2TB
+- Hostname: Sed (or Zed)
+- User: john
+- Timezone: America/New_York
+- Locale: en_US.UTF-8
 
 ---
 
-## Pre-Installation
+## 1) Install base Alpine
 
-### Download Alpine
-- Get the **Alpine Extended** ISO (includes more packages for desktop use)
-- Download: https://alpinelinux.org/downloads/
+Boot the Alpine ISO and run the installer:
 
-### Create Bootable USB
-```bash
-# Using dd
-sudo dd if=alpine-extended-*.iso of=/dev/sdX bs=4M status=progress && sync
-```
-
----
-
-## Base System Installation
-
-### Boot and Run Setup
 ```bash
 setup-alpine
 ```
 
-During setup:
-- Keyboard layout: `us`
-- Hostname: `Sed` or `Zed`
-- Network: Configure with NetworkManager (select `networkmanager` when asked)
-- Root password: Set securely
-- Timezone: Your timezone
-- Disk: Select disk and use `sys` mode
-- Package mirror: Choose nearest
+Choices (suggested):
+- Keyboard: us
+- Hostname: Sed
+- Network: configure
+- Mirror: choose a fast mirror
+- User: john (wheel)
+- Disk: sys (install to disk)
 
-### Create User
-```bash
-adduser john
-addgroup john wheel
-addgroup john video
-addgroup john audio
-addgroup john input
-```
-
-### Enable Community Repository
-Edit `/etc/apk/repositories` and uncomment the community line:
-```bash
-vi /etc/apk/repositories
-# Uncomment: http://dl-cdn.alpinelinux.org/alpine/v3.x/community
-```
+After reboot:
 
 ```bash
-apk update
+sudo apk update
+sudo apk upgrade
 ```
 
----
+## 1.1) Partitioning notes (UEFI + Btrfs)
 
-## Post-Installation Setup
+During `setup-alpine`, when asked about disk layout, choose a custom/managed option
+that lets you set:
+- EFI System Partition: 500M, FAT32, mount at `/boot/efi`
+- Swap: 16G (or skip and use swapfile)
+- Root: Btrfs, rest of disk, mount at `/`
 
-### Install sudo
-```bash
-apk add sudo
-echo '%wheel ALL=(ALL) ALL' >> /etc/sudoers
-```
+## 2) Enable community repository
 
-### Install Core Build Tools
-```bash
-apk add build-base git curl wget meson ninja cmake pkgconf \
-    linux-headers eudev-dev mesa-dev libinput-dev wayland-dev \
-    wayland-protocols libxkbcommon-dev pixman-dev cairo-dev \
-    pango-dev gdk-pixbuf-dev
-```
-
-### Enable Services at Boot
-```bash
-# OpenRC is Alpine's init system
-rc-update add udev sysinit
-rc-update add networkmanager default
-rc-update add dbus default
-```
-
----
-
-## Desktop Environment: labwc
-
-### Install wlroots and Dependencies
-```bash
-apk add wlroots wlroots-dev seatd libseat libseat-dev xwayland
-```
-
-### Enable seatd
-```bash
-rc-update add seatd default
-rc-service seatd start
-addgroup john seat
-```
-
-### Build labwc from Source
-```bash
-# Alpine repos may have labwc, check first:
-apk search labwc
-
-# If not available or outdated, build from source:
-apk add libxml2-dev
-git clone https://github.com/labwc/labwc.git
-cd labwc
-meson setup build -Dxwayland=enabled
-ninja -C build
-sudo ninja -C build install
-```
-
-### Install Display Manager (Ly) or Use TTY Login
-```bash
-# Option 1: Build Ly
-apk add linux-pam-dev libxcb-dev
-git clone --recurse-submodules https://github.com/fairyglade/ly
-cd ly
-make
-sudo make install installopenrc
-rc-update add ly default
-
-# Option 2: Start labwc from TTY (simpler)
-# Add to ~/.profile:
-echo 'if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
-    exec labwc
-fi' >> ~/.profile
-```
-
----
-
-## Status Bar: Waybar
+Edit `/etc/apk/repositories` and ensure community is enabled.
+Then:
 
 ```bash
-apk add waybar
-
-# Copy config
-mkdir -p ~/.config/waybar
-cp -r ~/repos/config/home/waybar/* ~/.config/waybar/
+sudo apk update
 ```
 
----
-
-## Application Launcher: Fuzzel
+## 3) Base desktop packages
 
 ```bash
-apk add fuzzel
-
-# Copy config
-mkdir -p ~/.config/fuzzel
-cp -r ~/repos/config/home/fuzzel/* ~/.config/fuzzel/
+sudo apk add \
+  labwc wayland wayland-protocols xwayland wlroots \
+  seatd \
+  xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr \
+  ly \
+  pipewire pipewire-pulse pipewire-alsa wireplumber pavucontrol alsa-utils \
+  networkmanager networkmanager-openrc network-manager-applet \
+  bluez blueman \
+  cups cups-filters \
+  gvfs tumbler gnome-keyring \
+  mako waybar fuzzel \
+  kitty fish zellij \
+  thunar thunar-volman thunar-archive-plugin \
+  swaylock swayidle wlogout \
+  swww \
+  brightnessctl grim slurp wl-clipboard wlr-randr
 ```
 
----
+If any package is missing, install via Nix or Flatpak later.
 
-## Notifications: Mako
+## 4) Users and groups
 
 ```bash
-apk add mako libnotify
+sudo adduser john seat
+sudo adduser john input
+sudo adduser john video
+sudo adduser john audio
+sudo adduser john netdev
 ```
 
----
-
-## Wallpaper: swww
+## 5) Enable services (OpenRC)
 
 ```bash
-# Requires Rust
-apk add rust cargo
-git clone https://github.com/LGFae/swww.git
-cd swww
-cargo build --release
-sudo cp target/release/swww /usr/local/bin/
-sudo cp target/release/swww-daemon /usr/local/bin/
+sudo rc-update add dbus default
+sudo rc-update add seatd default
+sudo rc-update add networkmanager default
+sudo rc-update add bluetooth default
+sudo rc-update add cupsd default
+sudo rc-update add ly default
+
+# Optional but matches NixOS config
+sudo rc-update add tlp default
+sudo rc-update add tailscale default
 ```
 
----
-
-## Lock Screen & Logout
+Start services now:
 
 ```bash
-apk add swaylock swayidle
-
-# For swaylock-effects, build from source:
-git clone https://github.com/jirutka/swaylock-effects.git
-cd swaylock-effects
-meson build
-ninja -C build
-sudo ninja -C build install
-
-# wlogout may need building from source
-git clone https://github.com/ArtsyMacaw/wlogout.git
-cd wlogout
-meson build
-ninja -C build
-sudo ninja -C build install
+sudo rc-service dbus start
+sudo rc-service seatd start
+sudo rc-service networkmanager start
+sudo rc-service bluetooth start
+sudo rc-service cupsd start
+sudo rc-service ly start
 ```
 
----
+PipeWire user services (in your session):
 
-## Audio: PipeWire
-
-```bash
-apk add pipewire pipewire-pulse pipewire-alsa wireplumber \
-    pipewire-tools pavucontrol alsa-utils
-
-# Create user service directory
-mkdir -p ~/.config/pipewire
-
-# Start via dbus (add to autostart)
-# PipeWire starts automatically with dbus session
-```
-
-Add to `~/.config/labwc/autostart`:
 ```bash
 pipewire &
-wireplumber &
 pipewire-pulse &
-```
-
----
-
-## Terminal & Shell
-
-### Kitty Terminal
-```bash
-apk add kitty
-```
-
-### Fish Shell
-```bash
-apk add fish
-chsh -s /usr/bin/fish john
-
-# Install fisher
-fish -c "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
-
-# Zoxide
-apk add zoxide
-echo "zoxide init fish | source" >> ~/.config/fish/config.fish
-```
-
-### Zellij
-```bash
-# Download pre-built binary (musl version)
-wget https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz
-tar xf zellij-*.tar.gz
-sudo mv zellij /usr/local/bin/
-```
-
----
-
-## File Managers
-
-```bash
-# Thunar
-apk add thunar thunar-volman thunar-archive-plugin gvfs
-
-# For Dolphin (heavier, pulls in KDE deps)
-apk add dolphin
-```
-
----
-
-## Web Browsers
-
-### Zen Browser
-```bash
-# AppImage may not work on Alpine due to musl
-# Try Flatpak instead (see Flatpak section)
-# Or use native Firefox:
-apk add firefox
-```
-
-### LibreWolf via Flatpak
-```bash
-apk add flatpak
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak install flathub io.gitlab.librewolf-community
-```
-
-**Note:** Many AppImages won't work on Alpine due to musl/glibc incompatibility. Use Flatpak or native packages instead.
-
----
-
-## Development Tools
-
-### VSCodium
-```bash
-# Use Flatpak for VSCodium on Alpine
-flatpak install flathub com.vscodium.codium
-```
-
-### Node.js & Bun
-```bash
-# Node.js
-apk add nodejs npm
-
-# Bun (native musl build)
-curl -fsSL https://bun.sh/install | bash
-# Note: Bun has musl support but check releases for compatibility
-```
-
-### GitHub CLI
-```bash
-apk add github-cli
-```
-
-### Flutter
-```bash
-# Flutter requires glibc - use distrobox/toolbox for glibc container
-apk add distrobox podman
-distrobox create --name flutter-dev --image ubuntu:latest
-distrobox enter flutter-dev
-# Inside container: install flutter normally
-```
-
----
-
-## Productivity Apps
-
-### Obsidian
-```bash
-# Use Flatpak
-flatpak install flathub md.obsidian.Obsidian
-```
-
----
-
-## Services
-
-### Bluetooth
-```bash
-apk add bluez blueman
-rc-update add bluetooth default
-rc-service bluetooth start
-```
-
-### Syncthing
-```bash
-apk add syncthing
-# Create OpenRC service or run in autostart
-```
-
-### TLP (Power Management)
-```bash
-apk add tlp
-rc-update add tlp default
-
-# Configure /etc/tlp.conf
-cat >> /etc/tlp.conf << 'EOF'
-START_CHARGE_THRESH_BAT0=75
-STOP_CHARGE_THRESH_BAT0=80
-EOF
-```
-
-### Tailscale
-```bash
-apk add tailscale
-rc-update add tailscale default
-rc-service tailscale start
-tailscale up
-```
-
-### Printing
-```bash
-apk add cups cups-filters
-rc-update add cupsd default
-```
-
----
-
-## Theming
-
-### GTK Theme: Flexoki
-```bash
-apk add gtk+3.0
-git clone https://github.com/kepano/flexoki.git
-mkdir -p ~/.themes
-# Copy/adapt GTK theme to ~/.themes/Flexoki
-```
-
-### Icon Theme: YAMIS
-```bash
-git clone https://github.com/nicholasbien/yamis-icon-theme.git
-mkdir -p ~/.icons
-cp -r yamis-icon-theme/YAMIS ~/.icons/
-```
-
-### Cursor Theme: Graphite
-```bash
-git clone https://github.com/vinceliuice/Graphite-cursors.git
-cd Graphite-cursors
-./install.sh
-```
-
-### Fonts
-```bash
-# Core fonts
-apk add font-noto font-liberation ttf-font-awesome
-
-# Iosevka - download from releases
-wget https://github.com/be5invis/Iosevka/releases/download/v29.0.0/PkgTTC-IosevkaTermSlab-29.0.0.zip
-mkdir -p ~/.local/share/fonts
-unzip PkgTTC-*.zip -d ~/.local/share/fonts/
-fc-cache -fv
-
-# Nerd Fonts
-mkdir -p ~/.local/share/fonts/NerdFonts
-cd ~/.local/share/fonts/NerdFonts
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/IosevkaTermSlab.zip
-unzip IosevkaTermSlab.zip
-fc-cache -fv
-```
-
-### Apply GTK Settings
-```bash
-mkdir -p ~/.config/gtk-3.0
-cat > ~/.config/gtk-3.0/settings.ini << 'EOF'
-[Settings]
-gtk-theme-name=Flexoki
-gtk-icon-theme-name=YAMIS
-gtk-font-name=Iosevka Aile 11
-gtk-cursor-theme-name=Graphite-Cursors_light
-gtk-application-prefer-dark-theme=0
-EOF
-```
-
----
-
-## labwc Configuration
-
-```bash
-mkdir -p ~/.config/labwc
-cp ~/repos/config/home/labwc/* ~/.config/labwc/
-```
-
-Create `~/.config/labwc/autostart`:
-```bash
-#!/bin/sh
-pipewire &
 wireplumber &
-pipewire-pulse &
-swww-daemon &
-waybar &
-mako &
-blueman-applet &
-nm-applet &
 ```
 
-Make executable:
+## 5.1) Swapfile alternative (laptops)
+
+If you prefer a swapfile on Btrfs instead of a swap partition:
+
 ```bash
-chmod +x ~/.config/labwc/autostart
+sudo mkdir -p /swap
+sudo chattr +C /swap
+sudo fallocate -l 16G /swap/swapfile
+sudo chmod 600 /swap/swapfile
+sudo mkswap /swap/swapfile
+sudo swapon /swap/swapfile
+echo '/swap/swapfile none swap defaults 0 0' | sudo tee -a /etc/fstab
 ```
 
----
-
-## XDG Portals
+## 6) Theming (match NixOS look)
 
 ```bash
-apk add xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr
+sudo apk add font-noto font-liberation ttf-font-awesome
+
+# Flexoki + YAMIS + Graphite are not guaranteed in Alpine repos.
+# Install via Nix or Git (after Nix is installed).
 ```
 
----
-
-## Additional Utilities
+## 7) Configs from this repo
 
 ```bash
-# System utilities
-apk add brightnessctl grim slurp wl-clipboard wlr-randr
+# Example: clone your config repo and link Wayland configs
+mkdir -p ~/repos
+cd ~/repos
+# git clone <your repo> config
 
-# Media
-apk add vlc inkscape
-
-# Archives
-apk add p7zip unrar xarchiver
-
-# VPN
-apk add wireguard-tools
+ln -s ~/repos/config/home/labwc ~/.config/labwc
+ln -s ~/repos/config/home/waybar ~/.config/waybar
+ln -s ~/repos/config/home/fuzzel ~/.config/fuzzel
+ln -s ~/repos/config/home/raffi ~/.config/raffi
 ```
 
+## 8) Optional: install Nix for apps
+
+You said you will install Nix. After that, use your existing Nix configs
+or `nix profile install` for:
+- zen-browser, librewolf, vscodium
+- obsidian, inkscape, vlc, etc.
+
 ---
 
-## Flatpak Setup (Recommended for Alpine)
-
-Flatpak provides glibc-based containers, solving many compatibility issues:
+## Quick reference: OpenRC
 
 ```bash
-apk add flatpak
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-
-# Useful Flatpaks for Alpine
-flatpak install flathub \
-    io.gitlab.librewolf-community \
-    com.vscodium.codium \
-    md.obsidian.Obsidian \
-    com.super_productivity.SuperProductivity \
-    com.github.tchx84.Flatseal
-```
-
----
-
-## Distrobox for glibc Apps
-
-For apps that absolutely need glibc:
-
-```bash
-apk add distrobox podman
-
-# Create Ubuntu container
-distrobox create --name ubuntu-apps --image ubuntu:latest
-
-# Enter and install glibc-only apps
-distrobox enter ubuntu-apps
-# Inside: apt install <package>
-
-# Export apps to host
-distrobox-export --app <application>
-```
-
----
-
-## Gaming (Optional)
-
-```bash
-# Steam requires glibc - use Flatpak
-flatpak install flathub com.valvesoftware.Steam
-```
-
----
-
-## Alpine-Specific Considerations
-
-### musl vs glibc
-- Alpine uses musl libc, not glibc
-- Many pre-built binaries (AppImages, some downloads) won't work
-- Solutions: Flatpak, distrobox, or compile from source
-
-### OpenRC vs systemd
-- Alpine uses OpenRC, not systemd
-- User services work differently - use autostart scripts
-- Service commands: `rc-service <name> start/stop/restart`
-- Enable at boot: `rc-update add <name> default`
-
-### Fewer Packages
-- Alpine has fewer packages than Debian/Arch
-- Check `apk search <package>` before assuming availability
-- Build from source or use Flatpak as fallback
-
----
-
-## Troubleshooting
-
-### labwc won't start
-- Check seatd: `rc-service seatd status`
-- Verify groups: `groups john` (should include seat, video, input)
-- Check logs: `cat /var/log/messages | grep labwc`
-
-### No sound
-- Verify PipeWire is running: `pgrep pipewire`
-- Check ALSA: `aplay -l`
-- Ensure user is in audio group
-
-### Flatpak apps look wrong
-- Install GTK themes for Flatpak:
-  ```bash
-  flatpak install flathub org.gtk.Gtk3theme.Adwaita-dark
-  ```
-- Or override with Flatseal
-
-### AppImage doesn't work
-- Expected on Alpine (musl incompatibility)
-- Use Flatpak version or build from source
-
----
-
-## Quick Reference: Key Bindings
-
-| Key | Action |
-|-----|--------|
-| Super (release) | Fuzzel launcher |
-| Alt (release) | Kitty terminal |
-| Win+Return | Kitty terminal |
-| Win+W | LibreWolf browser |
-| Win+F | Dolphin file manager |
-| Win+O | Obsidian |
-| Win+Space | VSCodium |
-| Win+M | Maximize window |
-| Win+Left/Right | Snap to edge |
-| Alt+Tab | Window switcher |
-| Alt+Return | Close window |
-| Alt+X | wlogout |
-| F3 | Screenshot (grim) |
-
----
-
-## Quick Reference: OpenRC Commands
-
-```bash
-# Service management
 rc-service <service> start|stop|restart|status
-
-# Enable/disable at boot
 rc-update add <service> default
 rc-update del <service> default
-
-# List services
 rc-status
-
-# System
-poweroff
-reboot
 ```
+
+---
+
+## Package verification script
+
+Run on the target system to check repo availability and get Nix fallback commands:
+
+
+
+If you want a custom list, edit .
+
+
+## References
+- Alpine Installation Handbook: https://docs.alpinelinux.org/user-handbook/0.1a/Installing/setup_alpine.html
+- Alpine Package Repositories: https://docs.alpinelinux.org/user-handbook/0.1a/Repositories.html
+- OpenRC: https://docs.alpinelinux.org/user-handbook/0.1a/Working/openrc.html
+
+---
+
+## Full parity checklist (apps, services, configs)
+
+This section mirrors the rest of your Nix config. Install distro-native packages where possible; if a package is
+missing, use Nix or Flatpak.
+
+### Package search (Alpine)
+
+```bash
+apk search -v <name>
+```
+
+### Apps and tools to install (distro-native where feasible)
+
+CLI + shells:
+- fish, fisher, zoxide, nnn, zellij, kitty
+
+Wayland + desktop utilities:
+- waybar, mako, ferritebar, fuzzel, raffi, kanshi, wl-clipboard, grim, slurp, wlr-randr, wdisplays, wl-gammactl, wlopm
+
+File management + disk tools:
+- thunar, thunar-volman, thunar-archive-plugin, gvfs, xarchiver, qdirstat, czkawka, fclones-gui, gparted
+
+Browsers + editors:
+- zen-browser, librewolf, vscodium
+
+Productivity + media:
+- obsidian, vlc, inkscape, fontfinder, xnconvert, normcap, penpot-desktop, lunacy, koreader, readest
+
+Dev tools:
+- nodejs, bun, rust/cargo, gh (GitHub CLI), github-desktop, codeberg-cli, devtoolbox, n8n, love
+
+System utilities:
+- network-manager-applet, blueman, pavucontrol, brightnessctl, usbimager, unetbootin, bleachbit, peazip, kopia-ui
+
+Phone integration:
+- android-tools, qtscrcpy, kdeconnect
+
+Networking + sharing:
+- qbittorrent, localsend, tailscale
+
+Learning + misc:
+- gtypist, amphetype, mupen64plus, minuet
+
+AI + LLM tools:
+- lmstudio, claude-desktop, helium
+
+### Fonts + theming (minimum set)
+
+Install at least:
+- Iosevka + Nerd Font (Iosevka Term Slab), Font Awesome, Noto, Liberation
+- Flexoki GTK, YAMIS icons, Graphite cursor (use Git or Nix if missing)
+
+### User services parity
+
+#### pCloud bisync (rclone)
+
+Create script:
+
+```bash
+sudo tee /usr/local/bin/pcloud-bisync << 'EOF'
+#!/bin/sh
+set -euo pipefail
+mkdir -p "$HOME/pCloud" "$HOME/.cache/rclone-bisync/pcloud"
+exec rclone bisync pcloud: "$HOME/pCloud" \
+  --workdir "$HOME/.cache/rclone-bisync/pcloud" \
+  --size-only \
+  --create-empty-src-dirs \
+  --exclude "*.partial" \
+  --exclude ".Trash-1000/**" \
+  --exclude "**/.Trash-1000/**" \
+  --exclude "**/node_modules/**" \
+  --tpslimit 10 --tpslimit-burst 10 \
+  --checkers 32 --transfers 16 \
+  --fast-list \
+  --retries 10 --retries-sleep 30s --low-level-retries 50 \
+  --stats 30s -v
+EOF
+sudo chmod +x /usr/local/bin/pcloud-bisync
+```
+
+OpenRC service (runs every 2 hours in a loop):
+
+```bash
+sudo tee /etc/init.d/pcloud-bisync << 'EOF'
+#!/sbin/openrc-run
+name="pcloud-bisync"
+command="/usr/local/bin/pcloud-bisync"
+command_background="yes"
+pidfile="/run/pcloud-bisync.pid"
+
+start() {
+  ebegin "Starting ${name}"
+  start-stop-daemon --start --make-pidfile --pidfile "${pidfile}" \
+    --background --startas /bin/sh -- -c 'while true; do /usr/local/bin/pcloud-bisync; sleep 7200; done'
+  eend $?
+}
+
+stop() {
+  ebegin "Stopping ${name}"
+  start-stop-daemon --stop --pidfile "${pidfile}"
+  eend $?
+}
+EOF
+sudo chmod +x /etc/init.d/pcloud-bisync
+sudo rc-update add pcloud-bisync default
+sudo rc-service pcloud-bisync start
+```
+
+#### Lid close behavior (wlopm)
+
+If you want the lid-close behavior from Nix, install `wlopm` and use a udev/acpid or logind hook
+to trigger `wlopm --off "*"` on lid close and `wlopm --on "*"` on open.
+
+### Config parity (from this repo)
+
+Ensure these are in place:
+- `~/.config/labwc` (labwc config)
+- `~/.config/waybar`
+- `~/.config/fuzzel`
+- `~/.config/raffi`
+- `~/.config/kanshi` (if you use monitor profiles)
+- `~/.zen` / autoconfig if you rely on Zen customizations
+
+## Package verification script
+
+Run on the target system to check repo availability and get Nix fallback commands:
+
+```bash
+~/repos/config/scripts/migrate/verify-packages-alpine.sh
+```
+
+If you want a custom list, edit `scripts/migrate/package-list.txt`.
+
+## One-command verification + service setup
+
+If you want the “clone, run, done” flow:
+
+```bash
+~/repos/config/scripts/migrate/run.sh
+```
+
+This will:
+- check all packages against your distro repos
+- create a missing list + Nix fallback script
+- generate service scripts for your init
+
+Notes:
+- You can disable auto installs with `AUTO_INSTALL_NATIVE=0`, `AUTO_INSTALL_NIX=0`, `AUTO_INSTALL_FLATPAK=0`.
+- Flatpak fallbacks are listed in `scripts/migrate/flatpak-list.txt` and write to `/tmp/flatpak-missing.txt`.
+- Per-distro lists live in `scripts/migrate/lists/` (edit freely).

@@ -1,8 +1,9 @@
-{ config, pkgs, ferritebar, ... }:
+{ config, pkgs, ... }:
 let
+  apps = import ../tauri.nix { inherit pkgs; };
   ferritebarRepoDir = "${config.home.homeDirectory}/repos/config/home/ferritebar";
 in {
-  home.packages = [ ferritebar.packages.${pkgs.system}.default ];
+  home.packages = [ apps.ferritebar ];
 
   xdg.configFile."ferritebar".source =
     config.lib.file.mkOutOfStoreSymlink ferritebarRepoDir;

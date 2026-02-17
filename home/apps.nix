@@ -18,7 +18,6 @@ in
     pixieditor
     wayvnc
     webkitgtk_6_0
-    voxinput
     filebrowser-quantum
   ];
 }
