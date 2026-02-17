@@ -521,7 +521,7 @@ in {
     vscodium
     obsidian
     (helium-nix.packages.${pkgs.system}.default)
-    tauriApps.spredux
+    tauriApps.daylight
 
     # Utilities
     thunar

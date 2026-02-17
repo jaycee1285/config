@@ -249,7 +249,7 @@ in
     pname = "ferritebar";
     version = "0.1.0";
     url = "https://github.com/jaycee1285/ferritebar/releases/download/v0.1.0/ferritebar-v0.1.0-linux-x86_64.tar.xz";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256:62f54a8917f96a97b4fa06c17210fb201fcd2d612a20fb7a8a7d0dd09324c54d";
   };
 
   rustvox = mkRustvoxApp {
