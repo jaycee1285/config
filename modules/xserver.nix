@@ -9,12 +9,18 @@
     desktopManager.lxqt.enable = true;
     desktopManager.lxqt.extraPackages = [ pkgs.lxqt.lxqt-wayland-session ];
   };
-services.displayManager.ly = {
-  enable = true;
-  settings = {
-    waylandsessions = "/run/current-system/sw/share/wayland-sessions/";
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet \
+          --time --remember \
+          --sessions /run/current-system/sw/share/wayland-sessions \
+          --xsessions /run/current-system/sw/share/xsessions";
+        user = "greeter";
+      };
+    };
   };
-};
 security.soteria.enable = true;
   xdg.portal.wlr.enable = true;
   console.keyMap = "us";

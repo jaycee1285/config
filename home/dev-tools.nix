@@ -13,7 +13,6 @@
     codeberg-cli
 
     # Editors & IDEs
-    pkgs.unstable.codex
     pkgs.unstable.opencode
     pkgs.unstable.fresh-editor
     pkgs.unstable.claude-code

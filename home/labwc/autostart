@@ -8,10 +8,7 @@ swww-daemon &
 # Launch a panel such as yambar or waybar.
 ferritebar >/dev/null 2>&1 &
 #waybar >/dev/null 2>&1 &
-#lxqt-panel >/dev/null 2>&1 &
-#xfce4-panel >/dev/null 2>&1 &
-#nwg-panel >/dev/null 2>&1 &
-#sfwbar >/dev/null 2>&1 &
+
 
 # Enable notifications. Typically GNOME/KDE application notifications go
 # through the org.freedesktop.Notifications D-Bus API and require a client such
@@ -20,6 +17,7 @@ mako >/dev/null 2>&1 &
 
 #nm-applet >/dev/null 2>&1 &
 
+rustvox 2>&1
 
 #pcloud 2>&1 &
 

@@ -9,5 +9,10 @@
 
   home.sessionPath = [ "$HOME/bin" ];
 
-  programs.bash.enable = true;
+  programs.bash = {
+    enable = true;
+    initExtra = ''
+      export PATH="$HOME/.bun/bin:$PATH"
+    '';
+  };
 }
