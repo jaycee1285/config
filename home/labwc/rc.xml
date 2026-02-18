@@ -156,7 +156,13 @@ windows and WM_CLASS for XWayland clients.
     <keybind key="W-S-Right">
       <action name="SendToDesktop" to="right"/>
     </keybind>
-  </keyboard>
+  
+  <keybind key="A-w">
+    <action name="Execute" command="sh -lc &apos;/nix/store/r03mjbkh6v5cpah8a9pzz60ih1dhn0i0-hm_labwcniri ws add&apos;" />
+  </keybind>
+  <keybind key="A-S-w">
+    <action name="Execute" command="sh -lc &apos;/nix/store/r03mjbkh6v5cpah8a9pzz60ih1dhn0i0-hm_labwcniri ws rm&apos;" />
+  </keybind></keyboard>
   <libinput>
     <device>
       <naturalScroll>yes</naturalScroll>
