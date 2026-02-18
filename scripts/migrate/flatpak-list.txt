@@ -1,0 +1,6 @@
+# Flatpak IDs for apps you want as a fallback when native packages are missing/outdated
+io.gitlab.librewolf-community
+com.vscodium.codium
+md.obsidian.Obsidian
+com.valvesoftware.Steam
+com.github.tchx84.Flatseal

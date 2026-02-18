@@ -203,6 +203,9 @@ let
         <keybind key="W-i">
           <action name="Execute" command="install-nixos"/>
         </keybind>
+        <keybind key="W-g">
+          <action name="Execute" command="calamares"/>
+        </keybind>
         <keybind key="XF86_MonBrightnessUp">
           <action name="Execute" command="brightnessctl set +10%"/>
         </keybind>
@@ -246,7 +249,10 @@ let
     <openbox_menu>
       <menu id="root-menu" label="root-menu">
         <title label="Emergency ISO"></title>
-        <item label="Install NixOS">
+        <item label="Install NixOS (GUI)">
+          <action name="Execute"><command>calamares</command></action>
+        </item>
+        <item label="Install NixOS (Script)">
           <action name="Execute"><command>kitty -e install-nixos</command></action>
         </item>
         <separator></separator>
@@ -293,9 +299,9 @@ let
     # Show welcome message with persistence status
     sleep 2 && {
       if mountpoint -q /persist 2>/dev/null; then
-        notify-send "Welcome to NixOS Emergency ISO" "PERSISTENT MODE - Changes saved to PERSIST partition\n\nSuper+I = Install\nSuper = Launcher\nSuper+Return = Terminal"
+        notify-send "Welcome to NixOS Emergency ISO" "PERSISTENT MODE - Changes saved to PERSIST partition\n\nSuper+G = Calamares (GUI)\nSuper+I = Install (script)\nSuper = Launcher\nSuper+Return = Terminal"
       else
-        notify-send "Welcome to NixOS Emergency ISO" "EPHEMERAL MODE - Changes lost on reboot\n\nSuper+I = Install\nSuper = Launcher\nSuper+Return = Terminal"
+        notify-send "Welcome to NixOS Emergency ISO" "EPHEMERAL MODE - Changes lost on reboot\n\nSuper+G = Calamares (GUI)\nSuper+I = Install (script)\nSuper = Launcher\nSuper+Return = Terminal"
       fi
     } &
   '';
@@ -313,14 +319,20 @@ let
   waybarConfig = builtins.toJSON {
     layer = "top";
     position = "top";
-    modules-left = [ "custom/install" "custom/persist" ];
+    modules-left = [ "custom/install" "custom/calamares" "custom/persist" ];
     modules-center = [ "wlr/taskbar" ];
     modules-right = [ "tray" "network" "pulseaudio" "battery" "clock" ];
 
     "custom/install" = {
-      format = "  Install NixOS";
+      format = "  Install NixOS (Script)";
       on-click = "kitty -e install-nixos";
       tooltip = "Click to start NixOS installation";
+    };
+
+    "custom/calamares" = {
+      format = "  Calamares (GUI)";
+      on-click = "calamares";
+      tooltip = "Click to start the graphical installer";
     };
 
     "custom/persist" = {
@@ -383,6 +395,17 @@ let
     #custom-install:hover {
       background: #66BB6A;
     }
+    #custom-calamares {
+      background: #2196F3;
+      color: white;
+      padding: 0 15px;
+      border-radius: 5px;
+      margin: 5px;
+      font-weight: bold;
+    }
+    #custom-calamares:hover {
+      background: #42A5F5;
+    }
     #custom-persist {
       padding: 0 10px;
       margin: 5px;
@@ -437,6 +460,11 @@ in {
   networking.wireless.enable = lib.mkForce false;
   networking.networkmanager.enable = true;
 
+  # Wi-Fi firmware + ath11k coverage
+  hardware.enableRedistributableFirmware = true;
+  hardware.firmware = [ pkgs.linux-firmware ];
+  boot.kernelModules = [ "ath11k_pci" "ath11k_core" "ath11k" ];
+
   # Audio
   services.pipewire = {
     enable = true;
@@ -450,6 +478,28 @@ in {
 
   # Btrfs support for persistence partition
   boot.supportedFilesystems = [ "btrfs" ];
+
+  # Calamares requirements: remove 10GB hard requirement
+  environment.etc."calamares/modules/welcome.conf".text = ''
+    # https://codeberg.org/Calamares/calamares/src/branch/calamares/src/modules/welcome/welcome.conf
+    showReleaseNotesUrl: true
+
+    requirements:
+        requiredStorage: 1
+        requiredRam: 3.0
+
+        internetCheckUrl: [ https://geoip.kde.org/v1/calamares, https://cache.nixos.org/ ]
+
+        check:
+            - ram
+            - power
+            - internet
+            - screen
+
+        required:
+            - ram
+            - internet
+  '';
 
   # Optional persistence: mount PERSIST partition and bind-mount home
   systemd.services.persist-home = {
@@ -528,6 +578,7 @@ in {
     pavucontrol
     brightnessctl
     networkmanagerapplet
+    xwayland
 
     # Install tools
     git
@@ -604,6 +655,19 @@ Categories=System;
 EOF
     chmod +x /home/nixos/Desktop/Install-NixOS.desktop
 
+    # Desktop shortcut for Calamares
+    cat > /home/nixos/Desktop/Install-NixOS-GUI.desktop << 'EOF'
+[Desktop Entry]
+Type=Application
+Name=Install NixOS (GUI)
+Comment=Install NixOS using Calamares
+Exec=calamares
+Icon=system-software-install
+Terminal=false
+Categories=System;
+EOF
+    chmod +x /home/nixos/Desktop/Install-NixOS-GUI.desktop
+
     # README on desktop
     cat > /home/nixos/Desktop/README.txt << 'EOF'
 ===========================================
@@ -623,12 +687,14 @@ KEYBOARD SHORTCUTS:
   Super + Space   = VSCodium
   Super + O       = Obsidian
   Super + F       = File manager
+  Super + G       = Calamares (GUI)
   Super + I       = Start installer
   Super + M       = Maximize window
   Super + Left/Right = Snap window
 
 TO INSTALL:
-  1. Click "Install NixOS" in waybar (top-left)
+  1. Click "Calamares (GUI)" or "Install NixOS (Script)" in waybar (top-left)
+     OR run: calamares
      OR run: install-nixos
 
   2. Follow the prompts - you'll need to:

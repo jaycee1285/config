@@ -83,7 +83,7 @@
         iso = nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
-            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-calamares.nix"
             ./iso.nix
           ];
           specialArgs = {

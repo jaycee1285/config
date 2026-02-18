@@ -1,6 +1,6 @@
 # NixOS Emergency ISO
 
-A bootable live environment with your LabWC/Waybar/Fuzzel setup, pre-installed apps, and an install script to deploy your full config.
+A bootable live environment with your LabWC/Waybar/Fuzzel setup, pre-installed apps, and both GUI (Calamares) and script-based installers to deploy your full config.
 
 ## Files Created/Modified
 
@@ -9,10 +9,15 @@ A bootable live environment with your LabWC/Waybar/Fuzzel setup, pre-installed a
 - Auto-login to LabWC as `nixos` user
 - VSCodium, Obsidian, Helium, SPRedux pre-installed
 - Install script available via:
-  - Waybar button (top-left green "Install NixOS")
+  - Waybar button (top-left green "Install NixOS (Script)")
   - Right-click menu
   - Keyboard shortcut `Super+I`
   - Terminal command `install-nixos`
+- Calamares GUI installer available via:
+  - Waybar button (top-left blue "Calamares (GUI)")
+  - Right-click menu
+  - Keyboard shortcut `Super+G`
+  - Terminal command `calamares`
 - GParted for partitioning
 - Desktop README with keybinds and instructions
 
@@ -41,12 +46,19 @@ The ISO will be at `./result/iso/nixos-emergency-labwc-*.iso`
 
 ---
 
+## Calamares (GUI Installer)
+
+Use Calamares for a fully guided graphical install, then reboot and switch to your flake-based config as normal.
+
+---
+
 ## Live ISO Keybinds
 
 | Key | Action |
 |-----|--------|
 | `Super` (tap) | Fuzzel launcher |
 | `Super+I` | Start installer |
+| `Super+G` | Calamares (GUI) |
 | `Super+Return` | Terminal |
 | `Super+Space` | VSCodium |
 | `Super+O` | Obsidian |
@@ -72,7 +84,9 @@ The ISO will be at `./result/iso/nixos-emergency-labwc-*.iso`
    sudo mkdir -p /mnt/boot
    sudo mount /dev/sdXZ /mnt/boot     # Your EFI partition
    ```
-5. Run installer: `install-nixos`
+5. Run installer:
+   - `calamares` (GUI)
+   - `install-nixos` (script)
 
 ---
 
@@ -115,4 +129,4 @@ The ISO doesn't include LibreWolf since it was using flatpak in your main config
 
 ## Changes
 
-- Moved `installation-cd-minimal.nix` import from `iso.nix` to `flake.nix` to fix infinite recursion. Using `pkgs.path` inside `imports` caused a circular dependency since `pkgs` requires `config`, which requires evaluating `imports` first.
+- Uses `installation-cd-graphical-calamares.nix` in `flake.nix` to provide the Calamares GUI installer while keeping the LabWC live-ISO configuration in `iso.nix`.

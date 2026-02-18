@@ -235,14 +235,14 @@ in
     pname = "daylight";
     version = "0.1.0";
     url = "https://github.com/jaycee1285/daylight/releases/download/v0.1.0/daylight-v0.1.0-linux-x86_64.tar.xz";
-    hash = "sha256:6d0e81ed94a4c194b7962255684c44f2e5d97ef6ca8c228164b966e15423138a";
+    hash = "sha256:53a548d0b0dcfd25b572d3172fa393af154188e3f09cdc62da04f9b7e42abe1c";
   };
 
   openswarm = mkGtkApp {
     pname = "openswarm";
     version = "0.0.1";
     url = "https://github.com/jaycee1285/OpenSwarm/releases/download/release/openswarm-v0.0.1-linux-x86_64.tar.xz";
-    hash = "sha256:89e8cd1bdd10b8856692bec9766ca6138f3b6e74968729b1c5ed89e1f08a9b80";
+    hash = "sha256-XGMl+K/+istRrEUdzP0ezIqUWir+VGxx9nlyncKQ11E=";
   };
 
   ferritebar = mkFerritebarApp {

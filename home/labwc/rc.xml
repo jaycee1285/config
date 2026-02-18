@@ -40,14 +40,11 @@ windows and WM_CLASS for XWayland clients.
     <keybind key="W-r">
       <action name="Execute" command="rf-tools"/>
     </keybind>
-    <keybind key="W-Escape">
-      <action name="Execute" command="rf-power"/>
-    </keybind>
     <keybind key="Alt_L" onRelease="yes">
       <action name="Execute" command="kitty"/>
     </keybind>
     <keybind key="Alt_R" onRelease="yes">
-      <action name="Execute" command="makoctl dismiss -a"/>
+      <action name="Execute" command="sh -lc &apos;makoctl dismiss -a&apos;" />
     </keybind>
     <keybind key="A-Tab">
       <action name="NextWindow"/>
@@ -75,14 +72,12 @@ windows and WM_CLASS for XWayland clients.
       <command>sh -lc &apos;/home/john/bin/labwc-niri ws rm&apos;</command>
     </action>
   </keybind>
-
   <keybind key="W-Tab">
       <action name="GoToDesktop" to="right"/>
     </keybind>
     <keybind key="W-S-Tab">
       <action name="GoToDesktop" to="left"/>
     </keybind>
-
     <keybind key="W-space">
       <action name="Execute" command="codium"/>
     </keybind>
@@ -132,17 +127,12 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="W-p">
       <action name="Execute">
-        <command>spredux</command>
+        <command>daylight</command>
       </action>
     </keybind>
     <keybind key="W-c">
       <action name="Execute">
         <command>sh -lc &apos;kitty -o remember_window_size=no -o initial_window_width=40c -o initial_window_height=20c -e base16changer&apos;</command>
-      </action>
-    </keybind>
-    <keybind key="F10">
-      <action name="Execute">
-        <command>&quot;~/bin/fuzzelfi.sh&quot;</command>
       </action>
     </keybind>
     <keybind key="Print">
@@ -175,14 +165,9 @@ windows and WM_CLASS for XWayland clients.
         <command>sh -lc &apos;ferritebar msg network&apos;</command>
       </action>
     </keybind>
-    <keybind key="A-p">
+    <keybind key="W-Escape">
       <action name="Execute">
         <command>sh -lc &apos;ferritebar msg power&apos;</command>
-      </action>
-    </keybind>
-    <keybind key="A-\">
-      <action name="Execute">
-        <command>sh -lc &apos;makoctl dismiss -a&apos;</command>
       </action>
     </keybind>
     <keybind key="W-Left">

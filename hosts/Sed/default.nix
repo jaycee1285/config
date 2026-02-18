@@ -11,6 +11,7 @@
 #    ../../modules/nemo.nix
     ../../modules/networking.nix
     ../../modules/nix-features.nix
+    ../../modules/memory.nix
     ../../modules/system-packages.nix
     ../../modules/programs.nix
     ../../modules/services.nix
