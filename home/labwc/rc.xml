@@ -10,6 +10,10 @@ default values.
     <adaptiveSync>yes</adaptiveSync>
     <reuseOutputMode>no</reuseOutputMode>
   </core>
+  <desktops number="1">
+    <names>
+    </names>
+  </desktops>
   <!-- <font><theme> can be defined without an attribute to set all places -->
   <theme>
     <name>Base16</name>
@@ -36,14 +40,11 @@ windows and WM_CLASS for XWayland clients.
     <keybind key="W-r">
       <action name="Execute" command="rf-tools"/>
     </keybind>
-    <keybind key="W-Escape">
-      <action name="Execute" command="rf-power"/>
-    </keybind>
     <keybind key="Alt_L" onRelease="yes">
       <action name="Execute" command="kitty"/>
     </keybind>
     <keybind key="Alt_R" onRelease="yes">
-      <action name="Execute" command="makoctl dismiss -a"/>
+      <action name="Execute" command="sh -lc &apos;makoctl dismiss -a&apos;" />
     </keybind>
     <keybind key="A-Tab">
       <action name="NextWindow"/>
@@ -55,10 +56,27 @@ windows and WM_CLASS for XWayland clients.
       <action name="Execute" command="kitty"/>
     </keybind>
     <keybind key="W-w">
-      <action name="Execute" command="sh -lc &apos;flatpak run io.gitlab.librewolf-community --profile &quot;$HOME/.librewolf/mmfqe1ap.default&quot;&apos;"/>
+      <action name="Execute" command="librewolf"/>
     </keybind>
     <keybind key="W-S-w">
       <action name="Execute" command="librewolf --private-window"/>
+    </keybind>
+  <keybind key="A-w">
+    <action name="Execute">
+      <command>sh -lc &apos;/home/john/bin/labwc-niri ws add&apos;</command>
+    </action>
+  </keybind>
+
+  <keybind key="A-S-w">
+    <action name="Execute">
+      <command>sh -lc &apos;/home/john/bin/labwc-niri ws rm&apos;</command>
+    </action>
+  </keybind>
+  <keybind key="W-Tab">
+      <action name="GoToDesktop" to="right"/>
+    </keybind>
+    <keybind key="W-S-Tab">
+      <action name="GoToDesktop" to="left"/>
     </keybind>
     <keybind key="W-space">
       <action name="Execute" command="codium"/>
@@ -70,6 +88,12 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="W-o">
       <action name="Execute" command="obsidian"/>
+    </keybind>
+    <keybind key="W-g">
+      <action name="Execute" command="github-desktop"/>
+    </keybind>
+    <keybind key="W-z">
+      <action name="Execute" command="zen"/>
     </keybind>
     <keybind key="F3">
       <action name="Execute" command="grim"/>
@@ -103,17 +127,12 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="W-p">
       <action name="Execute">
-        <command>~/repos/SPRedux/result/bin/spredux</command>
+        <command>daylight</command>
       </action>
     </keybind>
     <keybind key="W-c">
       <action name="Execute">
         <command>sh -lc &apos;kitty -o remember_window_size=no -o initial_window_width=40c -o initial_window_height=20c -e base16changer&apos;</command>
-      </action>
-    </keybind>
-    <keybind key="F10">
-      <action name="Execute">
-        <command>&quot;~/bin/fuzzelfi.sh&quot;</command>
       </action>
     </keybind>
     <keybind key="Print">
@@ -123,17 +142,32 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="A-k">
       <action name="Execute">
-        <command>pkill waybar</command>
+        <command>pkill ferritebar</command>
       </action>
     </keybind>
     <keybind key="A-b">
       <action name="Execute">
-        <command>&quot;waybar&quot;</command>
+        <command>ferritebar</command>
       </action>
     </keybind>
-    <keybind key="A-\">
+    <keybind key="A-f">
       <action name="Execute">
-        <command>&quot;makoctl dismiss -a&quot;</command>
+        <command>sh -lc &apos;ferritebar msg taskbar-focus&apos;</command>
+      </action>
+    </keybind>
+    <keybind key="A-v">
+      <action name="Execute">
+        <command>sh -lc &apos;ferritebar msg wg&apos;</command>
+      </action>
+    </keybind>
+    <keybind key="A-n">
+      <action name="Execute">
+        <command>sh -lc &apos;ferritebar msg network&apos;</command>
+      </action>
+    </keybind>
+    <keybind key="W-Escape">
+      <action name="Execute">
+        <command>sh -lc &apos;ferritebar msg power&apos;</command>
       </action>
     </keybind>
     <keybind key="W-Left">
@@ -156,13 +190,10 @@ windows and WM_CLASS for XWayland clients.
     <keybind key="W-S-Right">
       <action name="SendToDesktop" to="right"/>
     </keybind>
-  
-  <keybind key="A-w">
-    <action name="Execute" command="sh -lc &apos;/nix/store/r03mjbkh6v5cpah8a9pzz60ih1dhn0i0-hm_labwcniri ws add&apos;" />
-  </keybind>
-  <keybind key="A-S-w">
-    <action name="Execute" command="sh -lc &apos;/nix/store/r03mjbkh6v5cpah8a9pzz60ih1dhn0i0-hm_labwcniri ws rm&apos;" />
-  </keybind></keyboard>
+     <keybind key="W-S-Left">
+      <action name="SendToDesktop" to="left"/>
+    </keybind>
+    </keyboard>
   <libinput>
     <device>
       <naturalScroll>yes</naturalScroll>
