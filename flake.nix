@@ -18,9 +18,9 @@
     base16changer.url = "github:jaycee1285/base16changer";
     ferritebar.url = "github:jaycee1285/ferritebar";
     ferritebar.inputs.nixpkgs.follows = "nixpkgs";
-    sartwc.url = "path:/home/john/repos/sartwc";
+    sartwc.url = "github:jaycee1285/sartwc";
     sartwc.inputs.nixpkgs.follows = "nixpkgs";
-    intentile.url = "path:/home/john/repos/intentile";
+    intentile.url = "github:jaycee1285/intentile";
     intentile.inputs.nixpkgs.follows = "nixpkgs";
   };
 
