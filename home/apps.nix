@@ -1,8 +1,9 @@
-{ config, pkgs, unstable, crustdown, base16changer, ... }:
+{ config, pkgs, unstable, crustdown, base16changer, intentile, ... }:
 let
+  system = pkgs.stdenv.hostPlatform.system;
   mdphr = pkgs.runCommand "mdphr" {} ''
     mkdir -p $out/bin
-    ln -s ${crustdown.packages.${pkgs.system}.default}/bin/crustdown $out/bin/mdphr
+    ln -s ${crustdown.packages.${system}.default}/bin/crustdown $out/bin/mdphr
   '';
 in
 {
@@ -12,12 +13,12 @@ in
     rink
     qalculate-gtk
     heroic
-    base16changer.packages.${pkgs.system}.default
+    base16changer.packages.${system}.default
     material-design-icons
     rustc
-    pixieditor
     wayvnc
     webkitgtk_6_0
     filebrowser-quantum
+    intentile.packages.${system}.default
   ];
 }

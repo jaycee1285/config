@@ -1,10 +1,23 @@
-{ config, pkgs, ... }:
+{ config, pkgs, krust, ... }:
+
+let
+  system = pkgs.stdenv.hostPlatform.system;
+in
 
 {
   home.packages = with pkgs; [
-    # Shells
-    fish
-    fishPlugins.fifc
+    # Core shell utilities
+    curl
+    wget
+    git
+    jq
+    ripgrep
+    sqlite
+
+    # Modern CLI replacements / helpers
+    eza
+    nh
+    nix-init
 
     # Navigation & file managers
     zoxide
@@ -12,6 +25,9 @@
 
     # Multiplexers
     zellij
+
+    # Local TUI tools
+    krust.packages.${system}.default
 
     # Terminals
     kitty

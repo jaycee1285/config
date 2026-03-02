@@ -14,14 +14,11 @@
     wl-gammactl
 
     # File management
-    thunar-volman
-    thunar-archive-plugin
-    xarchiver
+    lxqt.pcmanfm-qt
 
     # Disk tools
     qdirstat
     czkawka-full
-    fclones-gui
     gparted
 
     # Utilities
@@ -32,7 +29,6 @@
 
     # Boot media
     usbimager
-    unetbootin
 
     # Backup
     kopia-ui

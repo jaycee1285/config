@@ -3,8 +3,14 @@ set -eu
 
 STATE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/labwc-niri"
 STATE_WS="$STATE_DIR/current_ws"
+STATE_ARM_WS="$STATE_DIR/arm_ws"
+STATE_ARM_TS="$STATE_DIR/arm_ts"
+STATE_SHAPE="$STATE_DIR/shape"
+STATE_SHAPE_TS="$STATE_DIR/shape_ts"
 RC_XML="${LABWC_NIRI_RC_XML:-${XDG_CONFIG_HOME:-$HOME/.config}/labwc/rc.xml}"
 SPAWN_DELAY="${LABWC_NIRI_SPAWN_DELAY:-0.20}"
+ARM_TTL_MS="${LABWC_NIRI_ARM_TTL_MS:-900}"
+SHAPE_TTL_MS="${LABWC_NIRI_SHAPE_TTL_MS:-1400}"
 SCRIPT_PATH="$(readlink -f "$0" 2>/dev/null || realpath "$0" 2>/dev/null || printf '%s' "$0")"
 
 KEY_HALF_LEFT="${LABWC_NIRI_KEY_HALF_LEFT:-super+ctrl+h}"
@@ -12,6 +18,10 @@ KEY_HALF_RIGHT="${LABWC_NIRI_KEY_HALF_RIGHT:-super+ctrl+l}"
 KEY_THIRD_LEFT="${LABWC_NIRI_KEY_THIRD_LEFT:-super+ctrl+j}"
 KEY_THIRD_MID="${LABWC_NIRI_KEY_THIRD_MID:-super+ctrl+k}"
 KEY_THIRD_RIGHT="${LABWC_NIRI_KEY_THIRD_RIGHT:-super+ctrl+semicolon}"
+KEY_QUARTER_UL="${LABWC_NIRI_KEY_QUARTER_UL:-super+ctrl+u}"
+KEY_QUARTER_UR="${LABWC_NIRI_KEY_QUARTER_UR:-super+ctrl+i}"
+KEY_QUARTER_LL="${LABWC_NIRI_KEY_QUARTER_LL:-super+ctrl+o}"
+KEY_QUARTER_LR="${LABWC_NIRI_KEY_QUARTER_LR:-super+ctrl+p}"
 KEY_WS_NEXT="${LABWC_NIRI_KEY_WS_NEXT:-super+ctrl+Right}"
 KEY_WS_PREV="${LABWC_NIRI_KEY_WS_PREV:-super+ctrl+Left}"
 KEY_MOVE_NEXT="${LABWC_NIRI_KEY_MOVE_NEXT:-super+ctrl+shift+Right}"
@@ -246,6 +256,277 @@ set_count() {
   printf "%s\n" "$2" > "$file"
 }
 
+state_read() {
+  file="$1"
+  if [ -f "$file" ]; then
+    cat "$file"
+  fi
+}
+
+state_write() {
+  file="$1"
+  value="$2"
+  printf "%s\n" "$value" > "$file"
+}
+
+state_clear() {
+  file="$1"
+  rm -f "$file"
+}
+
+now_ms() {
+  date +%s%3N
+}
+
+is_fresh() {
+  ts="$1"
+  ttl="$2"
+  if [ -z "$ts" ]; then
+    return 1
+  fi
+  now="$(now_ms)"
+  age=$((now - ts))
+  [ "$age" -ge 0 ] && [ "$age" -le "$ttl" ]
+}
+
+next_ws() {
+  ws="$1"
+  printf "%s\n" $((ws % MAX_WS + 1))
+}
+
+prev_ws() {
+  ws="$1"
+  p=$((ws - 1))
+  if [ "$p" -lt 1 ]; then
+    p="$MAX_WS"
+  fi
+  printf "%s\n" "$p"
+}
+
+resolve_target_ws() {
+  target="$1"
+  ws="$(get_ws)"
+  case "$target" in
+    here|current)
+      printf "%s\n" "$ws"
+      ;;
+    next|right)
+      next_ws "$ws"
+      ;;
+    prev|left)
+      prev_ws "$ws"
+      ;;
+    *)
+      case "$target" in
+        ''|*[!0-9]*)
+          return 1
+          ;;
+      esac
+      if [ "$target" -lt 1 ] || [ "$target" -gt "$MAX_WS" ]; then
+        return 1
+      fi
+      printf "%s\n" "$target"
+      ;;
+  esac
+}
+
+arm_target() {
+  target="$1"
+  ws="$(resolve_target_ws "$target" || true)"
+  if [ -z "$ws" ]; then
+    echo "labwc-niri: invalid arm target '$target'" >&2
+    exit 1
+  fi
+  state_write "$STATE_ARM_WS" "$ws"
+  state_write "$STATE_ARM_TS" "$(now_ms)"
+  maybe_notify "ARM ws:$ws"
+}
+
+clear_arm() {
+  state_clear "$STATE_ARM_WS"
+  state_clear "$STATE_ARM_TS"
+}
+
+set_shape() {
+  shape="$1"
+  case "$shape" in
+    2|3|4) ;;
+    *)
+      echo "labwc-niri: invalid shape '$shape' (expected 2|3|4)" >&2
+      exit 1
+      ;;
+  esac
+  state_write "$STATE_SHAPE" "$shape"
+  state_write "$STATE_SHAPE_TS" "$(now_ms)"
+  maybe_notify "SHAPE $shape"
+}
+
+clear_shape() {
+  state_clear "$STATE_SHAPE"
+  state_clear "$STATE_SHAPE_TS"
+}
+
+clear_intent() {
+  clear_arm
+  clear_shape
+}
+
+active_armed_ws() {
+  aws="$(state_read "$STATE_ARM_WS")"
+  ats="$(state_read "$STATE_ARM_TS")"
+  if is_fresh "$ats" "$ARM_TTL_MS" && [ -n "$aws" ]; then
+    printf "%s\n" "$aws"
+  fi
+}
+
+active_shape() {
+  shp="$(state_read "$STATE_SHAPE")"
+  sts="$(state_read "$STATE_SHAPE_TS")"
+  if is_fresh "$sts" "$SHAPE_TTL_MS" && [ -n "$shp" ]; then
+    printf "%s\n" "$shp"
+  fi
+}
+
+normalize_slot() {
+  shape="$1"
+  token="$(printf "%s" "$2" | tr '[:upper:]' '[:lower:]')"
+  case "$shape" in
+    2)
+      case "$token" in
+        j|left) printf "l\n" ;;
+        l|r|right) printf "r\n" ;;
+        *) return 1 ;;
+      esac
+      ;;
+    3)
+      case "$token" in
+        j|left) printf "l\n" ;;
+        k|m|mid|middle) printf "m\n" ;;
+        l|';'|r|right) printf "r\n" ;;
+        *) return 1 ;;
+      esac
+      ;;
+    4)
+      case "$token" in
+        ul|ij|tl) printf "ul\n" ;;
+        ur|il|tr) printf "ur\n" ;;
+        ll|kj|bl) printf "ll\n" ;;
+        lr|kl|br) printf "lr\n" ;;
+        *) return 1 ;;
+      esac
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+snap_shape_slot() {
+  shape="$1"
+  slot="$2"
+  case "$shape:$slot" in
+    2:l) send_key "$KEY_HALF_LEFT" ;;
+    2:r) send_key "$KEY_HALF_RIGHT" ;;
+    3:l) send_key "$KEY_THIRD_LEFT" ;;
+    3:m) send_key "$KEY_THIRD_MID" ;;
+    3:r) send_key "$KEY_THIRD_RIGHT" ;;
+    4:ul) send_key "$KEY_QUARTER_UL" ;;
+    4:ur) send_key "$KEY_QUARTER_UR" ;;
+    4:ll) send_key "$KEY_QUARTER_LL" ;;
+    4:lr) send_key "$KEY_QUARTER_LR" ;;
+    *)
+      echo "labwc-niri: unsupported placement '$shape$slot'" >&2
+      exit 1
+      ;;
+  esac
+}
+
+move_window_to_ws() {
+  target="$1"
+  ws="$(get_ws)"
+  if [ "$target" -eq "$ws" ]; then
+    return 0
+  fi
+
+  forward=$((target - ws))
+  if [ "$forward" -lt 0 ]; then
+    forward=$((forward + MAX_WS))
+  fi
+  backward=$((MAX_WS - forward))
+
+  if [ "$forward" -le "$backward" ]; then
+    steps="$forward"
+    key="$KEY_MOVE_NEXT"
+    dir="next"
+  else
+    steps="$backward"
+    key="$KEY_MOVE_PREV"
+    dir="prev"
+  fi
+
+  i=0
+  while [ "$i" -lt "$steps" ]; do
+    send_key "$key"
+    sleep 0.05
+    if [ "$dir" = "next" ]; then
+      ws="$(next_ws "$ws")"
+    else
+      ws="$(prev_ws "$ws")"
+    fi
+    set_ws "$ws"
+    i=$((i + 1))
+  done
+}
+
+place_slot() {
+  token="$1"
+  shape="$(active_shape || true)"
+  if [ -z "$shape" ]; then
+    echo "labwc-niri: no active shape (run 'shape 2|3|4' first)" >&2
+    exit 1
+  fi
+
+  slot="$(normalize_slot "$shape" "$token" || true)"
+  if [ -z "$slot" ]; then
+    echo "labwc-niri: invalid slot '$token' for shape '$shape'" >&2
+    exit 1
+  fi
+
+  target_ws="$(active_armed_ws || true)"
+  if [ -z "$target_ws" ]; then
+    target_ws="$(get_ws)"
+  fi
+
+  move_window_to_ws "$target_ws"
+  snap_shape_slot "$shape" "$slot"
+
+  # Bump approximate occupancy count on target workspace.
+  set_count "$target_ws" $(( $(get_count "$target_ws") + 1 ))
+
+  clear_intent
+}
+
+place_spec() {
+  target="$1"
+  spec="$(printf "%s" "$2" | tr '[:upper:]' '[:lower:]')"
+  case "$spec" in
+    2*|3*|4*) ;;
+    *)
+      echo "labwc-niri: invalid placement spec '$spec' (examples: 2l,3m,4lr)" >&2
+      exit 1
+      ;;
+  esac
+  shape="${spec%${spec#?}}"
+  slot="${spec#?}"
+  if [ -z "$slot" ]; then
+    echo "labwc-niri: missing slot in '$spec' (examples: 2l,3m,4lr)" >&2
+    exit 1
+  fi
+  arm_target "$target"
+  set_shape "$shape"
+  place_slot "$slot"
+}
+
 send_key() {
   chord="$1"
   key="${chord##*+}"
@@ -288,6 +569,11 @@ Usage:
   labwc-niri sync <index>
   labwc-niri ws next|prev|add|rm
   labwc-niri move next|prev
+  labwc-niri arm next|prev|here|<ws-index>
+  labwc-niri shape 2|3|4
+  labwc-niri slot <token>                      # 2:j/l  3:j/k/l  4:ij|il|kj|kl
+  labwc-niri place <next|prev|here|ws-index> <2j|2l|3j|3k|3l|4ij|4il|4kj|4kl>
+  labwc-niri clear
   labwc-niri reset
 USAGE
 }
@@ -421,9 +707,48 @@ case "$cmd" in
         ;;
     esac
     ;;
+  arm)
+    target="${1:-}"
+    if [ -z "$target" ]; then
+      usage
+      exit 1
+    fi
+    arm_target "$target"
+    ;;
+  shape)
+    shape="${1:-}"
+    if [ -z "$shape" ]; then
+      usage
+      exit 1
+    fi
+    set_shape "$shape"
+    ;;
+  slot)
+    need_wtype
+    token="${1:-}"
+    if [ -z "$token" ]; then
+      usage
+      exit 1
+    fi
+    place_slot "$token"
+    ;;
+  place)
+    need_wtype
+    target="${1:-}"
+    spec="${2:-}"
+    if [ -z "$target" ] || [ -z "$spec" ]; then
+      usage
+      exit 1
+    fi
+    place_spec "$target" "$spec"
+    ;;
+  clear)
+    clear_intent
+    ;;
   reset)
     rm -f "$STATE_DIR"/ws-*
     printf "%s\n" "${LABWC_NIRI_START_WS:-1}" > "$STATE_WS"
+    clear_intent
     ;;
   *)
     usage

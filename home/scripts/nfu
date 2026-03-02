@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+for f in ~/repos/*/flake.nix; do
+  dir=$(dirname "$f")
+  echo "Updating $(basename "$dir")..."
+  nix flake update --flake "$dir" 2>&1 | tail -1
+done

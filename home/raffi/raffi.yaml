@@ -48,7 +48,7 @@ search:
     q="${q#"${q%%[![:space:]]*}"}"
     q="${q%"${q##*[![:space:]]}"}"
     [[ -z "$q" ]] && exit 0
-    zen --search "$q" >/dev/null 2>&1 &
+    librewolf --search "$q" >/dev/null 2>&1 &
   description: "Web Search"
   icon: web-browser
 

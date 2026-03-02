@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+[[ -z "${1:-}" ]] && echo "Usage: cdevcd <repo>" && exit 1
+cd "$HOME/repos/$1"
+dev-preload "$1"
+exec codex

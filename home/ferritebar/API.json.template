@@ -1,0 +1,14 @@
+{
+  "openai": {
+    "api_key": "sk-...",
+    "limit": 20.0
+  },
+  "anthropic": {
+    "api_key": "sk-ant-admin-...",
+    "limit": 20.0
+  },
+  "openrouter": {
+    "api_key": "sk-or-...",
+    "limit": 10.0
+  }
+}

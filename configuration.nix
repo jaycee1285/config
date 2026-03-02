@@ -1,27 +1,10 @@
-{ config, pkgs, ob-themes, zen-browser, claude-desktop, ... }:
+_: throw ''
+  This repository is flake-only.
 
-{
-  imports = [
-    ./hardware-configuration.nix
-    ./modules/audio.nix
-    ./modules/bootloader.nix
-    ./modules/flatpak.nix
-    ./modules/hardware.nix
-    ./modules/localization.nix
-#    ./modules/nemo.nix
-    ./modules/networking.nix
-    ./modules/nix-features.nix
-    ./modules/packages.nix
-    ./modules/programs.nix
-    ./modules/services.nix
-    ./modules/system.nix
-    ./modules/users.nix
-    ./modules/xserver.nix
-    ./modules/ob-themes.nix
-    ./modules/zen-browser.nix
-    ./modules/claude-desktop.nix
-    ./modules/rclone-service.nix
-  ];
+  Canonical entrypoint: /home/john/repos/config/flake.nix
 
-  # You can also set global overrides here, or import other .nix files
-}
+  Use one of:
+    sudo nixos-rebuild switch --flake /home/john/repos/config#Sed
+    sudo nixos-rebuild switch --flake /home/john/repos/config#Zed
+    nix build /home/john/repos/config#nixosConfigurations.iso.config.system.build.isoImage
+''

@@ -59,6 +59,8 @@ cd ~/repos/SPRedux
 After uploading a new release:
 
 1. Get the new hash:
+   - Fast path: if GitHub shows a SHA/checksum for the uploaded asset on the release page, copy that directly (avoids a fetch/build failure just to learn the hash).
+   - Fallback: prefetch it locally:
    ```bash
    nix-prefetch-url --type sha256 https://github.com/jaycee1285/coverpro/releases/download/v0.2.0/coverpro-v0.2.0-linux-x86_64.tar.xz
    ```

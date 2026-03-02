@@ -1,27 +1,18 @@
 { config, pkgs, ... }:
+
 {
   services.xserver = {
     enable = true;
     xkb.layout = "us";
     xkb.options = "eurosign:e";
-    desktopManager.xfce.enable = true;
-    desktopManager.xfce.enableWaylandSession = true;
     desktopManager.lxqt.enable = true;
-    desktopManager.lxqt.extraPackages = [ pkgs.lxqt.lxqt-wayland-session ];
+#    desktopManager.lxqt.extraPackages = [ pkgs.lxqt.lxqt-wayland-session ];
   };
-  services.greetd = {
+  services.displayManager.ly = {
     enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet \
-          --time --remember \
-          --sessions /run/current-system/sw/share/wayland-sessions \
-          --xsessions /run/current-system/sw/share/xsessions";
-        user = "greeter";
-      };
-    };
   };
-security.soteria.enable = true;
+
+  security.soteria.enable = true;
   xdg.portal.wlr.enable = true;
   console.keyMap = "us";
   security.sudo.enable = true;

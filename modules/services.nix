@@ -5,6 +5,7 @@
   services.tumbler.enable = true;
   services.gvfs.enable = true;
   services.gnome.gnome-keyring.enable = true;
+  services.espanso.enable = true;
 
   #### Printing
   services.printing.enable = true;
@@ -15,6 +16,7 @@
   #### Sync / networking
   services.syncthing.enable = true;
   services.onedrive.enable = false;
+  services.mullvad-vpn.enable = true;
 
   #### Bluetooth
   services.blueman.enable = true;

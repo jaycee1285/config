@@ -3,7 +3,7 @@
 let
   pcloudBisync = pkgs.writeShellScript "pcloud-bisync" ''
     set -euo pipefail
-    mkdir -p "$HOME/pCloud" "$HOME/.cache/rclone-bisync/pcloud"
+    ${pkgs.coreutils}/bin/mkdir -p "$HOME/pCloud" "$HOME/.cache/rclone-bisync/pcloud"
 
     exec ${pkgs.rclone}/bin/rclone bisync pcloud: "$HOME/pCloud" \
       --workdir "$HOME/.cache/rclone-bisync/pcloud" \
@@ -36,7 +36,7 @@ in
     };
     Service = {
       Type = "oneshot";
-      ExecStart = "${pcloudBisync}";
+      ExecStart = "${pkgs.bash}/bin/bash ${pcloudBisync}";
     };
   };
 

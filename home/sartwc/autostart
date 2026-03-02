@@ -2,7 +2,6 @@
 # Use wlr-randr to get your output names
 # Set background image.
 swww-daemon &
-kanshi &
 
 /run/current-system/sw/bin/polkit-kde-authentication-agent-1 >/dev/null 2>&1 &
 
@@ -22,13 +21,18 @@ rustvox >/dev/null 2>&1 &
 
 #pcloud 2>&1 &
 
-syncthing 2>&1 &
-# Deploy swww wallpapers
-swww img $HOME/Pictures/elephant-flexoki.png 2>&1 &
+intentile daemon >/dev/null 2>&1 &
 
-exec swayidle -w \
+if ! pgrep -x syncthing >/dev/null 2>&1; then
+  syncthing >/dev/null 2>&1 &
+fi
+# Deploy swww wallpapers
+swww img "$HOME/Pictures/walls/elophontbw.png" >/dev/null 2>&1 &
+
+swayidle -w \
   timeout 300 'swaylock -f --screenshots --effect-pixelate 40' \
   timeout 600 'sh -lc "/run/current-system/sw/bin/wlopm --off \"*\""' \
-  resume      'sh -lc "/run/current-system/sw/bin/wlopm --on  \"*\""' \
-  before-sleep 'swaylock -f --screenshots --effect-pixelate 40'
-
+  resume      'sh -lc "/run/current-system/sw/bin/wlopm --on \"*\"; sleep 1; kanshictl reload || true"' \
+  before-sleep 'swaylock -f --screenshots --effect-pixelate 40' &
+kanshi &
+wait

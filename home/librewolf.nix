@@ -1,13 +1,17 @@
-{ config, pkgs, unstable, ... }:
+{ pkgs, ... }:
 
 let
   myProfile = "default";
   amoLatestById = id: "https://addons.mozilla.org/firefox/downloads/latest/${id}/latest.xpi";
+  librewolfPkg =
+    if pkgs.unstable ? librewolf
+    then pkgs.unstable.librewolf
+    else pkgs.unstable.librewolf-bin;
 in
 {
   programs.firefox = {
     enable = true;
-    package = pkgs.unstable.librewolf;
+    package = librewolfPkg;
 
     policies = {
       DisableTelemetry = true;
@@ -218,7 +222,7 @@ in
           installation_mode = "force_installed";
         };
 
-        # Firefox Color
+        # LibreWolf-compatible Firefox Color
         "FirefoxColor@mozilla.com" = {
           install_url = amoLatestById "FirefoxColor@mozilla.com";
           installation_mode = "force_installed";

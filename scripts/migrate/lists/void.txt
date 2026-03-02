@@ -99,7 +99,7 @@ kopia-ui
 themechanger
 
 # Browsers / editors / productivity
-zen-browser
+librewolf
 chawan
 obsidian
 harper

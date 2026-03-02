@@ -1,0 +1,157 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REPOS="$HOME/repos"
+LOCK_DIR="/tmp/dev-preload"
+mkdir -p "$LOCK_DIR"
+
+# Project-to-path mapping
+declare -A PROJECTS=(
+  [daylight]="$REPOS/DayLight"
+  [coverpro]="$REPOS/coverpro"
+  [openswarm]="$REPOS/OpenSwarm"
+  [openswarmmobile]="$REPOS/OpenSwarmMobile"
+)
+
+# Groups (resolved to project names)
+declare -A GROUPS=(
+  [tauri]="daylight"
+  [swarm]="openswarm"
+)
+
+resolve_shell() {
+  local flake_path="$1"
+  nix build "$flake_path#devShells.x86_64-linux.default" --no-link --print-out-paths 2>/dev/null
+}
+
+preload_project() {
+  local name="$1"
+  local flake_path="${PROJECTS[$name]:-}"
+
+  # Fallback: try to find a flake.nix under ~/repos (case-insensitive)
+  if [[ -z "$flake_path" ]]; then
+    for d in "$REPOS"/*/; do
+      if [[ "${d%/}" != "$REPOS" ]] && [[ "${d##*/}" == "" ]]; then continue; fi
+      dirname=$(basename "${d%/}")
+      if [[ "${dirname,,}" == "$name" ]] && [[ -f "${d}flake.nix" ]]; then
+        flake_path="${d%/}"
+        break
+      fi
+    done
+  fi
+
+  if [[ -z "$flake_path" ]]; then
+    echo "No flake found for: $name"
+    echo "Known projects: ${!PROJECTS[*]}"
+    echo "Also checks ~/repos/<name>/flake.nix"
+    return 1
+  fi
+
+  echo "Resolving $name shell..."
+  local shell_path
+  shell_path=$(resolve_shell "$flake_path")
+
+  if [[ -z "$shell_path" ]]; then
+    echo "Failed to resolve shell for $name"
+    return 1
+  fi
+
+  echo "Shell: $shell_path"
+
+  # Get closure paths
+  local paths_file="$LOCK_DIR/${name}.paths"
+  nix path-info -r "$shell_path" > "$paths_file"
+  local count
+  count=$(wc -l < "$paths_file")
+
+  # Check closure size
+  local size
+  size=$(nix path-info -S "$shell_path" | awk '{printf "%.1f", $2/1073741824}')
+
+  echo "Closure: $count paths, ${size} GB"
+  echo "Locking in RAM..."
+
+  # vmtouch -d (daemon mode) -l (lock) -f (follow symlinks)
+  # -p <pidfile> so we can stop it later
+  xargs vmtouch -dlf -p "$LOCK_DIR/${name}.pid" < "$paths_file" &>/dev/null &
+
+  echo "$shell_path" > "$LOCK_DIR/${name}.shell"
+  echo "Locked: $name ($size GB)"
+}
+
+show_status() {
+  local found=0
+
+  for pidfile in "$LOCK_DIR"/*.pid; do
+    [[ -f "$pidfile" ]] || continue
+    local name pid
+    name=$(basename "$pidfile" .pid)
+    pid=$(cat "$pidfile")
+    if kill -0 "$pid" 2>/dev/null; then
+      local shell_path size
+      shell_path=$(cat "$LOCK_DIR/${name}.shell" 2>/dev/null || echo "unknown")
+      size=$(nix path-info -S "$shell_path" 2>/dev/null | awk '{printf "%.1f", $2/1073741824}')
+      echo "  LOCKED  $name  (${size} GB)"
+      found=1
+    fi
+  done
+
+  if [[ $found -eq 0 ]]; then
+    echo "  No closures locked."
+  fi
+}
+
+stop_all() {
+  local stopped=0
+  for pidfile in "$LOCK_DIR"/*.pid; do
+    [[ -f "$pidfile" ]] || continue
+    local pid name
+    pid=$(cat "$pidfile")
+    name=$(basename "$pidfile" .pid)
+    if kill "$pid" 2>/dev/null; then
+      echo "  Released: $name (pid $pid)"
+      stopped=1
+    fi
+    rm -f "$pidfile" "$LOCK_DIR/${name}.paths" "$LOCK_DIR/${name}.shell"
+  done
+
+  if [[ $stopped -eq 0 ]]; then
+    echo "  Nothing to release."
+  fi
+}
+
+usage() {
+  echo "Usage: dev-preload <project|group|status|stop>"
+  echo ""
+  echo "Projects: ${!PROJECTS[*]}"
+  echo "Groups:   ${!GROUPS[*]}"
+  echo ""
+  echo "Commands:"
+  echo "  dev-preload <name>    Lock project/group closure in RAM"
+  echo "  dev-preload status    Show locked closures"
+  echo "  dev-preload stop      Release all locks"
+}
+
+case "${1:-}" in
+  status)
+    show_status
+    ;;
+  stop)
+    stop_all
+    ;;
+  -h|--help|"")
+    usage
+    ;;
+  *)
+    target="${1,,}"  # lowercase
+    if [[ -n "${GROUPS[$target]:-}" ]]; then
+      preload_project "${GROUPS[$target]}"
+    elif [[ -n "${PROJECTS[$target]:-}" ]]; then
+      preload_project "$target"
+    else
+      echo "Unknown target: $1"
+      usage
+      exit 1
+    fi
+    ;;
+esac

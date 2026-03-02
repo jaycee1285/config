@@ -1,11 +1,6 @@
-{ config, pkgs, unstable, zen-browser, claude-desktop, helium-nix, ... }:
+{ pkgs, ... }:
 
 {
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.permittedInsecurePackages = [
-    "librewolf-bin-147.0.1-3"
-  ];
-
   nixpkgs.overlays = [
     (final: prev: {
       waybar = prev.waybar.override { withJson = true; };
@@ -15,11 +10,20 @@
   environment.systemPackages = with pkgs; [
 
     # ───────────────────── core / base ─────────────────────
+    vmtouch
     openssl
     zlib
     glib
     gtk3
     gdk-pixbuf
+    libGL
+    libx11
+    nss
+    nspr
+    atk
+    cairo
+    pango
+    libepoxy
     pkg-config
     clang
     gcc13
@@ -28,7 +32,6 @@
     wget
     git
     p7zip
-    unzip
     unrar
     nixos-generators
     home-manager
@@ -45,15 +48,11 @@
 
 
     # ─────────────── wayland desktop & UX ───────────────
-    pkgs.unstable.labwc
     pkgs.unstable.labwc-tweaks-gtk
     pkgs.unstable.labwc-menu-generator
-    pkgs.unstable.waybar
-    pkgs.unstable.mangowc
     kdePackages.polkit-kde-agent-1
     gowall
     wlr-layout-ui
-    pkgs.unstable.dms-shell
     wlopm
 
     # Launchers & finders
@@ -90,9 +89,6 @@
     appimage-run
     libappimage
 
-    # ───────────── gaming (requires system integration) ─────────────
-    steam-run
-
     # ───────────── VPN & networking ─────────────
     wgnord
     wireguard-tools
@@ -100,12 +96,8 @@
     curl
 
     # ───────────── theming (engines & tools) ─────────────
-    themix-gui
     gtk-engine-murrine
     sassc
-    flavours
-    matugen
-    wpgtk
     graphite-gtk-theme
     stilo-themes
     materia-theme

@@ -195,7 +195,7 @@ let
           <action name="Execute" command="codium"/>
         </keybind>
         <keybind key="W-f">
-          <action name="Execute" command="thunar"/>
+          <action name="Execute" command="pcmanfm-qt"/>
         </keybind>
         <keybind key="W-o">
           <action name="Execute" command="obsidian"/>
@@ -260,7 +260,7 @@ let
           <action name="Execute"><command>kitty</command></action>
         </item>
         <item label="Files">
-          <action name="Execute"><command>thunar</command></action>
+          <action name="Execute"><command>pcmanfm-qt</command></action>
         </item>
         <item label="VS Codium">
           <action name="Execute"><command>codium</command></action>
@@ -574,7 +574,7 @@ in {
     tauriApps.daylight
 
     # Utilities
-    thunar
+    lxqt.pcmanfm-qt
     pavucontrol
     brightnessctl
     networkmanagerapplet

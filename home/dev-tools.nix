@@ -18,9 +18,10 @@
     pkgs.unstable.claude-code
 
     # Development tools
-    devtoolbox
-    # fjo - REMOVED: conflicts with codeberg-cli (both provide 'berg' binary)
-    pkgs.unstable.n8n
     love
+    pkgs.unstable.uv
+    playwright
+    playwright-mcp
+    pkgs.unstable.claude-monitor
   ];
 }

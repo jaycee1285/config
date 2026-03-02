@@ -17,7 +17,9 @@ result-*
 *.tar.gz
 *.xpi
 
+# Ferritebar local secrets
+home/ferritebar/API.json
+
 # OS (cross-platform safety)
 .DS_Store
 Thumbs.db
-

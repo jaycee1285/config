@@ -1,0 +1,17 @@
+#!/bin/sh
+# Pipe IPC commands to the SartWC compositor socket.
+# Usage: echo 'ping' | sartwc-ipc
+#        sartwc-ipc <<< 'GoToDesktop to=2'
+SOCKET="${SARTWC_IPC_SOCKET:-${XDG_RUNTIME_DIR}/sartwc-${WAYLAND_DISPLAY}.sock}"
+if [ ! -S "$SOCKET" ]; then
+	echo "sartwc-ipc: socket not found: $SOCKET" >&2
+	exit 1
+fi
+if command -v socat >/dev/null 2>&1; then
+	exec socat - "UNIX-CONNECT:$SOCKET"
+elif command -v nc >/dev/null 2>&1; then
+	exec nc -U "$SOCKET"
+else
+	echo "sartwc-ipc: need socat or nc" >&2
+	exit 1
+fi

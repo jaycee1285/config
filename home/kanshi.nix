@@ -3,7 +3,7 @@
 {
   services.kanshi = {
     enable = true;
-    systemdTarget = "labwc-session.target";
+    systemdTarget = "sartwc-session.target";
 
     settings = [
       # ── When the external monitor is attached ────────────────────────────────

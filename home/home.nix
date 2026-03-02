@@ -7,31 +7,64 @@
 
   programs.home-manager.enable = true;
 
-  # One place for nixpkgs options that apply to *this* HM profile
-  nixpkgs.config = {
-    android_sdk.accept_license = true;   # let HM build the Android SDK
-    allowUnfree                = true;   # needed by flutter → chromium, etc.
+  programs.bash = {
+    enable = true;
+    initExtra = ''
+      export PATH="$HOME/.bun/bin:$PATH"
+    '';
+    shellAliases = {
+      # NixOS
+      nrs  = "sudo nixos-rebuild switch --flake /home/john/repos/config#$(hostname)";
+      nrb  = "nixos-rebuild build --flake /home/john/repos/config#$(hostname)";
+      nfu  = "nix flake update --flake /home/john/repos/config";
+      ngc  = "sudo nix-collect-garbage -d";
+      ndo  = "sudo nix-env --profile /nix/var/nix/profiles/system --delete-generations old";
+
+      # eza → ls
+      ls = "eza";
+      ll = "eza -la --group-directories-first";
+      lt = "eza --tree --level=2";
+      la = "eza -a";
+
+      # tools
+      n    = "nnn -de";
+      zj   = "zellij";
+      zja  = "zellij attach";
+      vpn  = "sudo wgnord connect";
+      vpnd = "sudo wgnord disconnect";
+
+      # dev launchers
+      clr     = "cd ~/repos && claude";
+      cdr     = "cd ~/repos && codex";
+      nixconf = "cd /home/john/repos/config && fresh .";
+    };
+  };
+
+  home.sessionVariables = {
+    BROWSER = "librewolf";
   };
 
   xdg.mimeApps.enable = true;
   xdg.mimeApps.defaultApplications = {
-    "inode/directory" = [ "thunar.desktop" ];
-    "application/x-gnome-saved-search" = [ "thunar.desktop" ];
+    "inode/directory" = [ "pcmanfm-qt.desktop" ];
+    "application/x-gnome-saved-search" = [ "pcmanfm-qt.desktop" ];
+    "text/html" = [ "librewolf.desktop" ];
+    "x-scheme-handler/http" = [ "librewolf.desktop" ];
+    "x-scheme-handler/https" = [ "librewolf.desktop" ];
   };
 
   imports = [
     ./apps.nix
     ./fonts.nix
-    ./firefox.nix
-    ./flutter.nix
+    ./librewolf.nix
     ./fuzzel.nix
     ./gtk.nix
     ./gtk-themes.nix
    ./kanshi.nix
     ./labwc.nix
-    ./lid.nix
+    ./sartwc.nix
+  #  ./lid.nix
     ./scripts.nix
-   # ./steam.nix
     ./tauri.nix
     ./vscodium.nix
     ./ferritebar.nix
@@ -40,7 +73,6 @@
     ./theming.nix
     ./walls.nix
     ./raffi.nix
-    ./zen-autoconfig.nix
 
     # User package categories
     ./cli-tools.nix

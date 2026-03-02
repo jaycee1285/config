@@ -40,16 +40,20 @@ icon_size = 32
 max_title_length = 30
 
 [[modules.right]]
-type = "script"
-name = "wg"
-exec = "ip link show wg0 >/dev/null 2>&1 && printf '{\"text\":\"\\uf023\",\"class\":\"connected\"}' || printf '{\"text\":\"\\uf09c\",\"class\":\"disconnected\"}'"
-interval = 30
-return_type = "json"
-on_click = "rest=\"$(printf '' | fuzzel --dmenu --prompt 'wgnord> ')\" && [ -n \"$rest\" ] && { sudo wgnord $rest && notify-send -a wgnord \"wgnord $rest\" OK || notify-send -a wgnord \"wgnord $rest\" FAILED; }"
+type = "tray"
+icon_size = 32
 
 [[modules.right]]
-type = "tray"
-icon_size = 20
+type = "api_spend"
+
+[[modules.right]]
+type = "script"
+name = "wg"
+exec = "[ -n \"$(ip link show type wireguard 2>/dev/null)\" ] && printf '{\"text\":\"\\uf023\",\"class\":\"connected\"}' || printf '{\"text\":\"\\uf09c\",\"class\":\"disconnected\"}'"
+interval = 30
+return_type = "json"
+on_click = "[ -n \"$(ip link show type wireguard 2>/dev/null)\" ] && mullvad disconnect || mullvad connect"
+
 
 [[modules.right]]
 type = "network"
@@ -74,10 +78,3 @@ type = "clock"
 format = "%-I:%M %p"
 tooltip_format = "%A, %B %d, %Y"
 
-[[modules.right]]
-type = "power"
-hidden = true
-lock_cmd = "swaylock"
-suspend_cmd = "systemctl suspend"
-reboot_cmd = "systemctl reboot"
-shutdown_cmd = "systemctl poweroff"

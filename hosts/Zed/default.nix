@@ -1,4 +1,4 @@
-{ config, pkgs, ob-themes, zen-browser, claude-desktop, ... }:
+{ config, pkgs, ob-themes, ... }:
 
 {
   imports = [

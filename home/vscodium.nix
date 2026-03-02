@@ -2,8 +2,9 @@
 
 
 let
+  system = pkgs.stdenv.hostPlatform.system;
 
-  exts = nix-vscode-extensions.extensions.${pkgs.system};
+  exts = nix-vscode-extensions.extensions.${system};
   ovsx = exts.open-vsx-release; # or open-vsx-release-universal
 
 in
