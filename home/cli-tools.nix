@@ -13,6 +13,7 @@ in
     jq
     ripgrep
     sqlite
+    node-glob
 
     # Modern CLI replacements / helpers
     eza

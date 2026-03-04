@@ -9,6 +9,7 @@ let
       --workdir "$HOME/.cache/rclone-bisync/pcloud" \
       --size-only \
       --create-empty-src-dirs \
+      --exclude "*.part" \
       --exclude "*.partial" \
       --exclude ".Trash-1000/**" \
       --exclude "**/.Trash-1000/**" \

@@ -313,9 +313,68 @@ let
     dontInstall = true;
 
     postFixup = ''
+      mkdir -p $out/libexec
+      cat > $out/libexec/${pname}-wrapped <<'EOF'
+      #!${pkgs.bash}/bin/bash
+      set -euo pipefail
+
+      bundled_model="$out/share/rustvox/models/vosk-model-small-en-us-0.15"
+      config_home="''${XDG_CONFIG_HOME:-$HOME/.config}"
+      user_config="$config_home/rustvox/config.toml"
+
+      has_model_path() {
+        local config_file="$1"
+        [ -f "$config_file" ] || return 1
+        ${pkgs.gnugrep}/bin/grep -Eq '^[[:space:]]*path[[:space:]]*=' "$config_file"
+      }
+
+      if [ -d "$bundled_model" ] && ! has_model_path "$user_config"; then
+        tmp_config_home="$(${pkgs.coreutils}/bin/mktemp -d)"
+        trap '${pkgs.coreutils}/bin/rm -rf "$tmp_config_home"' EXIT
+        ${pkgs.coreutils}/bin/mkdir -p "$tmp_config_home/rustvox"
+
+        if [ -f "$user_config" ]; then
+          ${pkgs.gawk}/bin/awk -v model_path="$bundled_model" '
+            BEGIN { in_model = 0; inserted = 0 }
+            /^\[model\][[:space:]]*$/ {
+              print
+              print "path = \"" model_path "\""
+              in_model = 1
+              inserted = 1
+              next
+            }
+            /^\[/ && $0 !~ /^\[model\][[:space:]]*$/ {
+              in_model = 0
+            }
+            { print }
+            END {
+              if (!inserted) {
+                print ""
+                print "[model]"
+                print "path = \"" model_path "\""
+              }
+            }
+          ' "$user_config" > "$tmp_config_home/rustvox/config.toml"
+        else
+          cat > "$tmp_config_home/rustvox/config.toml" <<CONFIG_EOF
+[model]
+path = "$bundled_model"
+CONFIG_EOF
+        fi
+
+        export XDG_CONFIG_HOME="$tmp_config_home"
+      fi
+
+      exec "$out/bin/.${pname}-nix-wrapped" "$@"
+      EOF
+      chmod +x $out/libexec/${pname}-wrapped
+
       wrapProgram $out/bin/${pname} \
         --prefix PATH : "${pkgs.wtype}/bin" \
-        --prefix PATH : "${pkgs.dotool}/bin"
+        --prefix PATH : "${pkgs.dotool}/bin" \
+        --rename ${pname} .${pname}-nix-wrapped
+
+      ln -s $out/libexec/${pname}-wrapped $out/bin/${pname}
     '';
   };
 
@@ -360,7 +419,7 @@ in
     pname = "rustvox";
     version = "0.1.0";
     url = "https://github.com/jaycee1285/rustvox/releases/download/v0.1.0/rustvox-v0.1.0-linux-x86_64.tar.xz";
-    hash = "sha256:bfd943d18a9b6bb58dba39369172f40b764e3f63dc6bb9664d7be42ace7f5fb3";
+    hash = "sha256:e1a44aac2db6ed11d61257dddd8dc177517d55615b2f0688a5a965f31c969ce3";
   };
 
   ferrite = mkGtkApp {

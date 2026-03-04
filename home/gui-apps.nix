@@ -14,6 +14,7 @@ in
     pkgs.pencil
     pkgs.flowtime
     pkgs.flow-state
+    pkgs.resources
 
     # Media
     pkgs.vlc
