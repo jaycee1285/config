@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "== restart pcloud bisync user units =="
+echo ":: daemon-reload"
+systemctl --user daemon-reload
+
+echo ":: restart timer"
+systemctl --user restart pcloud-bisync.timer
+
+echo ":: start one immediate sync run"
+systemctl --user start pcloud-bisync.service
+
+echo ":: current state"
+systemctl --user status pcloud-bisync.service --no-pager -l || true
+systemctl --user status pcloud-bisync.timer --no-pager -l || true

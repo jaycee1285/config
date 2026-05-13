@@ -5,12 +5,13 @@
   services.tumbler.enable = true;
   services.gvfs.enable = true;
   services.gnome.gnome-keyring.enable = true;
-  services.espanso.enable = true;
 
   #### Printing
   services.printing.enable = true;
   services.system-config-printer.enable = true;
-
+  services.printing.drivers = with pkgs; [
+    cnijfilter_4_00
+  ];
   xdg.portal.wlr.enable = true;
 
   #### Sync / networking
@@ -47,6 +48,10 @@ networking.firewall = {
   # services.dbus.enable = true;
   
     qt.enable = true;
-  qt.platformTheme = "gnome";   # uses qgnomeplatform
-  qt.style = "adwaita";    # or "adwaita"
+  qt.platformTheme = "gtk2";   # uses qgnomeplatform
+  xdg.portal.config = {
+      common = {
+          default = ["gnome"];
+      };
+  };
 }

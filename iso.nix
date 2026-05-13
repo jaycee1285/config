@@ -15,7 +15,7 @@
 #
 # Without PERSIST, the ISO runs as a normal ephemeral live environment.
 
-{ config, pkgs, lib, helium-nix, ... }:
+{ config, pkgs, lib, helium-nix, openswarm-src, ... }:
 
 let
   # Persistence settings
@@ -422,7 +422,7 @@ let
     }
   '';
 
-  tauriApps = import ./tauri.nix { inherit pkgs; };
+  tauriApps = import ./tauri.nix { inherit pkgs openswarm-src; };
 
   fuzzelIni = ''
     [colors]

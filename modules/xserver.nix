@@ -5,7 +5,7 @@
     enable = true;
     xkb.layout = "us";
     xkb.options = "eurosign:e";
-    desktopManager.lxqt.enable = true;
+    desktopManager.xfce.enable = true;
 #    desktopManager.lxqt.extraPackages = [ pkgs.lxqt.lxqt-wayland-session ];
   };
   services.displayManager.ly = {

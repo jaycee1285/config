@@ -21,10 +21,10 @@ One shared `tauri.nix` at the repo root defines `mkTauriApp` and both derivation
 
 ## Release URLs
 
-| App | URL |
-|-----|-----|
+| App      | URL                  |
+|----------|----------------------|
 | CoverPro | `https://github.com/jaycee1285/coverpro/releases/download/v0.1.0/coverpro-v0.1.0-linux-x86_64.tar.xz` |
-| SPRedux | `https://github.com/jaycee1285/SPRedux/releases/download/v0.1.0/spredux-v0.1.0-linux-x86_64.tar.xz` |
+| SPRedux  | `https://github.com/jaycee1285/SPRedux/releases/download/v0.1.0/spredux-v0.1.0-linux-x86_64.tar.xz` |
 
 Pattern: `https://github.com/jaycee1285/<repo>/releases/download/v<version>/<pname>-v<version>-linux-x86_64.tar.xz`
 

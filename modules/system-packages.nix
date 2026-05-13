@@ -45,6 +45,11 @@
     nh
     nix-init
     pkgs.unstable.keychron-udev-rules
+    system-config-printer
+    xdg-desktop-portal-gtk
+    xdg-desktop-portal-gnome
+	fzf
+	nodejs_24
 
 
     # ─────────────── wayland desktop & UX ───────────────
@@ -65,7 +70,6 @@
     # Notifications & text expansion
     mako
     libnotify
-    espanso-wayland
 
     # Wallpaper & visuals
     swww

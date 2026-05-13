@@ -1,11 +1,11 @@
 # Ignore all markdown files
 *.md
 
-# Except files ending in migrate
-!*migrate.md
-
 # Claude Code agent artifacts
 .claude/
+
+# Archived modules
+.archive/
 
 # Nix
 result

@@ -5,7 +5,20 @@ let
     set -euo pipefail
     ${pkgs.coreutils}/bin/mkdir -p "$HOME/pCloud" "$HOME/.cache/rclone-bisync/pcloud"
 
-    exec ${pkgs.rclone}/bin/rclone bisync pcloud: "$HOME/pCloud" \
+    notify() {
+      ${pkgs.libnotify}/bin/notify-send \
+        --app-name="pCloud Sync" \
+        --urgency="$1" \
+        "pCloud Sync" "$2" || true
+    }
+
+    if ! ${pkgs.rclone}/bin/rclone lsd pcloud: >/dev/null; then
+      notify critical "Sync skipped: pCloud remote is not listable"
+      exit 7
+    fi
+
+    set +e
+    ${pkgs.rclone}/bin/rclone bisync pcloud: "$HOME/pCloud" \
       --workdir "$HOME/.cache/rclone-bisync/pcloud" \
       --size-only \
       --create-empty-src-dirs \
@@ -16,9 +29,19 @@ let
       --exclude "**/node_modules/**" \
       --tpslimit 10 --tpslimit-burst 10 \
       --checkers 32 --transfers 16 \
-      --fast-list \
+      --disable ListR \
       --retries 10 --retries-sleep 30s --low-level-retries 50 \
       --stats 30s -v
+    rc=$?
+    set -e
+
+    if [ "$rc" -eq 0 ]; then
+      notify low "Sync completed successfully"
+    else
+      notify critical "Sync failed (exit code $rc)"
+    fi
+
+    exit "$rc"
   '';
 in
 {
@@ -26,7 +49,6 @@ in
     syncthing
     pkgs.unstable.pcloud
     rclone
-    rclone-ui
   ];
 
   systemd.user.services.pcloud-bisync = {

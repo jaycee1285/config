@@ -1,8 +1,22 @@
 # Pre-built app derivations fetched from GitHub releases and patched
 # with autoPatchelfHook to link against the correct runtime deps.
-{ pkgs }:
+{ pkgs, openswarm-src }:
 
 let
+  cliRuntimeLibs = with pkgs; [
+    stdenv.cc.cc.lib
+  ];
+
+  transcrustRuntimeLibs = with pkgs; [
+    alsa-lib
+    libpulseaudio
+    wayland
+    dbus
+    openssl
+    libnotify
+    stdenv.cc.cc.lib
+  ];
+
   tauriRuntimeLibs = with pkgs; [
     webkitgtk_4_1
     gtk3
@@ -34,7 +48,7 @@ let
       local tmp srcRoot
       local -a entries
       tmp=$(mktemp -d)
-      tar xJf $src -C "$tmp"
+      tar xaf $src -C "$tmp"
       srcRoot="$tmp"
 
       # Handle archives wrapped in a single top-level directory.
@@ -50,7 +64,10 @@ let
         # Archive with directory structure (e.g. from nix build output)
         cp -a "$srcRoot"/. "$out/"
         # Unwrap stale Nix wrappers to get the raw binary
-        if [ -f "$out/bin/.${pname}-wrapped_" ]; then
+        if [ -f "$out/bin/.${pname}-wrapped" ]; then
+          mv "$out/bin/.${pname}-wrapped" "$out/bin/${pname}"
+          rm -f "$out/bin/.${pname}-wrapped_"
+        elif [ -f "$out/bin/.${pname}-wrapped_" ]; then
           mv "$out/bin/.${pname}-wrapped_" "$out/bin/${pname}"
           rm -f "$out/bin/.${pname}-wrapped"
         fi
@@ -76,10 +93,50 @@ let
       wrapProgram $out/bin/${pname} \
         --set GIO_MODULE_DIR "${pkgs.glib-networking}/lib/gio/modules" \
         --set WEBKIT_DISABLE_COMPOSITING_MODE 1 \
-        --prefix XDG_DATA_DIRS : "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}" \
-        --prefix PATH : "${pkgs.typst}/bin" \
-        --run 'export TYPST_FONT_PATHS="/etc/profiles/per-user/$USER/share/fonts:$HOME/.local/share/fonts:/run/current-system/sw/share/fonts"'
+        --prefix XDG_DATA_DIRS : "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}"
     '';
+  };
+
+  mkCliApp = { pname, version, url, hash }: pkgs.stdenv.mkDerivation {
+    inherit pname version;
+
+    src = pkgs.fetchurl { inherit url hash; };
+
+    nativeBuildInputs = [ pkgs.autoPatchelfHook ];
+    buildInputs = cliRuntimeLibs;
+
+    unpackPhase = ''
+      local tmp srcRoot
+      local -a entries
+      tmp=$(mktemp -d)
+      tar xaf $src -C "$tmp"
+      srcRoot="$tmp"
+
+      shopt -s nullglob dotglob
+      entries=("$tmp"/*)
+      if [ ''${#entries[@]} -eq 1 ] && [ -d "''${entries[0]}" ]; then
+        srcRoot="''${entries[0]}"
+      fi
+
+      mkdir -p $out/bin
+
+      if [ -d "$srcRoot/bin" ]; then
+        cp -a "$srcRoot"/. "$out/"
+      else
+        cp -a "$srcRoot"/. "$out/"
+        entries=("$out"/*)
+        for entry in "''${entries[@]}"; do
+          [ "$entry" = "$out/bin" ] && continue
+          if [ ! -d "$entry" ]; then
+            mv "$entry" "$out/bin/"
+          fi
+        done
+      fi
+      chmod +x "$out/bin/${pname}"
+    '';
+
+    dontBuild = true;
+    dontInstall = true;
   };
 
   gtk4RuntimeLibs = with pkgs; [
@@ -92,6 +149,7 @@ let
     graphene
     harfbuzz
     gsettings-desktop-schemas
+    adwaita-icon-theme
   ];
 
   ferriteRuntimeLibs = gtk4RuntimeLibs ++ (with pkgs; [
@@ -106,21 +164,18 @@ let
     libxi
     libxrandr
     libxcb
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libxcb
-    xorg.libXext
-    xorg.libXrender
-    xorg.libXfixes
-    xorg.libXinerama
-    xorg.libXdamage
-    xorg.libXcomposite
-    xorg.libXxf86vm
+    libxext
+    libxrender
+    libxfixes
+    libxinerama
+    libxdamage
+    libxcomposite
+    libxxf86vm
   ]);
 
-  mkGtkApp = { pname, version, url, hash, extraWrapArgs ? "" }: pkgs.stdenv.mkDerivation {
+  openswarmSrc = openswarm-src;
+
+  mkGtkApp = { pname, version, url, hash, extraWrapArgs ? "", extraPostFixup ? "" }: pkgs.stdenv.mkDerivation {
     inherit pname version;
 
     src = pkgs.fetchurl { inherit url hash; };
@@ -132,7 +187,7 @@ let
       local tmp srcRoot
       local -a entries
       tmp=$(mktemp -d)
-      tar xJf $src -C "$tmp"
+      tar xaf $src -C "$tmp"
       srcRoot="$tmp"
 
       shopt -s nullglob dotglob
@@ -145,7 +200,10 @@ let
 
       if [ -d "$srcRoot/bin" ]; then
         cp -a "$srcRoot"/. "$out/"
-        if [ -f "$out/bin/.${pname}-wrapped_" ]; then
+        if [ -f "$out/bin/.${pname}-wrapped" ]; then
+          mv "$out/bin/.${pname}-wrapped" "$out/bin/${pname}"
+          rm -f "$out/bin/.${pname}-wrapped_"
+        elif [ -f "$out/bin/.${pname}-wrapped_" ]; then
           mv "$out/bin/.${pname}-wrapped_" "$out/bin/${pname}"
           rm -f "$out/bin/.${pname}-wrapped"
         fi
@@ -168,7 +226,9 @@ let
     postFixup = ''
       wrapProgram $out/bin/${pname} \
         ${extraWrapArgs} \
-        --prefix XDG_DATA_DIRS : "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk4}/share/gsettings-schemas/${pkgs.gtk4.name}"
+        --set GTK_THEME Adwaita \
+        --prefix XDG_DATA_DIRS : "$out/share:${pkgs.adwaita-icon-theme}/share:${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk4}/share/gsettings-schemas/${pkgs.gtk4.name}"
+      ${extraPostFixup}
     '';
   };
 
@@ -212,7 +272,7 @@ let
         local tmp srcRoot
         local -a entries
         tmp=$(mktemp -d)
-        tar xJf $src -C "$tmp"
+        tar xaf $src -C "$tmp"
         srcRoot="$tmp"
 
         shopt -s nullglob dotglob
@@ -225,10 +285,13 @@ let
 
         if [ -d "$srcRoot/bin" ]; then
           cp -a "$srcRoot"/. "$out/"
-          if [ -f "$out/bin/.${pname}-wrapped_" ]; then
-            mv "$out/bin/.${pname}-wrapped_" "$out/bin/${pname}"
-            rm -f "$out/bin/.${pname}-wrapped"
-          fi
+          if [ -f "$out/bin/.${pname}-wrapped" ]; then
+          mv "$out/bin/.${pname}-wrapped" "$out/bin/${pname}"
+          rm -f "$out/bin/.${pname}-wrapped_"
+        elif [ -f "$out/bin/.${pname}-wrapped_" ]; then
+          mv "$out/bin/.${pname}-wrapped_" "$out/bin/${pname}"
+          rm -f "$out/bin/.${pname}-wrapped"
+        fi
         else
           cp -a "$srcRoot"/. "$out/"
           entries=("$out"/*)
@@ -259,27 +322,19 @@ let
           --prefix XDG_DATA_DIRS : "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk4}/share/gsettings-schemas/${pkgs.gtk4.name}"
       '';
     };
-  rustvoxRuntimeLibs = with pkgs; [
-    alsa-lib
-    libpulseaudio
-    wayland
-    dbus
-    stdenv.cc.cc.lib  # libstdc++ for bundled libvosk.so
-  ];
-
-  mkRustvoxApp = { pname, version, url, hash }: pkgs.stdenv.mkDerivation {
+  mkTranscrustApp = { pname, version, url, hash }: pkgs.stdenv.mkDerivation {
     inherit pname version;
 
     src = pkgs.fetchurl { inherit url hash; };
 
     nativeBuildInputs = [ pkgs.autoPatchelfHook pkgs.makeWrapper ];
-    buildInputs = rustvoxRuntimeLibs;
+    buildInputs = transcrustRuntimeLibs;
 
     unpackPhase = ''
       local tmp srcRoot
       local -a entries
       tmp=$(mktemp -d)
-      tar xJf $src -C "$tmp"
+      tar xaf $src -C "$tmp"
       srcRoot="$tmp"
 
       shopt -s nullglob dotglob
@@ -288,14 +343,10 @@ let
         srcRoot="''${entries[0]}"
       fi
 
-      mkdir -p $out/bin $out/share/rustvox/models
+      mkdir -p $out/bin
 
       if [ -d "$srcRoot/bin" ]; then
         cp -a "$srcRoot"/. "$out/"
-        if [ -f "$out/bin/.${pname}-wrapped_" ]; then
-          mv "$out/bin/.${pname}-wrapped_" "$out/bin/${pname}"
-          rm -f "$out/bin/.${pname}-wrapped"
-        fi
       else
         cp -a "$srcRoot"/. "$out/"
         entries=("$out"/*)
@@ -313,70 +364,76 @@ let
     dontInstall = true;
 
     postFixup = ''
-      mkdir -p $out/libexec
-      cat > $out/libexec/${pname}-wrapped <<'EOF'
-      #!${pkgs.bash}/bin/bash
-      set -euo pipefail
-
-      bundled_model="$out/share/rustvox/models/vosk-model-small-en-us-0.15"
-      config_home="''${XDG_CONFIG_HOME:-$HOME/.config}"
-      user_config="$config_home/rustvox/config.toml"
-
-      has_model_path() {
-        local config_file="$1"
-        [ -f "$config_file" ] || return 1
-        ${pkgs.gnugrep}/bin/grep -Eq '^[[:space:]]*path[[:space:]]*=' "$config_file"
-      }
-
-      if [ -d "$bundled_model" ] && ! has_model_path "$user_config"; then
-        tmp_config_home="$(${pkgs.coreutils}/bin/mktemp -d)"
-        trap '${pkgs.coreutils}/bin/rm -rf "$tmp_config_home"' EXIT
-        ${pkgs.coreutils}/bin/mkdir -p "$tmp_config_home/rustvox"
-
-        if [ -f "$user_config" ]; then
-          ${pkgs.gawk}/bin/awk -v model_path="$bundled_model" '
-            BEGIN { in_model = 0; inserted = 0 }
-            /^\[model\][[:space:]]*$/ {
-              print
-              print "path = \"" model_path "\""
-              in_model = 1
-              inserted = 1
-              next
-            }
-            /^\[/ && $0 !~ /^\[model\][[:space:]]*$/ {
-              in_model = 0
-            }
-            { print }
-            END {
-              if (!inserted) {
-                print ""
-                print "[model]"
-                print "path = \"" model_path "\""
-              }
-            }
-          ' "$user_config" > "$tmp_config_home/rustvox/config.toml"
-        else
-          cat > "$tmp_config_home/rustvox/config.toml" <<CONFIG_EOF
-[model]
-path = "$bundled_model"
-CONFIG_EOF
-        fi
-
-        export XDG_CONFIG_HOME="$tmp_config_home"
-      fi
-
-      exec "$out/bin/.${pname}-nix-wrapped" "$@"
-      EOF
-      chmod +x $out/libexec/${pname}-wrapped
-
       wrapProgram $out/bin/${pname} \
-        --prefix PATH : "${pkgs.wtype}/bin" \
-        --prefix PATH : "${pkgs.dotool}/bin" \
-        --rename ${pname} .${pname}-nix-wrapped
-
-      ln -s $out/libexec/${pname}-wrapped $out/bin/${pname}
+        --prefix PATH : "${pkgs.wtype}/bin:${pkgs.dotool}/bin:${pkgs.libnotify}/bin"
     '';
   };
+
+  # Serverbar: GTK4 system tray daemon
+  mkServerbarApp = { pname, version, url, hash }:
+    let
+      serverbarRuntimeLibs = gtk4RuntimeLibs ++ (with pkgs; [
+        libnotify
+        dbus
+        libxkbcommon
+        fontconfig
+        freetype
+      ]);
+    in
+    pkgs.stdenv.mkDerivation {
+      inherit pname version;
+
+      src = pkgs.fetchurl { inherit url hash; };
+
+      nativeBuildInputs = [ pkgs.autoPatchelfHook pkgs.makeWrapper ];
+      buildInputs = serverbarRuntimeLibs;
+
+      unpackPhase = ''
+        local tmp srcRoot
+        local -a entries
+        tmp=$(mktemp -d)
+        tar xaf $src -C "$tmp"
+        srcRoot="$tmp"
+
+        shopt -s nullglob dotglob
+        entries=("$tmp"/*)
+        if [ ''${#entries[@]} -eq 1 ] && [ -d "''${entries[0]}" ]; then
+          srcRoot="''${entries[0]}"
+        fi
+
+        mkdir -p $out/bin
+
+        if [ -d "$srcRoot/bin" ]; then
+          cp -a "$srcRoot"/. "$out/"
+          if [ -f "$out/bin/.${pname}-wrapped" ]; then
+            mv "$out/bin/.${pname}-wrapped" "$out/bin/${pname}"
+            rm -f "$out/bin/.${pname}-wrapped_"
+          elif [ -f "$out/bin/.${pname}-wrapped_" ]; then
+            mv "$out/bin/.${pname}-wrapped_" "$out/bin/${pname}"
+            rm -f "$out/bin/.${pname}-wrapped"
+          fi
+        else
+          cp -a "$srcRoot"/. "$out/"
+          entries=("$out"/*)
+          for entry in "''${entries[@]}"; do
+            [ "$entry" = "$out/bin" ] && continue
+            if [ ! -d "$entry" ]; then
+              mv "$entry" "$out/bin/"
+            fi
+          done
+        fi
+        chmod +x "$out/bin/${pname}"
+      '';
+
+      dontBuild = true;
+      dontInstall = true;
+
+      postFixup = ''
+        wrapProgram $out/bin/${pname} \
+          --set GTK_THEME Adwaita \
+          --prefix XDG_DATA_DIRS : "$out/share:${pkgs.adwaita-icon-theme}/share:${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk4}/share/gsettings-schemas/${pkgs.gtk4.name}"
+      '';
+    };
 
 in
 {
@@ -384,49 +441,105 @@ in
     pname = "coverpro";
     version = "0.1.0";
     url = "https://github.com/jaycee1285/coverpro/releases/download/v0.1.0/coverpro-v0.1.0-linux-x86_64.tar.xz";
-    hash = "sha256:572959b5800785673082890de1f16ea94e39ef41870d2390d93e2a65b94fa7b6";
+    hash = "sha256:6c23e1852a207a5f0d26086c3b41060afaf8cc620f16466dfd4c9ba087bc1cca";
   };
 
   daylight = mkTauriApp {
     pname = "daylight";
     version = "0.1.0";
     url = "https://github.com/jaycee1285/daylight/releases/download/v0.1.0/daylight-v0.1.0-linux-x86_64.tar.xz";
-    hash = "sha256:12f59b87ed571e8159ea08bb21ec07361224285d3975ac51dd5ec06b6c9829cd";
+    hash = "sha256:6b4dc1c18aa0f17243d75f936fb8f0e2d0de106c0acfc54cbd0b826d99656e0e";
   };
 
-  jotter = mkTauriApp {
-    pname = "jotter";
-    version = "0.1.3";
-    url = "https://github.com/jaycee1285/jotter/releases/download/v0.1.3/jotter-v0.1.3-linux-x86_64.tar.xz";
-    hash = "sha256:d1e18b58c875a48f49b1a4ac1b5400690e960bf12ea63837ba6a1ff8dfc33494";
-  };
-
-  openswarm = mkGtkApp {
+  openswarm = pkgs.rustPlatform.buildRustPackage {
     pname = "openswarm";
-    version = "0.0.1";
-    url = "https://github.com/jaycee1285/OpenSwarm/releases/download/v0.0.1/openswarm-v0.0.1-linux-x86_64.tar.xz";
-    hash = "sha256:a36824d2b8c6f3a59978ed68d3b9579b8733f934088b0dd4aeb9f9210ee2105f";
+    version = "main";
+    src = openswarmSrc;
+    cargoLock.lockFile = openswarmSrc + "/Cargo.lock";
+
+    nativeBuildInputs = [ pkgs.pkg-config pkgs.makeWrapper ];
+    buildInputs = gtk4RuntimeLibs;
+
+    postInstall = ''
+      install -Dm644 ${openswarmSrc}/packaging/linux/openswarm.desktop \
+        $out/share/applications/openswarm.desktop
+      substituteInPlace $out/share/applications/openswarm.desktop \
+        --replace-fail 'Exec=openswarm' "Exec=$out/bin/openswarm"
+
+      mkdir -p $out/share/icons
+      cp -r ${openswarmSrc}/icons/linux/hicolor $out/share/icons/
+    '';
+
+    postFixup = ''
+      wrapProgram $out/bin/openswarm \
+        --set OPENSWARM_CODEX_BIN "${pkgs.codex}/bin/codex" \
+        --set GTK_THEME Adwaita \
+        --prefix XDG_DATA_DIRS : "$out/share:${pkgs.adwaita-icon-theme}/share:${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk4}/share/gsettings-schemas/${pkgs.gtk4.name}"
+    '';
   };
 
   ferritebar = mkFerritebarApp {
     pname = "ferritebar";
     version = "0.1.0";
     url = "https://github.com/jaycee1285/ferritebar/releases/download/v0.1.0/ferritebar-v0.1.0-linux-x86_64.tar.xz";
-    hash = "sha256:158e716823726c1d34107e002f3577cb82b98a10cc7e71f60b9cbe859d0ffed6";
+    hash = "sha256:8e9a93d901720b203a17ef1ee8cb822ae9bbdf6e04cbc4f9c14b01547310dbdb";
   };
 
-  rustvox = mkRustvoxApp {
-    pname = "rustvox";
+  transcrust = mkTranscrustApp {
+    pname = "transcrust";
     version = "0.1.0";
-    url = "https://github.com/jaycee1285/rustvox/releases/download/v0.1.0/rustvox-v0.1.0-linux-x86_64.tar.xz";
-    hash = "sha256:e1a44aac2db6ed11d61257dddd8dc177517d55615b2f0688a5a965f31c969ce3";
+    url = "https://github.com/jaycee1285/transcrust/releases/download/v0.1.0/transcrust-v0.1.0-linux-x86_64.tar.xz";
+    hash = "sha256:dc63be543d7265154b1ada01616196eb1f6ac6ecb3f5d3f48f55a975f086b8d4";
   };
 
-  ferrite = mkGtkApp {
-    pname = "ferrite";
-    version = "0.2.7";
-    url = "https://github.com/jaycee1285/Ferrite/releases/download/v0.2.7/ferrite-v0.2.7-linux-x86_64.tar.xz";
-    hash = "sha256:7a11c1b64d5c6fc875272a53fb3d6ade7235ee66bc67f31bdbb368bd5172164d";
+  dotagent = mkGtkApp {
+    pname = "dotagent";
+    version = "0.1.0";
+    url = "https://github.com/jaycee1285/dotagent/releases/download/v0.1.0/dotagent-v0.1.0-linux-x86_64.tar.xz";
+    hash = "sha256:a6d83511dabab5c103ac7927702a718d9cebc2604f0e2f5b6b0468942211489a";
     extraWrapArgs = ''--prefix LD_LIBRARY_PATH : "${pkgs.lib.makeLibraryPath ferriteRuntimeLibs}"'';
+  };
+
+  ferritor = mkGtkApp {
+    pname = "ferritor";
+    version = "0.1.0";
+    url = "https://github.com/jaycee1285/ferritor/releases/download/v0.1.0/ferritor-v0.1.0-linux-x86_64.tar.xz";
+    hash = "sha256:f72cfa272d43112033023eb67fa6f0153ec0b8dfbe9049a1f11af4b5a50a5401";
+    extraWrapArgs = ''--prefix LD_LIBRARY_PATH : "${pkgs.lib.makeLibraryPath ferriteRuntimeLibs}"'';
+    extraPostFixup = ''
+      if [ ! -f "$out/share/applications/ferritor.desktop" ]; then
+        mkdir -p $out/share/applications
+        cat > $out/share/applications/ferritor.desktop <<'DESKTOP'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Ferritor
+GenericName=Text Editor
+Comment=A filesystem browser and text editor built with Rust
+Exec=ferritor %F
+Icon=ferritor
+Terminal=false
+Categories=Utility;TextEditor;Office;
+Keywords=editor;text;markdown;files;browser;rust;
+MimeType=text/plain;text/markdown;text/x-markdown;application/json;application/x-yaml;application/toml;text/x-toml;text/csv;text/tab-separated-values;text/x-rust;text/javascript;application/javascript;application/x-typescript;
+StartupNotify=true
+StartupWMClass=ferritor
+DESKTOP
+      fi
+    '';
+  };
+
+  krust = mkCliApp {
+    pname = "krust";
+    version = "0.1.0";
+    url = "https://github.com/jaycee1285/krust/releases/download/v0.1.0/krust-v0.1.0-linux-x86_64.tar.gz";
+    hash = "sha256:03a5e31c5c48722ebfbbe55a7490e138a60a41a9bdffef63e8761f69a4bf0c0f";
+  };
+
+  serverbar = mkServerbarApp {
+    pname = "serverbar";
+    version = "0.1.0";
+    url = "https://github.com/jaycee1285/serverbar/releases/download/v0.1.0/serverbar-v0.1.0-linux-x86_64.tar.gz";
+    hash = "sha256:757699e9255a99fc9248e8503218bb21bb290e097689d8d32e55c06bf4f65b08";
   };
 }

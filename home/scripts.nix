@@ -16,7 +16,13 @@
   home.file."bin/cdevcd".executable = true;
   home.file."bin/sartwc-ipc".source = ./scripts/sartwc-ipc;
   home.file."bin/sartwc-ipc".executable = true;
+  home.file."bin/pcloud-bisync-status".source = ./scripts/pcloud-bisync-status;
+  home.file."bin/pcloud-bisync-status".executable = true;
+  home.file."bin/pcloud-bisync-repair-from-local".source = ./scripts/pcloud-bisync-repair-from-local;
+  home.file."bin/pcloud-bisync-repair-from-local".executable = true;
+  home.file."bin/pcloud-bisync-restart".source = ./scripts/pcloud-bisync-restart;
+  home.file."bin/pcloud-bisync-restart".executable = true;
 
-  home.sessionPath = [ "$HOME/bin" ];
+  home.sessionPath = [ "$HOME/.local/bin" ];
 
 }

@@ -10,6 +10,33 @@ let
     };
   });
   upstreamLabwcPackage = pkgs.labwc092;
+  labwc097Package = pkgs.unstable.labwc;
+  labwc097Launcher = pkgs.writeShellScriptBin "labwc-097" ''
+    exec ${pkgs.lib.getExe labwc097Package} "$@"
+  '';
+  labwc097DesktopFile = pkgs.writeTextFile {
+    name = "labwc-097.desktop";
+    destination = "/share/wayland-sessions/labwc-097.desktop";
+    text = ''
+      [Desktop Entry]
+      Name=labwc-097
+      Comment=A wayland stacking compositor (labwc ${labwc097Package.version})
+      Exec=${labwc097Launcher}/bin/labwc-097
+      Icon=labwc
+      Type=Application
+      DesktopNames=labwc;wlroots
+    '';
+  };
+  labwc097SessionPackage = pkgs.runCommand "labwc-097-session" {
+    passthru = {
+      providedSessions = [ "labwc-097" ];
+    };
+  } ''
+    mkdir -p "$out/bin" "$out/share/wayland-sessions"
+    cp ${labwc097Launcher}/bin/labwc-097 "$out/bin/labwc-097"
+    chmod +x "$out/bin/labwc-097"
+    cp ${labwc097DesktopFile}/share/wayland-sessions/labwc-097.desktop "$out/share/wayland-sessions/labwc-097.desktop"
+  '';
   sartwcSessionPackage = pkgs.runCommand "sartwc-session" {
     passthru = {
       providedSessions = [ "sartwc" ];
@@ -59,7 +86,12 @@ EOF
   '';
 in
 {
+  environment.systemPackages = [
+    labwc097Launcher
+  ];
+
   services.displayManager.sessionPackages = [
+    labwc097SessionPackage
     sartwcSessionPackage
   ];
 
@@ -70,4 +102,11 @@ in
   programs.fuse.userAllowOther = true;
   programs.nix-ld.enable = true;
   programs.wayvnc.enable = true;
+   programs.thunar = {
+    enable = true;
+    plugins = with pkgs.xfce; [
+      thunar-archive-plugin
+      thunar-volman
+    ];
+  };
 }

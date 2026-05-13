@@ -12,6 +12,8 @@
     wdisplays
     wlr-randr
     wl-gammactl
+	wl-gammarelay-rs
+	ringboard-wayland
 
     # File management
     lxqt.pcmanfm-qt
@@ -31,7 +33,6 @@
     usbimager
 
     # Backup
-    kopia-ui
     themechanger
   ];
 }

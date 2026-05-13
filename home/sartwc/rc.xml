@@ -22,7 +22,7 @@ default values.
     <cornerRadius>10</cornerRadius>
     <keepBorder>yes</keepBorder>
     <font>
-      <name>IosevkaTermSlab Propo</name>
+      <name>Spline Sans</name>
       <size>16</size>
       <slant>normal</slant>
       <weight>book</weight>
@@ -55,7 +55,7 @@ windows and WM_CLASS for XWayland clients.
       <action name="Close"/>
     </keybind>
     <keybind key="W-Return">
-      <action name="Execute" command="kitty"/>
+      <action name="Execute" command="ferritor"/>
     </keybind>
     <keybind key="W-w">
       <action name="Execute" command="librewolf"/>
@@ -81,7 +81,7 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
       <keybind key="W-f">
       <action name="Execute">
-        <command>pcmanfm-qt</command>
+        <command>thunar</command>
       </action>
     </keybind>
     <keybind key="W-o">
@@ -147,6 +147,11 @@ windows and WM_CLASS for XWayland clients.
     <keybind key="A-v">
       <action name="Execute">
         <command>sh -lc &apos;ferritebar msg wg&apos;</command>
+      </action>
+    </keybind>
+     <keybind key="A-t">
+      <action name="Execute">
+        <command>sh -lc &apos;ferritebar msg toggle&apos;</command>
       </action>
     </keybind>
     <keybind key="A-n">

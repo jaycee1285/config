@@ -1,7 +1,7 @@
 # Configure output directives such as mode, position, scale and transform.
 # Use wlr-randr to get your output names
 # Set background image.
-swww-daemon &
+awww-daemon &
 kanshi &
 
 /run/current-system/sw/bin/polkit-kde-authentication-agent-1 >/dev/null 2>&1 &
@@ -18,13 +18,15 @@ mako >/dev/null 2>&1 &
 
 #nm-applet >/dev/null 2>&1 &
 
-rustvox >/dev/null 2>&1 &
+transcrust >/dev/null 2>&1 &
+
+wl-paste --watch cliphist store 2>&1 &
 
 #pcloud 2>&1 &
 
 syncthing 2>&1 &
 # Deploy swww wallpapers
-swww img $HOME/Pictures/elephant-flexoki.png 2>&1 &
+awww img $HOME/Pictures/elephant-flexoki.png 2>&1 &
 
 exec swayidle -w \
   timeout 300 'swaylock -f --screenshots --effect-pixelate 40' \

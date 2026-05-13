@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+WORKDIR="${HOME}/.cache/rclone-bisync/pcloud"
+REMOTE="pcloud:"
+LOCAL_DEFAULT_UPPER="${HOME}/pCloud"
+LOCAL_DEFAULT_LOWER="${HOME}/pcloud"
+LOCAL_PATH="${LOCAL_DEFAULT_UPPER}"
+
+if [[ -d "${LOCAL_DEFAULT_LOWER}" ]]; then
+  LOCAL_PATH="${LOCAL_DEFAULT_LOWER}"
+fi
+
+echo "== pcloud bisync status =="
+echo "Remote: ${REMOTE}"
+echo "Local:  ${LOCAL_PATH}"
+echo "Workdir:${WORKDIR}"
+echo
+
+echo "-- systemd unit state --"
+systemctl --user status pcloud-bisync.service --no-pager -l || true
+echo
+echo "-- systemd timer state --"
+systemctl --user status pcloud-bisync.timer --no-pager -l || true
+echo
+echo "-- timer schedule --"
+systemctl --user list-timers --all --no-pager | grep -E "pcloud-bisync|NEXT|LAST|LEFT|PASSED" || true
+echo
+echo "-- workdir files --"
+if [[ -d "${WORKDIR}" ]]; then
+  ls -lah "${WORKDIR}"
+else
+  echo "missing: ${WORKDIR}"
+fi
+echo
+echo "-- recent logs (service) --"
+journalctl --user -u pcloud-bisync.service -n 40 --no-pager -o short-iso
+echo
+echo "-- remote probe --"
+if rclone lsd "${REMOTE}" >/dev/null 2>&1; then
+  echo "ok: ${REMOTE} is listable"
+else
+  echo "error: ${REMOTE} is not listable (check rclone config and pCloud auth)"
+fi

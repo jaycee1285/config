@@ -2,8 +2,8 @@
 
 {
   environment.systemPackages = with pkgs; [
-    nemo
-    nemo-fileroller
+  nautilus
+  nautilus-open-any-terminal
     # optional:
     # nemo-preview
   ];

@@ -46,123 +46,9 @@ in
           installation_mode = "force_installed";
         };
 
-        # Solarize Fox
-        "{467c0f66-2faa-4636-93bb-9a5eda23389f}" = {
-          install_url = amoLatestById "{467c0f66-2faa-4636-93bb-9a5eda23389f}";
-          installation_mode = "force_installed";
-        };
-
         # Session Sync
         "session-sync@gabrielivanica.com" = {
           install_url = amoLatestById "session-sync@gabrielivanica.com";
-          installation_mode = "force_installed";
-        };
-
-        # Solarized Light
-        "{cbaf2ab0-4b85-44b3-81c8-b99d609974b0}" = {
-          install_url = amoLatestById "{cbaf2ab0-4b85-44b3-81c8-b99d609974b0}";
-          installation_mode = "force_installed";
-        };
-
-        # kanagawa
-        "{53cc1853-5ebd-41c8-8c89-6524cb99b99e}" = {
-          install_url = amoLatestById "{53cc1853-5ebd-41c8-8c89-6524cb99b99e}";
-          installation_mode = "force_installed";
-        };
-
-        # ColorPick Eyedropper
-        "jid1-kCS67LPIOiGf2Q@jetpack" = {
-          install_url = amoLatestById "jid1-kCS67LPIOiGf2Q@jetpack";
-          installation_mode = "force_installed";
-        };
-
-        # Graphite Flat
-        "{67118a6e-ca52-4bcf-8da8-93b3d2e23cb6}" = {
-          install_url = amoLatestById "{67118a6e-ca52-4bcf-8da8-93b3d2e23cb6}";
-          installation_mode = "force_installed";
-        };
-
-        # Catppuccin Latte - Lavender
-        "{bc6fdbef-4c18-4967-9899-7803fdcaf3b4}" = {
-          install_url = amoLatestById "{bc6fdbef-4c18-4967-9899-7803fdcaf3b4}";
-          installation_mode = "force_installed";
-        };
-
-        # Gruvbox Material Light
-        "{9525ead3-fe6e-41c4-8220-ca9941b3b77d}" = {
-          install_url = amoLatestById "{9525ead3-fe6e-41c4-8220-ca9941b3b77d}";
-          installation_mode = "force_installed";
-        };
-
-        # Minimalist Ayu
-        "{fd07a33f-8807-49d5-848c-8a1a09f74a7f}" = {
-          install_url = amoLatestById "{fd07a33f-8807-49d5-848c-8a1a09f74a7f}";
-          installation_mode = "force_installed";
-        };
-
-        # Gruvbox Material Dark
-        "{f9be3857-6894-4d6e-90e0-64451bdf7655}" = {
-          install_url = amoLatestById "{f9be3857-6894-4d6e-90e0-64451bdf7655}";
-          installation_mode = "force_installed";
-        };
-
-        # oneclick-theme-switcher
-        "oneclick-theme-switch@janstuemmel.github.io" = {
-          install_url = amoLatestById "oneclick-theme-switch@janstuemmel.github.io";
-          installation_mode = "force_installed";
-        };
-
-        # SimilarWeb - Traffic Rank & Website Analysis
-        "FirefoxAddon@similarWeb.com" = {
-          install_url = amoLatestById "FirefoxAddon@similarWeb.com";
-          installation_mode = "force_installed";
-        };
-
-        # Nord Polar Dark
-        "{758478b6-29f3-4d69-ab17-c49fe568ed80}" = {
-          install_url = amoLatestById "{758478b6-29f3-4d69-ab17-c49fe568ed80}";
-          installation_mode = "force_installed";
-        };
-
-        # Rose Pine Dawn
-        "{2e6bfba0-33c2-4bf5-9aaf-15bf09f8fa2f}" = {
-          install_url = amoLatestById "{2e6bfba0-33c2-4bf5-9aaf-15bf09f8fa2f}";
-          installation_mode = "force_installed";
-        };
-
-        # Ayu Mirage Single Accent
-        "{1faf2b8b-cb9f-4cf7-a685-58d97d3c7115}" = {
-          install_url = amoLatestById "{1faf2b8b-cb9f-4cf7-a685-58d97d3c7115}";
-          installation_mode = "force_installed";
-        };
-
-        # Kanagawa Lotus
-        "{22cfb1ea-c625-488a-a9a0-5747dcbd94e1}" = {
-          install_url = amoLatestById "{22cfb1ea-c625-488a-a9a0-5747dcbd94e1}";
-          installation_mode = "force_installed";
-        };
-
-        # Nord Light
-        "{27d711f8-65ea-4fbb-ab26-cd326efdad75}" = {
-          install_url = amoLatestById "{27d711f8-65ea-4fbb-ab26-cd326efdad75}";
-          installation_mode = "force_installed";
-        };
-
-        # Everforest Light
-        "{08400cc9-1bf6-4e3e-b175-2d2650bc3104}" = {
-          install_url = amoLatestById "{08400cc9-1bf6-4e3e-b175-2d2650bc3104}";
-          installation_mode = "force_installed";
-        };
-
-        # Flexoki Light
-        "{cb1e6534-4545-429e-9ee6-bc50c22ad5e2}" = {
-          install_url = amoLatestById "{cb1e6534-4545-429e-9ee6-bc50c22ad5e2}";
-          installation_mode = "force_installed";
-        };
-
-        # Flexoki Dark
-        "{2f0596eb-26b7-45bb-addb-ab56eb7c97dc}" = {
-          install_url = amoLatestById "{2f0596eb-26b7-45bb-addb-ab56eb7c97dc}";
           installation_mode = "force_installed";
         };
 
@@ -171,24 +57,6 @@ in
           install_url = amoLatestById "{3c078156-979c-498b-8990-85f7987dd929}";
           installation_mode = "force_installed";
           default_area = "navbar";
-        };
-
-        # Google Chrome Light
-        "{1fd1213e-dcb2-48d9-806f-c0a8a7d0a8e7}" = {
-          install_url = amoLatestById "{1fd1213e-dcb2-48d9-806f-c0a8a7d0a8e7}";
-          installation_mode = "force_installed";
-        };
-
-        # Link-Md
-        "{11ea90de-7c7d-4f1f-a5a4-9baf3f519a6b}" = {
-          install_url = amoLatestById "{11ea90de-7c7d-4f1f-a5a4-9baf3f519a6b}";
-          installation_mode = "force_installed";
-        };
-
-        # Internet Archive Downloader
-        "internet_archive_downloader@timelegend.net" = {
-          install_url = amoLatestById "internet_archive_downloader@timelegend.net";
-          installation_mode = "force_installed";
         };
 
         # SingleFile
@@ -210,23 +78,12 @@ in
           installation_mode = "force_installed";
         };
 
-        # RSSHub Radar
-        "i@diygod.me" = {
-          install_url = amoLatestById "i@diygod.me";
-          installation_mode = "force_installed";
-        };
-
         # BetterViewer
         "ademking@betterviewer" = {
           install_url = amoLatestById "ademking@betterviewer";
           installation_mode = "force_installed";
         };
 
-        # LibreWolf-compatible Firefox Color
-        "FirefoxColor@mozilla.com" = {
-          install_url = amoLatestById "FirefoxColor@mozilla.com";
-          installation_mode = "force_installed";
-        };
 
         # Dark Reader (pinned)
         "addon@darkreader.org" = {
@@ -235,25 +92,6 @@ in
           default_area = "navbar";
         };
 
-        # Tab Session Manager
-        "Tab-Session-Manager@sienori" = {
-          install_url = amoLatestById "Tab-Session-Manager@sienori";
-          installation_mode = "force_installed";
-        };
-
-        # floccus bookmarks sync
-        "floccus@handmadeideas.org" = {
-          install_url = amoLatestById "floccus@handmadeideas.org";
-          installation_mode = "force_installed";
-        };
-
-        # ---- Optional: Bitwarden (NOT in your extensions.json, but you used it earlier) ----
-        # If you want it, leave this in; if not, delete it.
-        "{446900e4-71c2-419f-a6a7-df9c091e268b}" = {
-          install_url = amoLatestById "{446900e4-71c2-419f-a6a7-df9c091e268b}";
-          installation_mode = "force_installed";
-          default_area = "navbar";
-        };
       };
     };
 
@@ -263,6 +101,12 @@ in
       name = myProfile;
 
       userChrome = ''
+
+@import url("file:///home/john/.config/base16changer/librewolf/colors.css");
+
+/* Minimum UI font size */
+* { font-size: 14pt !important; }
+
 :root:is([tabsintitlebar], [sizemode="fullscreen"]) {
   --uc-window-drag-space-pre: 30px;
   --uc-window-drag-space-post: 30px;
@@ -294,6 +138,8 @@ in
   background-clip: border-box !important;
 }
       '';
+
+      userContent = "";
     };
   };
 }

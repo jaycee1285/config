@@ -1,30 +1,25 @@
 {
-  description = "My NixOS system with GTK themes and super-productivity flakes";
+  description = "My NixOS system flake";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-labwc-092.url = "github:NixOS/nixpkgs/00c21e4c93d963c50d4c0c89bfa84ed6e0694df2";
-    gtk-themes.url = "path:./gtk-themes";
-    ob-themes.url = "path:./ob-themes";
     home-manager.url = "github:nix-community/home-manager";
-    helium-nix.url = "git+https://codeberg.org/MachsteNix/helium-nix";
-    crustdown.url = "github:jaycee1285/crustdown";
-    crustdown.inputs.nixpkgs.follows = "nixpkgs";
-    krust.url = "github:jaycee1285/krust";
-    krust.inputs.nixpkgs.follows = "nixpkgs";
-    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
+    helium-nix.url = "github:schembriaiden/helium-browser-nix-flake";
     walls.url = "github:jaycee1285/walls";
     base16changer.url = "github:jaycee1285/base16changer";
-    ferritebar.url = "github:jaycee1285/ferritebar";
-    ferritebar.inputs.nixpkgs.follows = "nixpkgs";
     sartwc.url = "github:jaycee1285/sartwc";
     sartwc.inputs.nixpkgs.follows = "nixpkgs";
     intentile.url = "github:jaycee1285/intentile";
     intentile.inputs.nixpkgs.follows = "nixpkgs";
+    openswarm-src = {
+      url = "github:jaycee1285/OpenSwarm";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-labwc-092, gtk-themes, ob-themes, home-manager, helium-nix, crustdown, krust, nix-vscode-extensions, walls, base16changer, ferritebar, sartwc, intentile, ... }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-labwc-092, home-manager, helium-nix, walls, base16changer, sartwc, intentile, openswarm-src, ... }:
     let
       system = "x86_64-linux";
       nixpkgsPolicy = {
@@ -45,8 +40,6 @@
         })
       ];
 
-      obThemesPkg = ob-themes.packages.${system}.default;
-
       # Shared host configuration - all hosts are identical except hostname/hardware
       mkHost = hostname: nixpkgs.lib.nixosSystem {
         inherit system;
@@ -62,14 +55,12 @@
             home-manager.users.john = import ./home/home.nix;
 
             home-manager.extraSpecialArgs = {
-              inherit gtk-themes nixpkgs-unstable crustdown krust nix-vscode-extensions walls base16changer ferritebar helium-nix sartwc intentile;
-              ob-themes = obThemesPkg;
+              inherit nixpkgs-unstable walls base16changer helium-nix sartwc intentile openswarm-src;
             };
           }
         ];
         specialArgs = {
-          inherit nixpkgs-unstable helium-nix sartwc intentile;
-          ob-themes = obThemesPkg;
+          inherit nixpkgs-unstable helium-nix sartwc intentile openswarm-src;
         };
       };
 
@@ -89,7 +80,7 @@
             ./iso.nix
           ];
           specialArgs = {
-            inherit helium-nix;
+            inherit helium-nix openswarm-src;
           };
         };
       };

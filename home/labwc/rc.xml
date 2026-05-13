@@ -13,11 +13,11 @@ default values.
   </core>
   <!-- <font><theme> can be defined without an attribute to set all places -->
   <theme>
-    <name>Base16</name>
+    <name>Orchis-Light-Compact</name>
     <cornerRadius>10</cornerRadius>
     <keepBorder>yes</keepBorder>
     <font>
-      <name>IosevkaTermSlab Propo</name>
+      <name>Spline Sans</name>
       <size>16</size>
       <slant>normal</slant>
       <weight>book</weight>
@@ -76,11 +76,11 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="W-f">
       <action name="Execute">
-        <command>pcmanfm-qt</command>
+        <command>thunar</command>
       </action>
     </keybind>
-    <keybind key="W-o">
-      <action name="Execute" command="obsidian"/>
+    <keybind key="W-e">
+      <action name="Execute" command="ferritor"/>
     </keybind>
     <keybind key="W-g">
       <action name="Execute" command="github-desktop"/>
@@ -124,14 +124,24 @@ windows and WM_CLASS for XWayland clients.
         <command>sh -lc 'kitty -o remember_window_size=no -o initial_window_width=40c -o initial_window_height=20c -e base16changer'</command>
       </action>
     </keybind>
+    <keybind key="W-b">
+      <action name="Execute">
+        <command>sh -lc 'wl-gammactl -b 1.050'</command>
+      </action>
+    </keybind>
     <keybind key="Print">
       <action name="Execute">
-        <command>"flameshot"""</command>
+        <command>"flameshot"</command>
       </action>
     </keybind>
     <keybind key="A-b">
       <action name="Execute">
         <command>ferritebar</command>
+      </action>
+    </keybind>
+    <keybind key="A-k">
+      <action name="Execute">
+        <command>sh -lc 'kitty pkill ferritebar'</command>
       </action>
     </keybind>
     <keybind key="A-f">
@@ -186,6 +196,11 @@ windows and WM_CLASS for XWayland clients.
     </keybind>
     <keybind key="A-d">
       <action name="Execute" command="intentile arm next 4"/>
+    </keybind>
+    <keybind key="A-t">
+      <action name="Execute">
+        <command>sh -lc 'ferritebar msg toggle'</command>
+      </action>
     </keybind>
     <!-- intentile: slot placement -->
   </keyboard>

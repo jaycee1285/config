@@ -10,12 +10,14 @@ This project's documentation lives in an Obsidian vault at `~/Sync/JMC/SideProje
 
 ## Quick Reference
 
-| Item | Path |
-|------|------|
-| Obsidian vault | `~/Sync/JMC/SideProjects/` |
-| Dashboard | `~/Sync/JMC/SideProjects/SideProjects.md` |
-| Project template | `~/Sync/JMC/SideProjects/Templates/Project Template.md` |
-| This project's folder | `~/Sync/JMC/SideProjects/NixOS-Config/` |
+| Item                 | Path                 |
+|----------------------|----------------------|
+| Obsidian vault       | `~/Sync/JMC/SideProjects/` |
+| Dashboard            | `~/Sync/JMC/SideProjects/SideProjects.md` |
+| Project template     | `~/Sync/JMC/SideProjects/Templates/Project |
+|                      | Template.md`         |
+| This project's       | `~/Sync/JMC/SideProjects/NixOS-Config/` |
+| folder               |                      |
 
 ---
 
@@ -104,13 +106,17 @@ next-tasks:
 
 ### Status Values
 
-| Status | When to Use |
-|--------|-------------|
-| `active` | Currently being worked on |
-| `paused` | On hold, will resume later |
-| `blocked` | Waiting on human input or external dependency |
-| `completed` | Project finished |
-| `archived` | No longer relevant |
+| Status      | When to Use          |
+|-------------|----------------------|
+| `active`    | Currently being      |
+|             | worked on            |
+| `paused`    | On hold, will resume |
+|             | later                |
+| `blocked`   | Waiting on human     |
+|             | input or external    |
+|             | dependency           |
+| `completed` | Project finished     |
+| `archived`  | No longer relevant   |
 
 ### Setting Blockers
 

@@ -1,4 +1,4 @@
-{ config, pkgs, ob-themes, ... }:
+{ config, pkgs, ... }:
 
 {
   imports = [
@@ -8,7 +8,7 @@
     ../../modules/flatpak.nix
     ../../modules/hardware.nix
     ../../modules/localization.nix
-#    ../../modules/nemo.nix
+    ../../modules/nautilus.nix
     ../../modules/networking.nix
     ../../modules/nix-features.nix
     ../../modules/memory.nix
@@ -18,7 +18,6 @@
     ../../modules/system.nix
     ../../modules/users.nix
     ../../modules/xserver.nix
-    ../../modules/ob-themes.nix
   ];
 
   # Host-specific settings for Sed

@@ -22,10 +22,8 @@ rustvox >/dev/null 2>&1 &
 #pcloud 2>&1 &
 
 intentile daemon >/dev/null 2>&1 &
+syncthing >/dev/null 2>&1 &
 
-if ! pgrep -x syncthing >/dev/null 2>&1; then
-  syncthing >/dev/null 2>&1 &
-fi
 # Deploy swww wallpapers
 swww img "$HOME/Pictures/walls/elophontbw.png" >/dev/null 2>&1 &
 

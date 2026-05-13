@@ -1,23 +1,17 @@
 [bar]
 position = "top"
-height = 28
+height = 24
+
+[bar.margin]
+top = 0
+bottom = 0
+left = 0
+right = 0
 
 [theme]
 icon_theme = "YAMIS"
 font = "Fira Sans"
-font_size = 28
-# Override colors (optional - auto-detected from GTK4 theme)
-# success_color = "#a3be8c"
-# warning_color = "#facc15"
-# error_color = "#f87171"
-
-[[modules.left]]
-type = "workspaces"
-format = "{index}"
-show_hidden = false
-scroll = true
-sync_command = "labwc-niri sync {index}"
-sync_only_active = true
+font_size = 24
 
 [[modules.left]]
 type = "memory"
@@ -35,36 +29,13 @@ bar_height = 28
 
 [[modules.center]]
 type = "taskbar"
-display = "icon"  # "icon", "title", or "both"
-icon_size = 32
 max_title_length = 30
+icon_size = 32
+display = "icon"
 
 [[modules.right]]
 type = "tray"
 icon_size = 32
-
-[[modules.right]]
-type = "api_spend"
-
-[[modules.right]]
-type = "script"
-name = "wg"
-exec = "[ -n \"$(ip link show type wireguard 2>/dev/null)\" ] && printf '{\"text\":\"\\uf023\",\"class\":\"connected\"}' || printf '{\"text\":\"\\uf09c\",\"class\":\"disconnected\"}'"
-interval = 30
-return_type = "json"
-on_click = "[ -n \"$(ip link show type wireguard 2>/dev/null)\" ] && mullvad disconnect || mullvad connect"
-
-
-[[modules.right]]
-type = "network"
-format = "{icon}"
-interval = 10
-on_click = "~/bin/fuzzelfi.sh"
-
-[[modules.right]]
-type = "audio"
-format = "{icon}"
-on_click = "wpctl set-mute @DEFAULT_SINK@ toggle"
 
 [[modules.right]]
 type = "battery"
@@ -78,3 +49,47 @@ type = "clock"
 format = "%-I:%M %p"
 tooltip_format = "%A, %B %d, %Y"
 
+[[modules.right]]
+type = "network"
+format = "{icon}"
+interval = 10
+on_click = "~/bin/fuzzelfi.sh"
+
+[[modules.right]]
+type = "audio"
+format = "{icon}"
+on_click = "wpctl set-mute @DEFAULT_SINK@ toggle"
+
+[[modules.right]]
+type = "script"
+name = "wg"
+exec = '''[ -n "$(ip link show type wireguard 2>/dev/null)" ] && printf '{"text":"\uf023","class":"connected"}' || printf '{"text":"\uf09c","class":"disconnected"}''''
+interval = 30
+return_type = "json"
+on_click = '[ -n "$(ip link show type wireguard 2>/dev/null)" ] && mullvad disconnect || mullvad connect'
+
+[[modules.hidden]]
+type = "workspaces"
+format = "{index}"
+show_hidden = false
+scroll = true
+sync_command = "labwc-niri sync {index}"
+sync_only_active = true
+
+[[modules.hidden]]
+type = "weather"
+zip = "29902"
+interval = 900
+unit = "F"
+
+[[modules.hidden]]
+type = "api_spend"
+icon = ""
+interval = 300
+data_path = "~/.config/ferritebar/API.json"
+
+[power]
+lock_cmd = "swaylock"
+suspend_cmd = "systemctl suspend"
+reboot_cmd = "systemctl reboot"
+shutdown_cmd = "systemctl poweroff"

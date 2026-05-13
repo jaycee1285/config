@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+WORKDIR="${HOME}/.cache/rclone-bisync/pcloud"
+REMOTE="pcloud:"
+LOCAL_DEFAULT_UPPER="${HOME}/pCloud"
+LOCAL_DEFAULT_LOWER="${HOME}/pcloud"
+LOCAL_PATH="${LOCAL_DEFAULT_UPPER}"
+
+if [[ -d "${LOCAL_DEFAULT_LOWER}" ]]; then
+  LOCAL_PATH="${LOCAL_DEFAULT_LOWER}"
+fi
+
+if [[ "${1:-}" == "--local" ]]; then
+  if [[ -z "${2:-}" ]]; then
+    echo "error: --local requires a path"
+    exit 2
+  fi
+  LOCAL_PATH="${2}"
+fi
+
+if [[ ! -d "${LOCAL_PATH}" ]]; then
+  echo "error: local source-of-truth path not found: ${LOCAL_PATH}"
+  exit 1
+fi
+
+mkdir -p "${WORKDIR}"
+
+echo "== pcloud bisync repair =="
+echo "Source of truth: local path2 -> ${LOCAL_PATH}"
+echo "Target remote:   path1 -> ${REMOTE}"
+echo "Workdir:         ${WORKDIR}"
+echo
+
+echo ":: stopping timer + service"
+systemctl --user stop pcloud-bisync.timer || true
+systemctl --user stop pcloud-bisync.service || true
+
+echo ":: clearing stale lock + temp bisync state"
+rm -f "${WORKDIR}"/*.lck
+rm -f "${WORKDIR}"/*.lst-new
+rm -f "${WORKDIR}"/*.lst-err
+
+echo ":: preflight: validating remote is listable"
+rclone lsd "${REMOTE}" >/dev/null
+
+echo ":: running one-time resync (path2 is source-of-truth)"
+rclone bisync --resync --resync-mode path2 "${REMOTE}" "${LOCAL_PATH}" \
+  --workdir "${WORKDIR}" \
+  --size-only \
+  --create-empty-src-dirs \
+  --exclude "*.part" \
+  --exclude "*.partial" \
+  --exclude ".Trash-1000/**" \
+  --exclude "**/.Trash-1000/**" \
+  --exclude "**/node_modules/**" \
+  --disable ListR \
+  --tpslimit 10 --tpslimit-burst 10 \
+  --checkers 32 --transfers 16 \
+  --retries 10 --retries-sleep 30s --low-level-retries 50 \
+  --stats 30s -v
+
+echo ":: restarting timer and kicking one immediate sync"
+systemctl --user start pcloud-bisync.timer
+systemctl --user start pcloud-bisync.service
+
+echo
+echo "repair complete"

@@ -2,10 +2,13 @@
 
 ## Available Hosts
 
-| Host | Description |
-|------|-------------|
-| Sed  | Primary configured host |
-| Zed  | Template host (requires hardware config) |
+| Host | Description          |
+|------|----------------------|
+| Sed  | Primary configured   |
+|      | host                 |
+| Zed  | Template host        |
+|      | (requires hardware   |
+|      | config)              |
 
 ## Prerequisites
 
@@ -31,7 +34,7 @@ sudo nixos-rebuild switch --flake /home/john/repos/config#Sed
 
 ## Other Operations
 
-### Test without switching
+### Test without switchin
 ```bash
 sudo nixos-rebuild test --flake .#Sed
 ```
